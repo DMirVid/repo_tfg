@@ -93,3 +93,8 @@ while read WL; do
         CORE_PID[$ASSIGNED_CORE]=$app_pid
 
 done < $WORKLOADS
+
+for core in ${CORES}; do
+    if [[ -n "${CORE_PID[$core]}" ]]; then
+        wait "${CORE_PID[$core]}"
+    fi

@@ -13,9 +13,9 @@ mkdir -p run
 
 # Preparar nombre de la aplicación
 WL=$(echo $WORKLOADS | tr '\-[],' " ")
-ID=$(join_by - ${WL[@]}_${ASSIGNED_CORE})
+ID=$(join_by - ${WL[@]}-${ASSIGNED_CORE})
 OUT="data/${ID}.csv"
-FIN_OUT="data/${ID}_total_time.csv"
+FIN_OUT="data/${ID}-time.csv"
 
 ## Crear directorio de ejecución
 mkdir -p "run/${ID}"

@@ -95,3 +95,8 @@ while read WL; do
 
 
 done < $WORKLOADS
+
+for core in ${CORES}; do
+    if [[ -n "${CORE_PID[$core]}" ]]; then
+        wait "${CORE_PID[$core]}"
+    fi
