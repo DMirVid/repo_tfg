@@ -20,7 +20,7 @@ FIN_OUT="data/${ID}-time.csv"
 ## Crear directorio de ejecución
 mkdir -p "run/${ID}"
 cd "run/${ID}"
-sudo taskset -c ${ASSIGNED_CORE} /home/dmirvid/app_sola.py ${WL[@]} > out 2> err &
+sudo taskset -c ${ASSIGNED_CORE} /home/dmirvid/repo_tfg/app_sola.py ${WL[@]} > out 2> err &
 app_pid=$!
 
 ## Monitorizar eventos

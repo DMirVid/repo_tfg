@@ -86,7 +86,7 @@ while read WL; do
             fi
         done
 
-        sudo taskset -c ${ASSIGNED_CORE} /home/dmirvid/launch.sh ${WL[@]} ${ASSIGNED_CORE} ${EVENTS_P} > out 2> err &
+        sudo taskset -c ${ASSIGNED_CORE} /home/dmirvid/repo_tfg/launch.sh ${WL[@]} ${ASSIGNED_CORE} ${EVENTS_P} > out 2> err &
         app_pid=$!
 
         # Actualizar el PID en el tracking
@@ -98,3 +98,6 @@ for core in ${CORES}; do
     if [[ -n "${CORE_PID[$core]}" ]]; then
         wait "${CORE_PID[$core]}"
     fi
+done
+
+echo "Todas las apps ejecutadas en núclos P"
