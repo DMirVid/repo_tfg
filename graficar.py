@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
 import sys
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
 from pathlib import Path
 
@@ -81,61 +79,6 @@ def main():
     df.to_csv(csv_out, index=False)
     print(f"\n✓ Datos guardados en {csv_out}")
     
-    # Crear gráfico de barras agrupado
-    plt.figure(figsize=(12, 6))
-    
-    # Agrupar por app y core
-    apps_unicas = df['App'].unique()
-    cores_unicos = df['Tipo Core'].unique()
-    
-    # Preparar datos para el gráfico
-    x_pos = {}
-    pos = 0
-    ancho_barra = 0.35
-    
-    for app in sorted(apps_unicas):
-        x_pos[app] = pos
-        pos += 1
-    
-    # Plotear barras para cada tipo de core
-    for i, core in enumerate(sorted(cores_unicos)):
-        tiempos = []
-        apps_plot = []
-        
-        for app in sorted(apps_unicas):
-            fila = df[(df['App'] == app) & (df['Tipo Core'] == core)]
-            if not fila.empty:
-                tiempos.append(fila['Tiempo (s)'].values[0])
-                apps_plot.append(x_pos[app] + (i - len(sorted(cores_unicos))/2 + 0.5) * ancho_barra)
-            else:
-                tiempos.append(0)
-                apps_plot.append(x_pos[app] + (i - len(sorted(cores_unicos))/2 + 0.5) * ancho_barra)
-        
-        plt.bar(apps_plot, tiempos, width=ancho_barra, label=f'Core {core}')
-    
-    # Configurar gráfico
-    plt.xlabel('Aplicación', fontsize=12, fontweight='bold')
-    plt.ylabel('Tiempo (segundos)', fontsize=12, fontweight='bold')
-    plt.title('Tiempos de Ejecución por Aplicación y Tipo de Core', fontsize=14, fontweight='bold')
-    plt.xticks([x_pos[app] for app in sorted(apps_unicas)], sorted(apps_unicas), rotation=45)
-    plt.legend()
-    plt.grid(axis='y', alpha=0.3)
-    plt.tight_layout()
-    
-    # Guardar imagen
-    img_out = 'resultados_graficos.png'
-    plt.savefig(img_out, dpi=300, bbox_inches='tight')
-    print(f"✓ Gráfico guardado en {img_out}")
-    
-    # Mostrar estadísticas
-    print("\n=== Estadísticas ===")
-    for app in sorted(apps_unicas):
-        print(f"\n{app}:")
-        for core in sorted(cores_unicos):
-            fila = df[(df['App'] == app) & (df['Tipo Core'] == core)]
-            if not fila.empty:
-                tiempo = fila['Tiempo (s)'].values[0]
-                print(f"  Core {core}: {tiempo:.4f}s")
 
 if __name__ == "__main__":    
     main()

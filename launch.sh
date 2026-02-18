@@ -15,7 +15,7 @@ mkdir -p run
 WL=$(echo $WORKLOADS | tr '\-[],' " ")
 ID=$(join_by - ${WL[@]}-${ASSIGNED_CORE})
 OUT="data/${ID}.csv"
-FIN_OUT="data/${ID}-time.csv"
+FIN_OUT="data/${ID}-time.txt"
 
 ## Crear directorio de ejecución
 mkdir -p "run/${ID}"
