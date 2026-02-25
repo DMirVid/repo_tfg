@@ -49,13 +49,14 @@ def main():
             plt.figure(figsize=(14, 7))
             
             for app_name, ipc_values in data.items():
-                tiempo = np.arange(len(ipc_values))
+                tiempo = np.arange(len(ipc_values)/20)
                 plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
             
-            plt.xlabel('Quantums', fontsize=12)
+            plt.xlabel('Tiempo (s)', fontsize=12)
+            plt.ylabel('IPC', fontsize=12)
             plt.title('IPC dinámico', fontsize=14)
             plt.grid(True, alpha=0.3)
-            plt.legend(loc='best', fontsize=10)
+            plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
             plt.tight_layout()
             
             # Guardar figura
