@@ -2,6 +2,7 @@
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import MultipleLocator
 
 def main():
     data = {}
@@ -56,6 +57,7 @@ def main():
             plt.ylabel('IPC', fontsize=12)
             plt.title('IPC dinámico', fontsize=14)
             plt.grid(True, alpha=0.3)
+            plt.gca().xaxis.set_major_locator(MultipleLocator(200))
             plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
             plt.tight_layout()
             
