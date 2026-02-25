@@ -59,7 +59,7 @@ def main():
             plt.yticks(fontsize=18)
             plt.grid(True, alpha=0.3)
             plt.xlim(0, 6000)
-            plt.legend(loc='outside upper center', fontsize=16)
+            plt.legend(loc='upper right', bbox_to_anchor=(1, 1), fontsize=16)
             plt.tight_layout()
             
             # Guardar figura
