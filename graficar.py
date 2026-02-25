@@ -67,6 +67,7 @@ def main():
                 plt.yticks(fontsize=18)
                 plt.grid(True, alpha=0.3)
                 plt.xlim(0, 6000)
+                plt.ylim(0, 4)
                 plt.subplots_adjust(top=0.85)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=16, ncol=4)
                 plt.tight_layout()
