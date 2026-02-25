@@ -49,10 +49,10 @@ def main():
             plt.figure(figsize=(14, 7))
             
             for app_name, ipc_values in data.items():
-                tiempo = np.arange(len(ipc_values)/20)
+                tiempo = np.arange(len(ipc_values))
                 plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
             
-            plt.xlabel('Tiempo (s)', fontsize=12)
+            plt.xlabel('Quantums', fontsize=12)
             plt.ylabel('IPC', fontsize=12)
             plt.title('IPC dinámico', fontsize=14)
             plt.grid(True, alpha=0.3)
