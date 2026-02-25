@@ -1,84 +1,71 @@
 #!/usr/bin/python
-
 import sys
-import os
+import matplotlib.pyplot as plt
+import numpy as np
 from pathlib import Path
 
-def validar_datos(app_name, core_type, tiempo):
-    if tiempo < 1:
-        # Buscar el CSV correspondiente a esta app y core
-        csv_files = [f for f in os.listdir('.') if f.startswith(app_name + '-' + core_type) and f.endswith('.csv')]
-        for csv_file in csv_files:
-            try:
-                df = pd.read_csv(csv_file)
-                # Si el CSV tiene solo 1 línea (o está vacío), hay error
-                if len(df) <= 1:
-                    print(f"Advertencia: {csv_file} tiene solo {len(df)} línea(s). Puede haber un error de ejecución.")
-                    return False
-            except Exception as e:
-                print(f"Error al leer {csv_file}: {e}")
-                return False
-    return True
-
 def main():
-    lista = sys.argv[1:]
-    
-    if not lista:
-        print("Uso: python graficar.py archivo1-core archivo2-core ...")
-        print("Ejemplo: python graficar.py app1-E app1-P app2-E app2-P")
+    data = {}
+
+    if len(sys.argv) < 2:
+        print("Uso: python graficar.py archivo1 [archivo2 ...]")
         return
     
-    datos = []
+    archivos = sys.argv[1:]
     
-    for archivo in lista:
+    # Procesar cada archivo
+    for archivo in archivos:
         try:
-            # Extraer nombre de app y tipo de core del nombre del archivo
-            nombre_base = Path(archivo).stem  # Elimina la extensión
-            partes = nombre_base.split('-')
-            
-            if len(partes) < 2:
-                print(f"Advertencia: nombre de archivo {archivo} no tiene formato correcto (app-core)")
-                continue
-            
-            app = partes[0]  # Todo menos la última parte es el app
-            core = partes[1]  # Última parte es el core (P o E)
-            
-            # Leer el tiempo del archivo
             with open(archivo, 'r') as f:
-                contenido = f.read().strip()
-                if not contenido:
-                    print(f"Error: {archivo} está vacío")
-                    continue
-                tiempo = float(contenido)
-            
-            # Validar datos
-            if not validar_datos(app, core, tiempo):
-                print(f"Datos inválidos para {archivo}, saltando...")
+                lineas = f.readlines()
+        except Exception as e:
+            print(f"Error abriendo {archivo}: {e}")
+            continue
+        
+        # Procesar cada línea del archivo
+        for linea in lineas:
+            linea = linea.strip()
+            if not linea or linea.startswith("name"):
                 continue
             
-            tipo_core = "P" if int(core) > 14 else "E"
-            datos.append({'App': app, 'Tipo Core': tipo_core, 'Tiempo (s)': tiempo})
-            print(f"✓ {app}: Core {core} = {tiempo:.4f}s")
+            # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
+            datos = linea.split(";")
             
-        except FileNotFoundError:
-            print(f"Error: archivo {archivo} no encontrado")
-        except ValueError:
-            print(f"Error: no se puede convertir el tiempo en {archivo} a float")
-        except Exception as e:
-            print(f"Error procesando {archivo}: {e}")
+            # Agrupar en conjuntos de 4
+            for i in range(0, len(datos), 4):
+                if i + 3 < len(datos):
+                    app_name = datos[i]
+                    cores = datos[i+1]
+                    instr= datos[i+2]
+                    cycles = datos[i+3]
+                    
+                    ipc_value = float(instr) / float(cycles) if float(cycles) != 0 else 0
+                    if app_name in data:
+                        data[app_name].append(ipc_value)
+                    else:
+                        data[app_name] = [ipc_value]
     
-    if not datos:
-        print("No hay datos válidos para graficar")
-        return
-    
-    # Crear DataFrame
-    df = pd.DataFrame(datos)
-    
-    # Guardar en CSV
-    csv_out = 'resultados_graficos.csv'
-    df.to_csv(csv_out, index=False)
-    print(f"\n✓ Datos guardados en {csv_out}")
-    
+    # Graficar todas las aplicaciones en una sola gráfica
+    if data:
+        plt.figure(figsize=(14, 7))
+        
+        for app_name, ipc_values in data.items():
+            tiempo = np.arange(len(ipc_values))
+            plt.plot(tiempo, ipc_values, linewidth=2, marker='o', markersize=4, label=app_name)
+        
+        plt.xlabel('Tiempo', fontsize=12)
+        plt.title('IPC durante 300s', fontsize=14)
+        plt.grid(True, alpha=0.3)
+        plt.legend(loc='best', fontsize=10)
+        plt.tight_layout()
+        
+        # Guardar figura
+        output_filename = 'ipc_todas_aplicaciones.png'
+        plt.savefig(output_filename, dpi=100)
+        print(f"Gráfica guardada: {output_filename}")
+        plt.close()
+    else:
+        print("No se encontraron datos para graficar")
 
 if __name__ == "__main__":    
     main()
