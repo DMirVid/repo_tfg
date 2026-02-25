@@ -47,7 +47,7 @@ def main():
     
         # Graficar todas las aplicaciones en una sola gráfica
         if data:
-            plt.figure(figsize=(14, 7))
+            plt.figure(figsize=(16, 8))
             
             for app_name, ipc_values in data.items():
                 tiempo = np.arange(len(ipc_values))
@@ -59,7 +59,8 @@ def main():
             plt.yticks(fontsize=18)
             plt.grid(True, alpha=0.3)
             plt.xlim(0, 6000)
-            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1), fontsize=16, ncol=4)
+            plt.subplots_adjust(top=0.85)
+            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=16, ncol=4)
             plt.tight_layout()
             
             # Guardar figura
