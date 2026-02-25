@@ -53,11 +53,9 @@ def main():
                 tiempo = np.arange(len(ipc_values))
                 plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
             
-            plt.xlabel('Quantums', fontsize=12)
-            plt.ylabel('IPC', fontsize=12)
-            plt.title('IPC dinámico', fontsize=14)
+            plt.xlabel('Quantums', fontsize=20)
+            plt.ylabel('IPC', fontsize=20)
             plt.grid(True, alpha=0.3)
-            plt.gca().xaxis.set_major_locator(MultipleLocator(200))
             plt.xlim(0, 6000)
             plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
             plt.tight_layout()
