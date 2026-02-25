@@ -44,27 +44,29 @@ def main():
                     else:
                         data[app_name] = [ipc_value]
     
-    # Graficar todas las aplicaciones en una sola gráfica
-    if data:
-        plt.figure(figsize=(14, 7))
-        
-        for app_name, ipc_values in data.items():
-            tiempo = np.arange(len(ipc_values))
-            plt.plot(tiempo, ipc_values, linewidth=2, marker='o', markersize=4, label=app_name)
-        
-        plt.xlabel('Tiempo', fontsize=12)
-        plt.title('IPC durante 300s', fontsize=14)
-        plt.grid(True, alpha=0.3)
-        plt.legend(loc='best', fontsize=10)
-        plt.tight_layout()
-        
-        # Guardar figura
-        output_filename = '../ipc_todas_aplicaciones.png'
-        plt.savefig(output_filename, dpi=100)
-        print(f"Gráfica guardada: {output_filename}")
-        plt.close()
-    else:
-        print("No se encontraron datos para graficar")
+        # Graficar todas las aplicaciones en una sola gráfica
+        if data:
+            plt.figure(figsize=(14, 7))
+            
+            for app_name, ipc_values in data.items():
+                tiempo = np.arange(len(ipc_values))
+                plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=4, label=app_name)
+            
+            plt.xlabel('Quantums', fontsize=12)
+            plt.title('IPC dinámico', fontsize=14)
+            plt.grid(True, alpha=0.3)
+            plt.legend(loc='best', fontsize=10)
+            plt.tight_layout()
+            
+            # Guardar figura
+            output_filename = '../' + archivo + '.png'
+            plt.savefig(output_filename, dpi=100)
+            print(f"Gráfica guardada: {output_filename}")
+            plt.close()
+        else:
+            print("No se encontraron datos para graficar")
+
+        data.clear()  # Limpiar datos para el siguiente archivo
 
 if __name__ == "__main__":    
     main()
