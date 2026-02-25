@@ -2,7 +2,6 @@
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
-from pathlib import Path
 
 def main():
     data = {}
@@ -60,7 +59,7 @@ def main():
         plt.tight_layout()
         
         # Guardar figura
-        output_filename = 'ipc_todas_aplicaciones.png'
+        output_filename = '../ipc_todas_aplicaciones.png'
         plt.savefig(output_filename, dpi=100)
         print(f"Gráfica guardada: {output_filename}")
         plt.close()
