@@ -50,7 +50,7 @@ def main():
             
             for app_name, ipc_values in data.items():
                 tiempo = np.arange(len(ipc_values))
-                plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=4, label=app_name)
+                plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
             
             plt.xlabel('Quantums', fontsize=12)
             plt.title('IPC dinámico', fontsize=14)
