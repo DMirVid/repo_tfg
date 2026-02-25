@@ -58,6 +58,7 @@ def main():
             plt.title('IPC dinámico', fontsize=14)
             plt.grid(True, alpha=0.3)
             plt.gca().xaxis.set_major_locator(MultipleLocator(200))
+            plt.xlim(0, 6000)
             plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
             plt.tight_layout()
             
