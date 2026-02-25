@@ -53,11 +53,13 @@ def main():
                 tiempo = np.arange(len(ipc_values))
                 plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
             
-            plt.xlabel('Quantums', fontsize=20)
-            plt.ylabel('IPC', fontsize=20)
+            plt.xlabel('Quantums', fontsize=18)
+            plt.ylabel('IPC', fontsize=18)
+            plt.xticks(fontsize=18)
+            plt.yticks(fontsize=18)
             plt.grid(True, alpha=0.3)
             plt.xlim(0, 6000)
-            plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
+            plt.legend(loc='outside upper center', fontsize=16)
             plt.tight_layout()
             
             # Guardar figura
