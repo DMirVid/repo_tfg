@@ -67,7 +67,7 @@ def main():
                 plt.xlabel('Quantums', fontsize=18)
                 plt.ylabel('Backend bound (%)', fontsize=18)
                 plt.xticks(fontsize=18)
-                plt.yticks(fontsize=18)
+                plt.yticks(range(0, 100, 10), fontsize=18)
                 plt.grid(True, alpha=0.3)
                 plt.xlim(0, 6000)
                 plt.ylim(0, 100)
