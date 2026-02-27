@@ -1,0 +1,1 @@
+Carpeta para pasar resultados entre la maquina y mi ordenador
