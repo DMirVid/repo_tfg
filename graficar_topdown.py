@@ -30,15 +30,15 @@ def main():
             # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
             datos = linea.split(";")
             
-            # Agrupar en conjuntos de 4
-            for i in range(0, len(datos), 4):
+            # Agrupar en conjuntos de 7
+            for i in range(0, len(datos), 7):
                 if i + 3 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr= datos[i+2]
                     cycles = datos[i+3]
-                    mem_bound = datos[i+5]
-                    backend_bound = datos[i+6]
+                    mem_bound = float(datos[i+5])
+                    backend_bound = float(datos[i+6])
 
                     core_bound = backend_bound - mem_bound
                     core_per = (core_bound/backend_bound) * 100
@@ -52,7 +52,6 @@ def main():
         # Graficar todas las aplicaciones en gráficas individuales
         if data:
             apps_list = list(data.items())
-            num_graficas = (len(apps_list) + 7) // 8 
             
             for app in apps_list:
                 app_name, backend = app
@@ -61,16 +60,17 @@ def main():
                 tiempo = np.arange(len(backend))
                 core_per_list = [x[0] for x in backend]
                 mem_per_list = [x[1] for x in backend]
-                plt.plot(tiempo, core_per_list, linewidth=1, marker='o', markersize=1, label=f"{app_name}_core")
-                plt.plot(tiempo, mem_per_list, linewidth=1, marker='s', markersize=1, label=f"{app_name}_mem")
+
+                plt.stackplot(tiempo, core_per_list, mem_per_list,
+                              labels=[f"{app_name}_core", f"{app_name}_mem"], alpha=0.8)
                 
                 plt.xlabel('Quantums', fontsize=18)
-                plt.ylabel('Backend bound', fontsize=18)
+                plt.ylabel('Backend bound (%)', fontsize=18)
                 plt.xticks(fontsize=18)
                 plt.yticks(fontsize=18)
                 plt.grid(True, alpha=0.3)
                 plt.xlim(0, 6000)
-                plt.ylim(0, 4)
+                plt.ylim(0, 100)
                 plt.subplots_adjust(top=0.85)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=16, ncol=4)
                 plt.tight_layout()
