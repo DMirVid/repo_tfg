@@ -93,7 +93,7 @@ def main():
                 # leyenda combinada fuera de la gráfica
                 lines1, labels1 = ax1.get_legend_handles_labels()
                 lines2, labels2 = ax2.get_legend_handles_labels()
-                plt.subplots_adjust(top=0.85)
+
                 fig.legend(lines1 + lines2, labels1 + labels2, 
                           loc='upper center', bbox_to_anchor=(0.5, 1.05), 
                           fontsize=16, ncol=5, frameon=True)
