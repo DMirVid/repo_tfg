@@ -32,8 +32,8 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 21):
-                if i + 21 < len(datos):
+            for i in range(0, len(datos), 22):
+                if i + 22 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2]) if datos[i+2] else 0
@@ -42,7 +42,7 @@ def main():
                     retiring = float(datos[i+6])
                     bad_speculation = float(datos[i+7])
                     backend_bound = float(datos[i+8])
-                    ipc = float(datos[i+21])
+                    ipc = instr / cycles
 
                     total = frontend + retiring + bad_speculation + backend_bound
                     retiring = retiring / total
