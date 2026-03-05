@@ -91,7 +91,7 @@ def main():
                 ax2.plot(tiempo, ipc_list, 'o-', color='silver', linewidth=2, markersize=1, label='IPC')
                 ax2.set_ylabel('IPC', fontsize=18)
                 ax2.tick_params(axis='y', labelsize=18)
-                ax2.set_ylim(0, 4)
+                ax2.set_ylim(0, 5)
 
                 # Crear espacio en la parte superior para la leyenda
                 lines, labels = ax1.get_legend_handles_labels()
