@@ -33,7 +33,7 @@ def main():
             
             # Agrupar en conjuntos de 21
             for i in range(0, len(datos), 22):
-                if i + 22 < len(datos):
+                if i + 21 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2]) if datos[i+2] else 0
