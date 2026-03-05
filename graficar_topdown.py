@@ -90,7 +90,9 @@ def main():
                 ax2.tick_params(axis='y', labelsize=18)
                 ax2.set_ylim(0, 4)
 
-                fig.legend(loc='upper center', bbox_to_anchor=(0.75, 1.05), 
+                # Crear espacio en la parte superior para la leyenda
+                plt.subplots_adjust(top=0.8)
+                fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), 
                           fontsize=16, ncol=5)
                 
                 plt.tight_layout()
