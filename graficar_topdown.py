@@ -32,18 +32,18 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 22):
-                if i + 21 < len(datos):
+            for i in range(0, len(datos), 8):
+                if i + 7 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    frontend = float(datos[i+5])
-                    retiring = float(datos[i+6])
-                    bad_speculation = float(datos[i+7])
-                    backend_bound = float(datos[i+8])
+                    frontend = float(datos[i+4])
+                    retiring = float(datos[i+5])
+                    bad_speculation = float(datos[i+6])
+                    backend_bound = float(datos[i+7])
                     ipc = instr / cycles
 
                     total = frontend + retiring + bad_speculation + backend_bound
@@ -91,7 +91,7 @@ def main():
                 ax2.plot(tiempo, ipc_list, 'o-', color='silver', linewidth=2, markersize=1, label='IPC')
                 ax2.set_ylabel('IPC', fontsize=18)
                 ax2.tick_params(axis='y', labelsize=18)
-                ax2.set_ylim(0, 5)
+                ax2.set_ylim(0, 4)
 
                 # Crear espacio en la parte superior para la leyenda
                 lines, labels = ax1.get_legend_handles_labels()
