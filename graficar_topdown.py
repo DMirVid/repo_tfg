@@ -71,31 +71,33 @@ def main():
                 ipc_list = [x[4] for x in topdown]
 
                 # eje principal: area apilada
-                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_plot,
+                color_map = ["cornflowerblue", "y", "lightgreen", "lightcoral"]
+                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_plot, colors=color_map,
                               labels=["Retiring", "Bad spèculation", "Frontend", "Backend"], alpha=0.8)
                 ax1.set_xlabel('Time', fontsize=18)
                 ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
                 ax1.tick_params(axis='x', labelsize=18)
                 ax1.tick_params(axis='y', labelsize=18)
-                ax1.yaxis.set_major_formatter(mtick.PercentFormatter())
+                ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
                 ax1.set_xlim(0, len(topdown))
                 ax1.set_ylim(0, 1)
                 ax1.grid(True, alpha=0.3, axis='y')
 
                 # eje secundario: IPC
                 ax2 = ax1.twinx()
-                ax2.plot(tiempo, ipc_list, 'o-', color='red', linewidth=2, markersize=2, label='IPC')
+                ax2.plot(tiempo, ipc_list, 'o-', color='lightgrey', linewidth=2, markersize=2, label='IPC')
                 ax2.set_ylabel('IPC', fontsize=18)
                 ax2.tick_params(axis='y', labelsize=18)
                 ax2.set_ylim(0, 4)
 
-                # leyenda combinada arriba
+                # leyenda combinada arriba sin superponer
                 lines1, labels1 = ax1.get_legend_handles_labels()
                 lines2, labels2 = ax2.get_legend_handles_labels()
-                ax1.legend(lines1 + lines2, labels1 + labels2, 
-                          loc='upper center', bbox_to_anchor=(0.5, 1.08), 
-                          fontsize=16, ncol=3, frameon=True)
+                fig.legend(lines1 + lines2, labels1 + labels2, 
+                          loc='upper center', bbox_to_anchor=(0.5, 0.98), 
+                          fontsize=16, ncol=5, frameon=True)
                 
+                plt.subplots_adjust(top=0.88)
                 plt.tight_layout()
                 
                 output_filename = '../' + app_name + '.png'
