@@ -71,9 +71,9 @@ def main():
                 ipc_list = [x[4] for x in topdown]
 
                 # eje principal: area apilada
-                color_map = ["cornflowerblue", "y", "lightgreen", "lightcoral"]
+                color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral"]
                 ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_plot, colors=color_map,
-                              labels=["Retiring", "Bad spèculation", "Frontend", "Backend"], alpha=0.8)
+                              labels=["Retiring", "Bad speculation", "Frontend", "Backend"], alpha=0.8)
                 ax1.set_xlabel('Time', fontsize=18)
                 ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
                 ax1.tick_params(axis='x', labelsize=18)
@@ -85,19 +85,18 @@ def main():
 
                 # eje secundario: IPC
                 ax2 = ax1.twinx()
-                ax2.plot(tiempo, ipc_list, 'o-', color='lightgrey', linewidth=2, markersize=2, label='IPC')
+                ax2.plot(tiempo, ipc_list, 'o-', color='silver', linewidth=2, markersize=1, label='IPC')
                 ax2.set_ylabel('IPC', fontsize=18)
                 ax2.tick_params(axis='y', labelsize=18)
                 ax2.set_ylim(0, 4)
 
-                # leyenda combinada arriba sin superponer
+                # leyenda combinada fuera de la gráfica
                 lines1, labels1 = ax1.get_legend_handles_labels()
                 lines2, labels2 = ax2.get_legend_handles_labels()
                 fig.legend(lines1 + lines2, labels1 + labels2, 
-                          loc='upper center', bbox_to_anchor=(0.5, 0.98), 
-                          fontsize=16, ncol=5, frameon=True)
+                          loc='upper center', bbox_to_anchor=(0.5, 1.02), 
+                          fontsize=16, ncol=5, frameon=True, bbox_inches='tight')
                 
-                plt.subplots_adjust(top=0.88)
                 plt.tight_layout()
                 
                 output_filename = '../' + app_name + '.png'
