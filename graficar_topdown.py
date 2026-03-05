@@ -91,8 +91,12 @@ def main():
                 ax2.set_ylim(0, 4)
 
                 # Crear espacio en la parte superior para la leyenda
-                plt.subplots_adjust(top=0.8)
-                fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), 
+                lines, labels = ax1.get_legend_handles_labels()
+                lines2, labels2 = ax2.get_legend_handles_labels()
+
+                plt.subplots_adjust(top=0.85)
+                fig.legend(lines + lines2, labels + labels2, 
+                          loc='upper center', bbox_to_anchor=(0.5, 1.15), 
                           fontsize=16, ncol=5)
                 
                 plt.tight_layout()
