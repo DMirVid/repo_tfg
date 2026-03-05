@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import numpy as np
 
 def main():
@@ -30,49 +31,71 @@ def main():
             # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
             datos = linea.split(";")
             
-            # Agrupar en conjuntos de 7
-            for i in range(0, len(datos), 7):
-                if i + 3 < len(datos):
+            # Agrupar en conjuntos de 21
+            for i in range(0, len(datos), 21):
+                if i + 21 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
-                    instr= datos[i+2]
-                    cycles = datos[i+3]
-                    mem_bound = float(datos[i+5])
-                    backend_bound = float(datos[i+6])
+                    instr = float(datos[i+2]) if datos[i+2] else 0
+                    cycles = float(datos[i+3]) if datos[i+3] else 1
+                    frontend = float(datos[i+5])
+                    retiring = float(datos[i+6])
+                    bad_speculation = float(datos[i+7])
+                    backend_bound = float(datos[i+8])
+                    ipc = float(datos[i+21])
 
-                    core_bound = backend_bound - mem_bound
-                    core_per = (core_bound/backend_bound) * 100
-                    mem_per = (mem_bound/backend_bound) * 100
+                    total = frontend + retiring + bad_speculation + backend_bound
+                    retiring = retiring / total
+                    bad_speculation = bad_speculation / total
+                    frontend = frontend / total
+                    backend_bound = backend_bound / total
 
                     if app_name in data:
-                        data[app_name].append((core_per, mem_per))
+                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc))
                     else:
-                        data[app_name] = [(core_per, mem_per)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc)]
     
         # Graficar todas las aplicaciones en gráficas individuales
         if data:
             apps_list = list(data.items())
             
             for app in apps_list:
-                app_name, backend = app
-                plt.figure(figsize=(16, 8))
+                app_name, topdown = app
+                fig, ax1 = plt.subplots(figsize=(16, 8))
                 
-                tiempo = np.arange(len(backend))
-                core_per_list = [x[0] for x in backend]
-                mem_per_list = [x[1] for x in backend]
+                tiempo = np.arange(len(topdown))
+                retiring_plot = [x[0] for x in topdown]
+                bad_plot = [x[1] for x in topdown]
+                frontend_plot = [x[2] for x in topdown]
+                backend_plot = [x[3] for x in topdown]
+                ipc_list = [x[4] for x in topdown]
 
-                plt.stackplot(tiempo, core_per_list, mem_per_list,
-                              labels=[f"{app_name}_core", f"{app_name}_mem"], alpha=0.8)
+                # eje principal: area apilada
+                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_plot,
+                              labels=["Retiring", "Bad spèculation", "Frontend", "Backend"], alpha=0.8)
+                ax1.set_xlabel('Time', fontsize=18)
+                ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
+                ax1.tick_params(axis='x', labelsize=18)
+                ax1.tick_params(axis='y', labelsize=18)
+                ax1.yaxis.set_major_formatter(mtick.PercentFormatter())
+                ax1.set_xlim(0, len(topdown))
+                ax1.set_ylim(0, 1)
+                ax1.grid(True, alpha=0.3, axis='y')
+
+                # eje secundario: IPC
+                ax2 = ax1.twinx()
+                ax2.plot(tiempo, ipc_list, 'o-', color='red', linewidth=2, markersize=2, label='IPC')
+                ax2.set_ylabel('IPC', fontsize=18)
+                ax2.tick_params(axis='y', labelsize=18)
+                ax2.set_ylim(0, 4)
+
+                # leyenda combinada arriba
+                lines1, labels1 = ax1.get_legend_handles_labels()
+                lines2, labels2 = ax2.get_legend_handles_labels()
+                ax1.legend(lines1 + lines2, labels1 + labels2, 
+                          loc='upper center', bbox_to_anchor=(0.5, 1.08), 
+                          fontsize=16, ncol=3, frameon=True)
                 
-                plt.xlabel('Quantums', fontsize=18)
-                plt.ylabel('Backend bound (%)', fontsize=18)
-                plt.xticks(fontsize=18)
-                plt.yticks(range(0, 101, 10), fontsize=18)
-                plt.grid(True, alpha=0.3)
-                plt.xlim(0, 6000)
-                plt.ylim(0, 100)
-                plt.subplots_adjust(top=0.85)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=16, ncol=4)
                 plt.tight_layout()
                 
                 output_filename = '../' + app_name + '.png'
