@@ -36,8 +36,10 @@ def main():
                 if i + 21 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
-                    instr = float(datos[i+2]) if datos[i+2] else 0
-                    cycles = float(datos[i+3]) if datos[i+3] else 1
+                    instr = float(datos[i+2])
+                    cycles = float(datos[i+3])
+                    if cycles == 0:
+                        cycles = 1
                     frontend = float(datos[i+5])
                     retiring = float(datos[i+6])
                     bad_speculation = float(datos[i+7])
@@ -45,6 +47,7 @@ def main():
                     ipc = instr / cycles
 
                     total = frontend + retiring + bad_speculation + backend_bound
+                    total = total if total != 0 else 1  # Evitar división por cero
                     retiring = retiring / total
                     bad_speculation = bad_speculation / total
                     frontend = frontend / total
