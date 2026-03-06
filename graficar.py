@@ -45,46 +45,43 @@ def main():
                     else:
                         data[app_name] = [ipc_value]
     
-        # Graficar todas las aplicaciones en gráficas de máximo 8 apps
-        if data:
-            apps_list = list(data.items())
-            num_graficas = (len(apps_list) + 7) // 8  # Dividir en grupos de 8
+    # Graficar todas las aplicaciones en gráficas de máximo 8 apps
+    if data:
+        apps_list = list(data.items())
+        num_graficas = (len(apps_list) + 7) // 8  # Dividir en grupos de 8
+        
+        for grafica_num in range(num_graficas):
+            inicio = grafica_num * 8
+            fin = min((grafica_num + 1) * 8, len(apps_list))
+            apps_grupo = apps_list[inicio:fin]
             
-            for grafica_num in range(num_graficas):
-                inicio = grafica_num * 8
-                fin = min((grafica_num + 1) * 8, len(apps_list))
-                apps_grupo = apps_list[inicio:fin]
-                
-                plt.figure(figsize=(16, 8))
-                
-                for app_name, ipc_values in apps_grupo:
-                    tiempo = np.arange(len(ipc_values))
-                    plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
-                
-                plt.xlabel('Tiempo', fontsize=20)
-                plt.ylabel('IPC', fontsize=20)
-                plt.xticks(fontsize=20)
-                plt.yticks(fontsize=20)
-                plt.grid(True, alpha=0.3)
-                plt.xlim(0, 6000)
-                plt.ylim(0, 5)
-                plt.subplots_adjust(top=0.80)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=4)
-                plt.tight_layout()
-                
-                # Guardar figura con número de página si hay múltiples gráficas
-                if num_graficas > 1:
-                    output_filename = f'../{archivo[:-4]}_p{grafica_num + 1}.png'
-                else:
-                    output_filename = '../' + archivo + '.png'
-                
-                plt.savefig(output_filename, dpi=100)
-                print(f"Gráfica guardada: {output_filename}")
-                plt.close()
-        else:
-            print("No se encontraron datos para graficar")
+            plt.figure(figsize=(16, 8))
+            
+            for app_name, ipc_values in apps_grupo:
+                tiempo = np.arange(len(ipc_values))
+                plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
+            
+            plt.xlabel('Tiempo', fontsize=20)
+            plt.ylabel('IPC', fontsize=20)
+            plt.xticks(fontsize=20)
+            plt.yticks(fontsize=20)
+            plt.grid(True, alpha=0.3)
+            plt.xlim(0, 6000)
+            plt.ylim(0, 5)
+            plt.subplots_adjust(top=0.80)
+            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=4)
+            plt.tight_layout()
+            
+            # Guardar figura con número de página si hay múltiples gráficas
+            output_filename = f'../{apps_grupo}.png'
+            
+            plt.savefig(output_filename, dpi=100)
+            print(f"Gráfica guardada: {output_filename}")
+            plt.close()
+    else:
+        print("No se encontraron datos para graficar")
 
-        data.clear()  # Limpiar datos para el siguiente archivo
+    data.clear()  # Limpiar datos para el siguiente archivo
 
 if __name__ == "__main__":    
     main()
