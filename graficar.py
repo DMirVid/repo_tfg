@@ -55,7 +55,7 @@ def main():
             fin = min((grafica_num + 1) * 8, len(apps_list))
             apps_grupo = apps_list[inicio:fin]
             
-            plt.figure(figsize=(16, 8))
+            plt.figure(figsize=(16, 9))
             
             for app_name, ipc_values in apps_grupo:
                 tiempo = np.arange(len(ipc_values))
