@@ -68,7 +68,7 @@ def main():
                 plt.grid(True, alpha=0.3)
                 plt.xlim(0, 6000)
                 plt.ylim(0, 5)
-                plt.subplots_adjust(top=0.85)
+                plt.subplots_adjust(top=0.80)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=4)
                 plt.tight_layout()
                 
