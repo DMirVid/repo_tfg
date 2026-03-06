@@ -32,8 +32,8 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 4
-            for i in range(0, len(datos), 4):
-                if i + 3 < len(datos):
+            for i in range(0, len(datos), 22):
+                if i + 21 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr= datos[i+2]
@@ -61,15 +61,15 @@ def main():
                     tiempo = np.arange(len(ipc_values))
                     plt.plot(tiempo, ipc_values, linewidth=1, marker='o', markersize=1, label=app_name)
                 
-                plt.xlabel('Quantums', fontsize=18)
-                plt.ylabel('IPC', fontsize=18)
-                plt.xticks(fontsize=18)
-                plt.yticks(fontsize=18)
+                plt.xlabel('Tiempo', fontsize=20)
+                plt.ylabel('IPC', fontsize=20)
+                plt.xticks(fontsize=20)
+                plt.yticks(fontsize=20)
                 plt.grid(True, alpha=0.3)
                 plt.xlim(0, 6000)
-                plt.ylim(0, 4)
+                plt.ylim(0, 5)
                 plt.subplots_adjust(top=0.85)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=16, ncol=4)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=4)
                 plt.tight_layout()
                 
                 # Guardar figura con número de página si hay múltiples gráficas
