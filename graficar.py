@@ -32,8 +32,8 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 4
-            for i in range(0, len(datos), 8):
-                if i + 7 < len(datos):
+            for i in range(0, len(datos), 22):
+                if i + 21 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr= datos[i+2]
@@ -73,7 +73,7 @@ def main():
             plt.tight_layout()
             
             # Guardar figura con número de página si hay múltiples gráficas
-            output_filename = f'../E_core_grafica_{grafica_num + 1}.png'
+            output_filename = f'../P_core_grafica_{grafica_num + 1}.png'
             
             plt.savefig(output_filename, dpi=100)
             print(f"Gráfica guardada: {output_filename}")
