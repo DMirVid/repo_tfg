@@ -59,9 +59,9 @@ def main():
                     core_bound = backend_bound - memory_bound
 
                     if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc))
+                        data[app_name].append((retiring, bad_speculation, frontend, core_bound, memory_bound, ipc))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, memory_bound, core_bound, ipc)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, core_bound, memory_bound, ipc)]
 
     # Graficar todas las aplicaciones en gráficas individuales
     if data:
@@ -75,14 +75,14 @@ def main():
             retiring_plot = [x[0] for x in topdown]
             bad_plot = [x[1] for x in topdown]
             frontend_plot = [x[2] for x in topdown]
-            memory_plot = [x[3] for x in topdown]
-            core_plot = [x[4] for x in topdown]
+            core_plot = [x[3] for x in topdown]
+            memory_plot = [x[4] for x in topdown]
             ipc_list = [x[5] for x in topdown]
 
             # eje principal: area apilada
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "indianred"]
-            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, memory_plot, core_plot, colors=color_map,
-                            labels=["Retiring", "Bad speculation", "Frontend", "Memory_bound", "Core_bound"], alpha=0.8)
+            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_plot, memory_plot, colors=color_map,
+                            labels=["Retiring", "Bad speculation", "Frontend", "Core_bound", "Memory_bound"], alpha=0.8)
             ax1.set_xlabel('Time', fontsize=18)
             ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
             ax1.tick_params(axis='x', labelsize=18)
