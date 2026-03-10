@@ -44,11 +44,13 @@ def main():
                     retiring = float(datos[i+5])
                     bad_speculation = float(datos[i+6])
                     backend_bound = float(datos[i+7])
-
                     memory_bound = float(datos[i+8])
 
                     ipc = instr / cycles
 
+                    # Calcular core_bound ANTES de normalizar
+                    core_bound = backend_bound - memory_bound
+                    
                     total = frontend + retiring + bad_speculation + backend_bound
                     total = total if total != 0 else 1  # Evitar división por cero
                     retiring = retiring / total
@@ -56,7 +58,7 @@ def main():
                     frontend = frontend / total
                     backend_bound = backend_bound / total
                     memory_bound = memory_bound / total
-                    core_bound = backend_bound - memory_bound
+                    core_bound = core_bound / total
 
                     if app_name in data:
                         data[app_name].append((retiring, bad_speculation, frontend, core_bound, memory_bound, ipc))
@@ -97,7 +99,7 @@ def main():
             ax2.plot(tiempo, ipc_list, 'o-', color='silver', linewidth=2, markersize=1, label='IPC')
             ax2.set_ylabel('IPC', fontsize=18)
             ax2.tick_params(axis='y', labelsize=18)
-            ax2.set_ylim(0, 4)
+            ax2.set_ylim(0, 5)
 
             # Crear espacio en la parte superior para la leyenda
             lines, labels = ax1.get_legend_handles_labels()
