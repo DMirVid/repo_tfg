@@ -48,17 +48,15 @@ def main():
 
                     ipc = instr / cycles
 
-                    # Calcular core_bound ANTES de normalizar
-                    core_bound = backend_bound - memory_bound
-                    
                     total = frontend + retiring + bad_speculation + backend_bound
                     total = total if total != 0 else 1  # Evitar división por cero
                     retiring = retiring / total
                     bad_speculation = bad_speculation / total
                     frontend = frontend / total
                     backend_bound = backend_bound / total
+
                     memory_bound = memory_bound / total
-                    core_bound = core_bound / total
+                    core_bound = backend_bound - memory_bound
 
                     if app_name in data:
                         data[app_name].append((retiring, bad_speculation, frontend, core_bound, memory_bound, ipc))
