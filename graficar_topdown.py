@@ -46,7 +46,6 @@ def main():
                     backend_bound = float(datos[i+7])
 
                     memory_bound = float(datos[i+8])
-                    core_bound = backend_bound - memory_bound
 
                     ipc = instr / cycles
 
@@ -56,6 +55,8 @@ def main():
                     bad_speculation = bad_speculation / total
                     frontend = frontend / total
                     backend_bound = backend_bound / total
+                    memory_bound = memory_bound / total
+                    core_bound = backend_bound - memory_bound
 
                     if app_name in data:
                         data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc))
@@ -105,7 +106,7 @@ def main():
             plt.subplots_adjust(top=0.85)
             plt.legend(lines + lines2, labels + labels2, 
                         loc='upper center', bbox_to_anchor=(0.5, 1.15), 
-                        fontsize=16, ncol=5)
+                        fontsize=16, ncol=6)
             
             plt.tight_layout()
             
