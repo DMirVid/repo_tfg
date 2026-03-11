@@ -95,6 +95,8 @@ def main():
             # eje secundario: IPC
             ax2 = ax1.twinx()
             ax2.plot(tiempo, ipc_list, 'o-', color='silver', linewidth=2, markersize=1, label='IPC')
+            ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.5))
+            ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
             ax2.set_ylabel('IPC', fontsize=18)
             ax2.tick_params(axis='y', labelsize=18)
             ax2.set_ylim(0, 5)
