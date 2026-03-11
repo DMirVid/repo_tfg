@@ -80,7 +80,7 @@ def main():
             ipc_list = [x[5] for x in topdown]
 
             # eje principal: area apilada
-            color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
+            color_map = ['#2e7586', '#f4b183', '#ebcc0f', "#c00000", "lightcoral"]
             ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_plot, memory_bound, colors=color_map,
                             labels=["Retiring", "Bad speculation", "Frontend", "Core_bound", "Memory_bound"], alpha=0.8)
             ax1.set_xlabel('Time', fontsize=18)
