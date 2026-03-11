@@ -80,7 +80,7 @@ def main():
             ipc_list = [x[5] for x in topdown]
 
             # eje principal: area apilada
-            color_map = ['#2e75b6', '#f4b183', '#ebcc0f', "#c00000", "mistyrose"]
+            color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
             ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_plot, memory_bound, colors=color_map,
                             labels=["Retiring", "Bad speculation", "Frontend", "Core_bound", "Memory_bound"], alpha=0.8)
             ax1.set_xlabel('Time', fontsize=18)
@@ -94,7 +94,7 @@ def main():
 
             # eje secundario: IPC
             ax2 = ax1.twinx()
-            ax2.plot(tiempo, ipc_list, 'o-', color='grey', linewidth=2, markersize=1, label='IPC')
+            ax2.plot(tiempo, ipc_list, 'o-', color='black', linewidth=2, markersize=1, label='IPC')
             ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.5))
             ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
             ax2.set_ylabel('IPC', fontsize=18)
