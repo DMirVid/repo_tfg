@@ -128,7 +128,7 @@ def main():
 
         # Configurar etiquetas del eje X con nombre y tiempo
         x_labels = [name for name in app_names]
-        
+        ax1.set_xticks(x_pos)
         ax1.set_xticklabels(x_labels, fontsize=18, rotation=90)
         
         ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
