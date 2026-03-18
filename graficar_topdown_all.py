@@ -129,10 +129,11 @@ def main():
         # Configurar etiquetas del eje X con nombre y tiempo
         x_labels = [f"{name}\n({time:.2f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels(x_labels, fontsize=12)
+        ax1.set_xticklabels(x_labels, fontsize=12, rotation=270)
         
         ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
         ax1.tick_params(axis='y', labelsize=18)
+        ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
         ax1.set_ylim(0, 1)
         ax1.grid(True, alpha=0.3, axis='y')
@@ -146,12 +147,13 @@ def main():
         ax2.tick_params(axis='y', labelsize=18)
         ax2.set_ylim(0, 5)
         
-        # Leyenda
+        # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
         lines2, labels2 = ax2.get_legend_handles_labels()
-        ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left', fontsize=14, ncol=6)
+        ax1.legend(lines1 + lines2, labels1 + labels2, loc='center', bbox_to_anchor=(0.5, 1.15), fontsize=14, ncol=6, frameon=True)
         
         plt.tight_layout()
+        plt.subplots_adjust(left=0.05, right=0.95, top=0.92, bottom=0.15)
         
         output_filename = '../topdown_all_apps.png'
         
