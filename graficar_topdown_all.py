@@ -60,12 +60,10 @@ def main():
                     # memory_bound = memory_bound / total
                     # core_bound = backend_bound - memory_bound
 
-                    fin = 0 if not fin and cycles != data[app_name][-1][5] else 1  # Marcar fin de ejecución si los ciclos no cambian
-
                     if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles, fin))
+                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles, fin)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles)]
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
