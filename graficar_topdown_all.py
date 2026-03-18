@@ -147,7 +147,6 @@ def main():
         ax2.set_ylabel('IPC', fontsize=18)
         ax2.tick_params(axis='y', labelsize=18)
         ax2.set_ylim(0, 5)
-        ax2.set_xticks(x_pos)
         ax2.xaxis.set_label_position("top")
         ax2.xaxis.tick_top()
         
