@@ -105,10 +105,10 @@ def main():
             ipc_values.append(final_sample[4])
         
         # Crear gráfica de barras apiladas
-        fig, ax1 = plt.subplots(figsize=(20, 8))
+        fig, ax1 = plt.subplots(figsize=(19, 9))
         
         x_pos = np.arange(len(app_names))
-        width = 0.6
+        width = 1.0
         
         # Colores para las barras
         color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
@@ -150,10 +150,10 @@ def main():
         # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
         lines2, labels2 = ax2.get_legend_handles_labels()
-        ax1.legend(lines1 + lines2, labels1 + labels2, loc='center', bbox_to_anchor=(0.5, 1.15), fontsize=14, ncol=6, frameon=True)
+        ax1.legend(lines1 + lines2, labels1 + labels2, loc='center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=6, frameon=True)
         
         plt.tight_layout()
-        plt.subplots_adjust(left=0.05, right=0.95, top=0.92, bottom=0.15)
+        plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
         
         output_filename = '../topdown_all_apps.png'
         
