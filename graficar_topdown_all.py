@@ -136,6 +136,7 @@ def main():
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
         ax1.set_ylim(0, 1)
+        ax1.set_xlim(-0.5, len(app_names) - 0.5)
         ax1.grid(True, alpha=0.3, axis='y')
         
         # Eje secundario para IPC
