@@ -128,7 +128,7 @@ def main():
 
         # Configurar etiquetas del eje X con nombre y tiempo
         x_labels = [name for name in app_names]
-        ax1.set_xticks(x_pos)
+        
         ax1.set_xticklabels(x_labels, fontsize=18, rotation=90)
         
         ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
@@ -147,13 +147,16 @@ def main():
         ax2.set_ylabel('IPC', fontsize=18)
         ax2.tick_params(axis='y', labelsize=18)
         ax2.set_ylim(0, 5)
+        ax2.set_xticks(x_pos)
         
+        x_labels =[]
         # Agregar tiempos sobre el eje X secundario
         for i, (pos, time) in enumerate(zip(x_pos, app_times)):
             minutes = int(time // 60)
             seconds = int(time % 60)
             time_str = f"{minutes}m {seconds}s"
-            ax2.text(pos, 5.3, time_str, ha='center', va='bottom', fontsize=18, fontweight='bold', rotation=90)
+            x_labels.append(time_str)
+        ax2.set_xticklabels(x_labels, fontsize=18, rotation=90)
         
         # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
