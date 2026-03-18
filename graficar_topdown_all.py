@@ -108,7 +108,7 @@ def main():
         fig, ax1 = plt.subplots(figsize=(19, 9))
         
         x_pos = np.arange(len(app_names))
-        width = 1.0
+        width = 0.7
         
         # Colores para las barras
         color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
