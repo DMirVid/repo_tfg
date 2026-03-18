@@ -46,7 +46,7 @@ def main():
                     bad_speculation = float(datos[i+6])
                     frontend = float(datos[i+7])
                     backend_bound = float(datos[i+8])
-                    memory_bound = float(datos[i+9])
+                    #memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
 
@@ -57,15 +57,15 @@ def main():
                     frontend = frontend / total
                     backend_bound = backend_bound / total
 
-                    memory_bound = memory_bound / total
-                    core_bound = backend_bound - memory_bound
+                    # memory_bound = memory_bound / total
+                    # core_bound = backend_bound - memory_bound
 
-                    fin = 0 if not fin and cycles != data[app_name][-1][6] else 1  # Marcar fin de ejecución si los ciclos no cambian
+                    fin = 0 if not fin and cycles != data[app_name][-1][5] else 1  # Marcar fin de ejecución si los ciclos no cambian
 
                     if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, core_bound, memory_bound, ipc, cycles, fin))
+                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles, fin))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, core_bound, memory_bound, ipc, cycles, fin)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles, fin)]
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
@@ -77,15 +77,16 @@ def main():
         retiring_values = []
         bad_speculation_values = []
         frontend_values = []
-        core_bound_values = []
-        memory_bound_values = []
+        backend_bound = []
+        #core_bound_values = []
+        #memory_bound_values = []
         ipc_values = []
         
         for app_name, topdown in apps_list:
             # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
             last_idx = len(topdown) - 1
             for i in range(len(topdown) - 1, -1, -1):
-                if i == 0 or topdown[i][6] > topdown[i-1][6]:  # ciclos en posición 6
+                if i == 0 or topdown[i][5] > topdown[i-1][5]:  # ciclos en posición 5
                     last_idx = i
                     break
             
@@ -100,9 +101,10 @@ def main():
             retiring_values.append(final_sample[0])
             bad_speculation_values.append(final_sample[1])
             frontend_values.append(final_sample[2])
-            core_bound_values.append(final_sample[3])
-            memory_bound_values.append(final_sample[4])
-            ipc_values.append(final_sample[5])
+            backend_bound.append(final_sample[3])
+            #core_bound_values.append(final_sample[3])
+            #memory_bound_values.append(final_sample[4])
+            ipc_values.append(final_sample[4])
         
         # Crear gráfica de barras apiladas
         fig, ax1 = plt.subplots(figsize=(20, 8))
@@ -123,13 +125,9 @@ def main():
                      label='Frontend', color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=1.5)
         
         cumulative = [c + f for c, f in zip(cumulative, frontend_values)]
-        p4 = ax1.bar(x_pos, core_bound_values, width, bottom=cumulative,
-                     label='Core_bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
-        
-        cumulative = [c + cb for c, cb in zip(cumulative, core_bound_values)]
-        p5 = ax1.bar(x_pos, memory_bound_values, width, bottom=cumulative,
-                     label='Memory_bound', color=color_map[4], alpha=0.8, edgecolor='gray', linewidth=1.5)
-        
+        p4 = ax1.bar(x_pos, backend_bound, width, bottom=cumulative,
+                     label='Backend_bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
+
         # Configurar etiquetas del eje X con nombre y tiempo
         x_labels = [f"{name}\n({time:.2f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
