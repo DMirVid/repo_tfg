@@ -148,15 +148,17 @@ def main():
         ax2.tick_params(axis='y', labelsize=18)
         ax2.set_ylim(0, 5)
         ax2.set_xticks(x_pos)
+        ax2.xaxis.set_label_position("top")
+        ax2.xaxis.tick_top()
         
-        x_labels =[]
+        x_labels_time = []
         # Agregar tiempos sobre el eje X secundario
         for i, (pos, time) in enumerate(zip(x_pos, app_times)):
             minutes = int(time // 60)
             seconds = int(time % 60)
             time_str = f"{minutes}m {seconds}s"
-            x_labels.append(time_str)
-        ax2.set_xticklabels(x_labels, fontsize=18, rotation=90)
+            x_labels_time.append(time_str)
+        ax2.set_xticklabels(x_labels_time, fontsize=11, rotation=90)
         
         # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
