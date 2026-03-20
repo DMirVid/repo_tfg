@@ -128,7 +128,7 @@ def main():
 
         # Configurar etiquetas del eje X con nombre y tiempo
 
-        x_labels = [f"{name}\n({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
+        x_labels = [ rf"$\bf{name}$ ({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
         ax1.set_xticklabels(x_labels, fontsize=16, rotation=90)
         
