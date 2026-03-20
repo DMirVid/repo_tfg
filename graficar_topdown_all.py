@@ -127,10 +127,11 @@ def main():
                      label='Backend_bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
 
         # Configurar etiquetas del eje X con nombre y tiempo
-
+        def nombre(name):
+            return name.lower()
         x_labels = [ rf"$\bf{{{name}}}$" + f" ({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels(sorted(x_labels), fontsize=20, rotation=90)
+        ax1.set_xticklabels(sorted(x_labels, key=nombre), fontsize=20, rotation=90)
         
         ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
