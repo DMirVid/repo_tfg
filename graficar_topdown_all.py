@@ -128,11 +128,11 @@ def main():
 
         # Configurar etiquetas del eje X con nombre y tiempo
 
-        x_labels = [ rf"$\bf{{{name}}}$" + f"({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
+        x_labels = [ rf"$\bf{{{name}}}$" + f" ({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels(x_labels, fontsize=16, rotation=90)
+        ax1.set_xticklabels(x_labels, fontsize=20, rotation=90)
         
-        ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
+        ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
@@ -145,7 +145,7 @@ def main():
         ax2.scatter(x_pos, ipc_values, s=100, color='white', edgecolor='black', linewidth=2, zorder=5, label='IPC')
         ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.5))
         ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
-        ax2.set_ylabel('IPC', fontsize=18)
+        ax2.set_ylabel('IPC', fontsize=20)
         ax2.tick_params(axis='y', labelsize=18)
         ax2.set_ylim(0, 5)        
         
