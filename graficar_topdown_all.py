@@ -127,7 +127,8 @@ def main():
                      label='Backend_bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
 
         # Configurar etiquetas del eje X con nombre y tiempo
-        x_labels = [f"{name}\n({time//60:d}m {time%60:d}s)" for name, time in zip(app_names, app_times)]
+
+        x_labels = [f"{name}\n({(time//60):.0f}m {time%60:.1f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
         ax1.set_xticklabels(x_labels, fontsize=18, rotation=90)
         
