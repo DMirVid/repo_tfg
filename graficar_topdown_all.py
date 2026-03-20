@@ -105,7 +105,7 @@ def main():
             ipc_values.append(final_sample[4])
         
         # Crear gráfica de barras apiladas
-        fig, ax1 = plt.subplots(figsize=(19, 9))
+        fig, ax1 = plt.subplots(figsize=(21, 9))
         
         x_pos = np.arange(len(app_names))
         width = 0.7
@@ -128,9 +128,9 @@ def main():
 
         # Configurar etiquetas del eje X con nombre y tiempo
 
-        x_labels = [f"{name}\n({(time//60):.0f}m {time%60:.1f}s)" for name, time in zip(app_names, app_times)]
+        x_labels = [f"{name}\n({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels(x_labels, fontsize=18, rotation=90)
+        ax1.set_xticklabels(x_labels, fontsize=16, rotation=90)
         
         ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
         ax1.tick_params(axis='y', labelsize=18)
