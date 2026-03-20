@@ -30,18 +30,18 @@ def main():
             # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
             datos = linea.split(";")
             
-            for i in range(0, len(datos), 9):
-                if i + 8 < len(datos):
+            for i in range(0, len(datos), 8):
+                if i + 7 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    retiring = float(datos[i+5])
-                    bad_speculation = float(datos[i+6])
-                    frontend = float(datos[i+7])
-                    backend_bound = float(datos[i+8])
+                    retiring = float(datos[i+4])
+                    bad_speculation = float(datos[i+5])
+                    frontend = float(datos[i+6])
+                    backend_bound = float(datos[i+7])
                     #memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
@@ -67,7 +67,7 @@ def main():
 
         cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC\n"
         
-        with open("topdown_all_P.csv", "w") as f:
+        with open("../topdown_all_E.csv", "w") as f:
             f.write(cabecera)
             for app_name, topdown in apps_list:
                 # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
