@@ -3,14 +3,21 @@ import sys
 
 QUANTUM = 100 # 100ms
 
+def cmp(name):
+    return name.lower()
+
 def main():
     data = {}
 
-    if len(sys.argv) < 2:
-        print("Uso: python graficar.py archivo1 [archivo2 ...]")
+    if len(sys.argv) < 3:
+        print("Uso: python graficar.py core archivo1 [archivo2 ...]")
         return
-    
-    archivos = sys.argv[1:]
+
+    plus = 0
+    core = sys.argv[1]
+    if core == 'P':
+        plus = 1
+    archivos = sys.argv[2:]
     
     # Procesar cada archivo
     for archivo in archivos:
@@ -30,18 +37,18 @@ def main():
             # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
             datos = linea.split(";")
             
-            for i in range(0, len(datos), 8):
-                if i + 7 < len(datos):
+            for i in range(0, len(datos), 8 + plus):
+                if i + 7 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    retiring = float(datos[i+4])
-                    bad_speculation = float(datos[i+5])
-                    frontend = float(datos[i+6])
-                    backend_bound = float(datos[i+7])
+                    retiring = float(datos[i+4 + plus])
+                    bad_speculation = float(datos[i+5 + plus])
+                    frontend = float(datos[i+6 + plus])
+                    backend_bound = float(datos[i+7 + plus])
                     #memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
@@ -67,9 +74,9 @@ def main():
 
         cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC\n"
         
-        with open("../topdown_all_E.csv", "w") as f:
+        with open("../topdown_all_"+core+".csv", "w") as f:
             f.write(cabecera)
-            for app_name, topdown in apps_list:
+            for app_name, topdown in sorted(apps_list, key=lambda x: cmp(x[0])):
                 # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
                 last_idx = len(topdown) - 1
                 for i in range(len(topdown) - 1, -1, -1):
@@ -89,6 +96,8 @@ def main():
         print("No se encontraron datos")
 
     data.clear()  # Limpiar datos para el siguiente archivo
+
+    print("Finalizado")
 
 if __name__ == "__main__":    
     main()
