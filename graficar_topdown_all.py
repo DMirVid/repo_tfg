@@ -6,14 +6,21 @@ import numpy as np
 
 QUANTUM = 100 # 100ms
 
+def cmp(name):
+    return name.lower()
+
 def main():
     data = {}
 
-    if len(sys.argv) < 2:
-        print("Uso: python graficar.py archivo1 [archivo2 ...]")
+    if len(sys.argv) < 3:
+        print("Uso: python graficar.py core archivo1 [archivo2 ...]")
         return
     
-    archivos = sys.argv[1:]
+    plus = 0
+    core = sys.argv[1]
+    if core == 'P':
+        plus = 1
+    archivos = sys.argv[2:]
     
     # Procesar cada archivo
     for archivo in archivos:
@@ -34,18 +41,18 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 9):
-                if i + 8 < len(datos):
+            for i in range(0, len(datos), 8 + plus):
+                if i + 7 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    retiring = float(datos[i+5])
-                    bad_speculation = float(datos[i+6])
-                    frontend = float(datos[i+7])
-                    backend_bound = float(datos[i+8])
+                    retiring = float(datos[i+4 + plus])
+                    bad_speculation = float(datos[i+5 + plus])
+                    frontend = float(datos[i+6 + plus])
+                    backend_bound = float(datos[i+7 + plus])
                     #memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
@@ -67,7 +74,7 @@ def main():
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
-        apps_list = list(data.items())
+        apps_list = list(sorted(data.items(), key=lambda x: cmp(x[0])))
         
         # Preparar datos para el gráfico de barras
         app_names = []
@@ -127,11 +134,9 @@ def main():
                      label='Backend_bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
 
         # Configurar etiquetas del eje X con nombre y tiempo
-        def nombre(name):
-            return name.lower()
         x_labels = [ rf"$\bf{{{name}}}$" + f" ({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
         ax1.set_xticks(x_pos)
-        ax1.set_xticklabels(sorted(x_labels, key=nombre), fontsize=20, rotation=90)
+        ax1.set_xticklabels(x_labels, fontsize=20, rotation=90)
         
         ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
