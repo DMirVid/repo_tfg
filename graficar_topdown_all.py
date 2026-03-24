@@ -163,7 +163,7 @@ def main():
         plt.tight_layout()
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
         
-        output_filename = '../topdown_all_apps.png'
+        output_filename = '../topdown_all_apps_'+core+'.png'
         
         plt.savefig(output_filename, dpi=100, bbox_inches='tight')
         print(f"Gráfica guardada: {output_filename}")

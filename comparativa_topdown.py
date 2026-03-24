@@ -77,16 +77,16 @@ def main():
             max_comulative = cumulative_P
 
         # Barras para E_cores
-        p5 = ax1.bar(x_pos[i] + width/4, retiring_values[i][1], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.5, edgecolor='gray', linewidth=1.5)
+        p5 = ax1.bar(x_pos[i] + width/4, retiring_values[i][1], width/2, color=color_map[0], alpha=0.5, edgecolor='gray', linewidth=1.5)
         p6 = ax1.bar(x_pos[i] + width/4, bad_speculation_values[i][1], width/2, bottom=retiring_values[i][1], 
-                     label='Bad speculation' if i == 0 else "", color=color_map[1], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     color=color_map[1], alpha=0.5, edgecolor='gray', linewidth=1.5)
         
         cumulative_E = retiring_values[i][1] + bad_speculation_values[i][1]
         p7 = ax1.bar(x_pos[i] + width/4, frontend_values[i][1], width/2, bottom=cumulative_E,
-                     label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=1.5)
         cumulative_E += frontend_values[i][1]
         p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i][1], width/2, bottom=cumulative_E,
-                     label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=1.5)
         
         x_labels = [name for name in app_names]
         ax1.set_xticks(x_pos)
@@ -101,7 +101,7 @@ def main():
 
         ax2 = ax1.twinx()
         ax2.scatter(x_pos, speedup_values, s=100, color='white', edgecolor='black', linewidth=2, zorder=5, label='SpeedUp')
-        ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.5))
+        ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.25))
         ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
         ax2.set_ylabel('SpeedUp IPC', fontsize=20)
         ax2.tick_params(axis='y', labelsize=18)
