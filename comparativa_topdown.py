@@ -19,8 +19,8 @@ def main():
     ipc_values = []
     speedup_values = []
 
-    P_cores = int(sys.argv[1])
-    E_cores = int(sys.argv[2])
+    P_cores = sys.argv[1]
+    E_cores = sys.argv[2]
 
     f_p = open(P_cores, 'r')
     f_e = open(E_cores, 'r')
@@ -115,11 +115,11 @@ def main():
         plt.tight_layout()
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
 
-        output_filename = '../topdown_both.png'
+    output_filename = 'topdown_both.png'
         
-        plt.savefig(output_filename, dpi=100, bbox_inches='tight')
-        print(f"Gráfica guardada: {output_filename}")
-        plt.close()
+    plt.savefig(output_filename, dpi=100, bbox_inches='tight')
+    print(f"Gráfica guardada: {output_filename}")
+    plt.close()
 
 if __name__ == "__main__":    
     main()
