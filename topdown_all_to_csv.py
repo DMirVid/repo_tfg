@@ -70,7 +70,7 @@ def main():
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
-        apps_list = list(sorted(data.items(), key=lambda x: cmp(x[0])))
+        apps_list = list(data.items())
 
         cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC\n"
         
