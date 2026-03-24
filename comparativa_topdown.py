@@ -41,7 +41,7 @@ def main():
             print(f"Error: Las aplicaciones no coinciden: {datos_P[0]} vs {datos_E[0]}")
             continue
 
-        speedup_tiempo = float(datos_P[1]) / float(datos_E[1]) 
+        speedup_tiempo = float(datos_E[1]) / float(datos_P[1]) 
         app_names.append(datos_P[0])
 
         retiring_values.append((speedup_tiempo * float(datos_P[2]), float(datos_E[2])))
@@ -61,32 +61,32 @@ def main():
     max_comulative = 1.0
     # Graficar 2 barras apiladas para cada aplicación una para el topdown de P_cores y otra para el de E_cores
     for i in range(len(app_names)):
-        p1 = ax1.bar(x_pos[i] - width/4, retiring_values[i][0], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.8, edgecolor='gray', linewidth=1.5)
+        p1 = ax1.bar(x_pos[i] - width/4, retiring_values[i][0], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.8, edgecolor='gray', linewidth=2)
         p2 = ax1.bar(x_pos[i] - width/4, bad_speculation_values[i][0], width/2, bottom=retiring_values[i][0], 
-                     label='Bad speculation' if i == 0 else "", color=color_map[1], alpha=0.8, edgecolor='gray', linewidth=1.5)
+                     label='Bad speculation' if i == 0 else "", color=color_map[1], alpha=0.8, edgecolor='gray', linewidth=2)
         
         cumulative_P = retiring_values[i][0] + bad_speculation_values[i][0]
         p3 = ax1.bar(x_pos[i] - width/4, frontend_values[i][0], width/2, bottom=cumulative_P,
-                     label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=1.5)
+                     label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=2)
         
         cumulative_P += frontend_values[i][0]
         p4 = ax1.bar(x_pos[i] - width/4, backend_bound[i][0], width/2, bottom=cumulative_P,
-                     label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
+                     label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=2)
 
         if cumulative_P > max_comulative:
             max_comulative = cumulative_P
 
         # Barras para E_cores
-        p5 = ax1.bar(x_pos[i] + width/4, retiring_values[i][1], width/2, color=color_map[0], alpha=0.5, edgecolor='gray', linewidth=1.5)
+        p5 = ax1.bar(x_pos[i] + width/4, retiring_values[i][1], width/2, color=color_map[0], alpha=0.5, edgecolor='gray', linewidth=2)
         p6 = ax1.bar(x_pos[i] + width/4, bad_speculation_values[i][1], width/2, bottom=retiring_values[i][1], 
-                     color=color_map[1], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     color=color_map[1], alpha=0.5, edgecolor='gray', linewidth=2)
         
         cumulative_E = retiring_values[i][1] + bad_speculation_values[i][1]
         p7 = ax1.bar(x_pos[i] + width/4, frontend_values[i][1], width/2, bottom=cumulative_E,
-                     color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=2)
         cumulative_E += frontend_values[i][1]
         p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i][1], width/2, bottom=cumulative_E,
-                     color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=2)
         
         x_labels = [name for name in app_names]
         ax1.set_xticks(x_pos)
@@ -94,8 +94,8 @@ def main():
         ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
-        ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
-        ax1.set_ylim(0, 1)
+        ax1.yaxis.set_major_formatter(mtick.PercentFormatter(max_comulative, decimals=None))
+        ax1.set_ylim(0, max_comulative * 1.1)
         ax1.set_xlim(-0.5, len(app_names) - 0.5)
         ax1.grid(True, alpha=0.3, axis='y')
 
