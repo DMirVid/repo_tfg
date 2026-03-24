@@ -70,13 +70,13 @@ def main():
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
-        apps_list = list(data.items())
+        apps_list = list(sorted(data.items(), key=lambda x: cmp(x[0])))
 
         cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC\n"
         
         with open("../topdown_all_"+core+".csv", "w") as f:
             f.write(cabecera)
-            for app_name, topdown in sorted(apps_list, key=lambda x: cmp(x[0])):
+            for app_name, topdown in apps_list:
                 # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
                 last_idx = len(topdown) - 1
                 for i in range(len(topdown) - 1, -1, -1):

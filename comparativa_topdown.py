@@ -53,7 +53,7 @@ def main():
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
     x_pos = np.arange(len(app_names))
-    width = 0.7
+    width = 0.6
 
     # Colores para las barras
     color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
@@ -61,32 +61,32 @@ def main():
     max_comulative = 1.0
     # Graficar 2 barras apiladas para cada aplicación una para el topdown de P_cores y otra para el de E_cores
     for i in range(len(app_names)):
-        p1 = ax1.bar(x_pos[i] - width/4, retiring_values[i][0], width/2, label='Retiring P_cores' if i == 0 else "", color=color_map[0], alpha=0.8, edgecolor='gray', linewidth=1.5)
+        p1 = ax1.bar(x_pos[i] - width/4, retiring_values[i][0], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.8, edgecolor='gray', linewidth=1.5)
         p2 = ax1.bar(x_pos[i] - width/4, bad_speculation_values[i][0], width/2, bottom=retiring_values[i][0], 
-                     label='Bad speculation P_cores' if i == 0 else "", color=color_map[1], alpha=0.8, edgecolor='gray', linewidth=1.5)
+                     label='Bad speculation' if i == 0 else "", color=color_map[1], alpha=0.8, edgecolor='gray', linewidth=1.5)
         
         cumulative_P = retiring_values[i][0] + bad_speculation_values[i][0]
         p3 = ax1.bar(x_pos[i] - width/4, frontend_values[i][0], width/2, bottom=cumulative_P,
-                     label='Frontend P_cores' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=1.5)
+                     label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=1.5)
         
         cumulative_P += frontend_values[i][0]
         p4 = ax1.bar(x_pos[i] - width/4, backend_bound[i][0], width/2, bottom=cumulative_P,
-                     label='Backend_bound P_cores' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
+                     label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
 
         if cumulative_P > max_comulative:
             max_comulative = cumulative_P
 
         # Barras para E_cores
-        p5 = ax1.bar(x_pos[i] + width/4, retiring_values[i][1], width/2, label='Retiring E_cores' if i == 0 else "", color=color_map[0], alpha=0.5, edgecolor='gray', linewidth=1.5)
+        p5 = ax1.bar(x_pos[i] + width/4, retiring_values[i][1], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.5, edgecolor='gray', linewidth=1.5)
         p6 = ax1.bar(x_pos[i] + width/4, bad_speculation_values[i][1], width/2, bottom=retiring_values[i][1], 
-                     label='Bad speculation E_cores' if i == 0 else "", color=color_map[1], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     label='Bad speculation' if i == 0 else "", color=color_map[1], alpha=0.5, edgecolor='gray', linewidth=1.5)
         
         cumulative_E = retiring_values[i][1] + bad_speculation_values[i][1]
         p7 = ax1.bar(x_pos[i] + width/4, frontend_values[i][1], width/2, bottom=cumulative_E,
-                     label='Frontend E_cores' if i == 0 else "", color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=1.5)
         cumulative_E += frontend_values[i][1]
         p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i][1], width/2, bottom=cumulative_E,
-                     label='Backend_bound E_cores' if i == 0 else "", color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=1.5)
+                     label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=1.5)
         
         x_labels = [name for name in app_names]
         ax1.set_xticks(x_pos)
@@ -94,8 +94,8 @@ def main():
         ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
-        ax1.yaxis.set_major_formatter(mtick.PercentFormatter(max_comulative, decimals=None))
-        ax1.set_ylim(0, max_comulative * 1.1)
+        ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
+        ax1.set_ylim(0, 1)
         ax1.set_xlim(-0.5, len(app_names) - 0.5)
         ax1.grid(True, alpha=0.3, axis='y')
 
@@ -103,9 +103,9 @@ def main():
         ax2.scatter(x_pos, speedup_values, s=100, color='white', edgecolor='black', linewidth=2, zorder=5, label='SpeedUp')
         ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.5))
         ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
-        ax2.set_ylabel('SpeedUp', fontsize=20)
+        ax2.set_ylabel('SpeedUp IPC', fontsize=20)
         ax2.tick_params(axis='y', labelsize=18)
-        ax2.set_ylim(1, 3)
+        ax2.set_ylim(1, 2.5)
 
         # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
