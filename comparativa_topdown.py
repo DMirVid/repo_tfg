@@ -48,8 +48,8 @@ def main():
         bad_speculation_values.append((speedup_tiempo * float(datos_P[3]), float(datos_E[3])))
         frontend_values.append((speedup_tiempo * float(datos_P[4]), float(datos_E[4])))
         backend_bound.append((speedup_tiempo * float(datos_P[5]), float(datos_E[5])))
-        ipc_values.append((float(datos_P[6]), (2.2/3) * float(datos_E[6])))
-        speedup_values.append(float(datos_P[6]) / ((2.2/3) * float(datos_E[6])))
+        ipc_values.append((float(datos_P[6]), float(2.2/3.0) * float(datos_E[6])))
+        speedup_values.append(ipc_values[-1][0] / ipc_values[-1][1])
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
     x_pos = np.arange(len(app_names))
@@ -92,7 +92,7 @@ def main():
         x_labels = [name for name in app_names]
         ax1.set_xticks(x_pos)
         ax1.set_xticklabels(x_labels, fontsize=20, rotation=90)
-        ax1.set_ylabel('Percentage of Time Execution Tp/Te', fontsize=20)
+        ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
