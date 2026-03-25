@@ -61,16 +61,16 @@ def main():
     max_comulative = 1.0
     # Graficar 2 barras apiladas para cada aplicación una para el topdown de P_cores y otra para el de E_cores
     for i in range(len(app_names)):
-        p1 = ax1.bar(x_pos[i] + width/4, retiring_values[i][0], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.8, edgecolor='gray', linewidth=3)
-        p2 = ax1.bar(x_pos[i] + width/4, bad_speculation_values[i][0], width/2, bottom=retiring_values[i][0], 
+        p1 = ax1.bar(x_pos[i] - width/4, retiring_values[i][0], width/2, label='Retiring' if i == 0 else "", color=color_map[0], alpha=0.8, edgecolor='gray', linewidth=3)
+        p2 = ax1.bar(x_pos[i] - width/4, bad_speculation_values[i][0], width/2, bottom=retiring_values[i][0], 
                      label='Bad speculation' if i == 0 else "", color=color_map[1], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P = retiring_values[i][0] + bad_speculation_values[i][0]
-        p3 = ax1.bar(x_pos[i] + width/4, frontend_values[i][0], width/2, bottom=cumulative_P,
+        p3 = ax1.bar(x_pos[i] - width/4, frontend_values[i][0], width/2, bottom=cumulative_P,
                      label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P += frontend_values[i][0]
-        p4 = ax1.bar(x_pos[i] + width/4, backend_bound[i][0], width/2, bottom=cumulative_P,
+        p4 = ax1.bar(x_pos[i] - width/4, backend_bound[i][0], width/2, bottom=cumulative_P,
                      label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P += backend_bound[i][0]
