@@ -48,8 +48,8 @@ def main():
         bad_speculation_values.append((speedup_tiempo * float(datos_P[3]), float(datos_E[3])))
         frontend_values.append((speedup_tiempo * float(datos_P[4]), float(datos_E[4])))
         backend_bound.append((speedup_tiempo * float(datos_P[5]), float(datos_E[5])))
-        ipc_values.append((float(datos_P[6]), float(datos_E[6])))
-        speedup_values.append(float(datos_P[6]) / float(datos_E[6]))
+        ipc_values.append((float(datos_P[6]), (2.2/3) * float(datos_E[6])))
+        speedup_values.append(float(datos_P[6]) / ((2.2/3) * float(datos_E[6])))
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
     x_pos = np.arange(len(app_names))
