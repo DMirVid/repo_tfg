@@ -72,7 +72,8 @@ def main():
         cumulative_P += frontend_values[i][0]
         p4 = ax1.bar(x_pos[i], backend_bound[i][0], width, bottom=cumulative_P,
                      label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
-
+        
+        cumulative_P += backend_bound[i][0]
         if cumulative_P > max_comulative:
             max_comulative = cumulative_P
 
