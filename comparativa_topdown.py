@@ -43,7 +43,7 @@ def main():
             print(f"Error: Las aplicaciones no coinciden: {datos_P[0]} vs {datos_E[0]}")
             continue
 
-        speedup_tiempo = float(datos_E[1]) / float(datos_P[1])
+        speedup_tiempo = float(datos_P[1]) / float(datos_E[1])
         app_names.append(datos_P[0])
 
         retiring_values.append((speedup_tiempo * float(datos_P[2]), float(datos_E[2])))
