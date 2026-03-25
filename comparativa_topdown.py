@@ -19,6 +19,8 @@ def main():
     ipc_values = []
     speedup_values = []
 
+    norm = float(2.2/3.0)
+
     P_cores = sys.argv[1]
     E_cores = sys.argv[2]
 
@@ -48,7 +50,7 @@ def main():
         bad_speculation_values.append((speedup_tiempo * float(datos_P[3]), float(datos_E[3])))
         frontend_values.append((speedup_tiempo * float(datos_P[4]), float(datos_E[4])))
         backend_bound.append((speedup_tiempo * float(datos_P[5]), float(datos_E[5])))
-        ipc_values.append((float(datos_P[6]), float(2.2/3.0) * float(datos_E[6])))
+        ipc_values.append((float(datos_P[6]), norm * float(datos_E[6])))
         speedup_values.append(ipc_values[-1][0] / ipc_values[-1][1])
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
@@ -106,7 +108,7 @@ def main():
         ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
         ax2.set_ylabel('SpeedUp IPC', fontsize=20)
         ax2.tick_params(axis='y', labelsize=18)
-        ax2.set_ylim(1, 2.5)
+        ax2.set_ylim(1, 3)
 
         # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
