@@ -92,7 +92,7 @@ def main():
         x_labels = [name for name in app_names]
         ax1.set_xticks(x_pos)
         ax1.set_xticklabels(x_labels, fontsize=20, rotation=90)
-        ax1.set_ylabel('Percentage of Time Execution', fontsize=20)
+        ax1.set_ylabel('Percentage of Time Execution Tp/Te', fontsize=20)
         ax1.tick_params(axis='y', labelsize=18)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
