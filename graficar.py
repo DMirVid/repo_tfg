@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+# Muestra el IPC a lo largo del tiempo de hasta 8 aplicaciones en una misma gráfica de lineas
+
 import sys
 import matplotlib.pyplot as plt
 import numpy as np

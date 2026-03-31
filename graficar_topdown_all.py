@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+# Graficar el topdown de todas las aplicaciones en una sola gráfica de barras apiladas, con el tiempo de ejecución en el eje X.
+
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick

@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+# Este script procesa los archivos de topdown para P y E cores, y genera un archivo CSV para cada núcleo.
+
 import sys
 
 QUANTUM = 100 # 100ms

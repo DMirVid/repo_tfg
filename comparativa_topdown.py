@@ -1,4 +1,8 @@
 #!/usr/bin/python
+
+# Comparativa entre P_cores y E_cores para cada aplicación
+# mostrando el topdown de cada uno y el speedup del IPC en una gráfica de barras apiladas. 
+
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick

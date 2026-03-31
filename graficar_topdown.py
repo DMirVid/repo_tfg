@@ -1,17 +1,26 @@
 #!/usr/bin/python
+
+# Crea una gráfica de area para cada aplicaión con sus datos de topdown, usando un eje secundario para el IPC.
+
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 
+QUANTUM = 100 # 100ms
+
 def main():
     data = {}
 
-    if len(sys.argv) < 2:
-        print("Uso: python graficar.py archivo1 [archivo2 ...]")
+    if len(sys.argv) < 3:
+        print("Uso: python graficar.py core archivo1 [archivo2 ...]")
         return
     
-    archivos = sys.argv[1:]
+    plus = 0
+    core = sys.argv[1]
+    if core == 'P':
+        plus = 1
+    archivos = sys.argv[2:]
     
     # Procesar cada archivo
     for archivo in archivos:
@@ -32,19 +41,19 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 22):
-                if i + 21 < len(datos):
+            for i in range(0, len(datos), 8 + plus):
+                if i + 7 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    frontend = float(datos[i+5])
-                    retiring = float(datos[i+6])
-                    bad_speculation = float(datos[i+7])
-                    backend_bound = float(datos[i+8])
-                    memory_bound = float(datos[i+9])
+                    retiring = float(datos[i+4 + plus])
+                    bad_speculation = float(datos[i+5 + plus])
+                    frontend = float(datos[i+6 + plus])
+                    backend_bound = float(datos[i+7 + plus])
+                    #memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
 
@@ -55,13 +64,13 @@ def main():
                     frontend = frontend / total
                     backend_bound = backend_bound / total
 
-                    memory_bound = memory_bound / total
-                    core_bound = backend_bound - memory_bound
+                    #memory_bound = memory_bound / total
+                    #core_bound = backend_bound - memory_bound
 
                     if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, core_bound, memory_bound, ipc))
+                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, core_bound, memory_bound, ipc)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles)]
 
     # Graficar todas las aplicaciones en gráficas individuales
     if data:
@@ -69,15 +78,23 @@ def main():
         
         for app in apps_list:
             app_name, topdown = app
+
+            # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
+            last_idx = len(topdown) - 1
+            for i in range(len(topdown) - 1, -1, -1):
+                if i == 0 or topdown[i][5] > topdown[i-1][5]:  # ciclos en posición 5
+                    last_idx = i
+                    break
+
             fig, ax1 = plt.subplots(figsize=(16, 8))
             
-            tiempo = np.arange(len(topdown))
-            retiring_plot = [x[0] for x in topdown]
-            bad_plot = [x[1] for x in topdown]
-            frontend_plot = [x[2] for x in topdown]
-            core_plot = [x[3] for x in topdown]
-            memory_bound = [x[4] for x in topdown]
-            ipc_list = [x[5] for x in topdown]
+            tiempo = [x[0] * QUANTUM / 1000.0 for x in  np.arange(last_idx + 1)]  # Convertir a segundos
+            retiring_plot = [x[0] for x in topdown[:last_idx + 1]]
+            bad_plot = [x[1] for x in topdown[:last_idx + 1]]
+            frontend_plot = [x[2] for x in topdown[:last_idx + 1]]
+            core_plot = [x[3] for x in topdown[:last_idx + 1]]
+            memory_bound = [x[4] for x in topdown[:last_idx + 1]]
+            ipc_list = [x[5] for x in topdown[:last_idx + 1]]
 
             # eje principal: area apilada
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
