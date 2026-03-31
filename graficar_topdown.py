@@ -104,7 +104,7 @@ def main():
             ax1.tick_params(axis='x', labelsize=18)
             ax1.tick_params(axis='y', labelsize=18)
             ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
-            ax1.set_xlim(0, len(topdown))
+            ax1.set_xlim(0, last_idx * QUANTUM / 1000.0)
             ax1.set_ylim(0, 1)
             ax1.grid(True, alpha=0.3, axis='y')
 
