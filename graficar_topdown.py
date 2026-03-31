@@ -88,7 +88,7 @@ def main():
 
             fig, ax1 = plt.subplots(figsize=(16, 8))
             
-            tiempo = [x[0] * QUANTUM / 1000.0 for x in  np.arange(last_idx + 1)]  # Convertir a segundos
+            tiempo = [x * QUANTUM / 1000.0 for x in  np.arange(last_idx + 1)]  # Convertir a segundos
             retiring_plot = [x[0] for x in topdown[:last_idx + 1]]
             bad_plot = [x[1] for x in topdown[:last_idx + 1]]
             frontend_plot = [x[2] for x in topdown[:last_idx + 1]]
