@@ -87,6 +87,7 @@ def main():
 
             fig, ax1 = plt.subplots(figsize=(16, 8))
             
+            seconds = last_idx * QUANTUM / 1000.0
             tiempo = [x * QUANTUM / 1000.0 for x in  np.arange(last_idx + 1)]  # Convertir a segundos
             retiring_plot = [x[0] for x in topdown[:last_idx + 1]]
             bad_plot = [x[1] for x in topdown[:last_idx + 1]]
@@ -99,12 +100,12 @@ def main():
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
             ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound, colors=color_map,
                             labels=["Retiring", "Bad speculation", "Frontend", "Backend_bound"], alpha=0.8)
-            ax1.set_xlabel('Time', fontsize=18)
+            ax1.set_xlabel('Time (s) Total: ' + str(seconds//60) + 'm ' + str(seconds%60) + 's' , fontsize=18)
             ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
             ax1.tick_params(axis='x', labelsize=18)
             ax1.tick_params(axis='y', labelsize=18)
             ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
-            ax1.set_xlim(0, last_idx * QUANTUM / 1000.0)
+            ax1.set_xlim(0, seconds)
             ax1.set_ylim(0, 1)
             ax1.grid(True, alpha=0.3, axis='y')
 
