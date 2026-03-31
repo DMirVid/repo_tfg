@@ -76,8 +76,7 @@ def main():
     if data:
         apps_list = list(data.items())
         
-        for app in apps_list:
-            app_name, topdown = app
+        for app_name, topdown in apps_list:
 
             # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
             last_idx = len(topdown) - 1
@@ -92,14 +91,14 @@ def main():
             retiring_plot = [x[0] for x in topdown[:last_idx + 1]]
             bad_plot = [x[1] for x in topdown[:last_idx + 1]]
             frontend_plot = [x[2] for x in topdown[:last_idx + 1]]
-            core_plot = [x[3] for x in topdown[:last_idx + 1]]
-            memory_bound = [x[4] for x in topdown[:last_idx + 1]]
-            ipc_list = [x[5] for x in topdown[:last_idx + 1]]
+            backend_bound = [x[3] for x in topdown[:last_idx + 1]]
+            # memory_bound = [x[4] for x in topdown[:last_idx + 1]]
+            ipc_list = [x[4] for x in topdown[:last_idx + 1]]
 
             # eje principal: area apilada
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
-            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_plot, memory_bound, colors=color_map,
-                            labels=["Retiring", "Bad speculation", "Frontend", "Core_bound", "Memory_bound"], alpha=0.8)
+            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound, colors=color_map,
+                            labels=["Retiring", "Bad speculation", "Frontend", "Backend_bound"], alpha=0.8)
             ax1.set_xlabel('Time', fontsize=18)
             ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
             ax1.tick_params(axis='x', labelsize=18)
