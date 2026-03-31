@@ -100,8 +100,8 @@ def main():
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
             ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound, colors=color_map,
                             labels=["Retiring", "Bad speculation", "Frontend", "Backend_bound"], alpha=0.8)
-            tiempo = f'Time (s) Total: {seconds//60:.0f}m {seconds%60:.0f}s'
-            ax1.set_xlabel(tiempo, fontsize=18)
+            str_t = f'Time (s) Total: {seconds//60:.0f}m {seconds%60:.0f}s'
+            ax1.set_xlabel(str_t, fontsize=18)
             ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
             ax1.tick_params(axis='x', labelsize=18)
             ax1.tick_params(axis='y', labelsize=18)
