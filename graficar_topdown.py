@@ -49,11 +49,11 @@ def main():
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    retiring = float(datos[i+4 + plus])
-                    bad_speculation = float(datos[i+5 + plus])
-                    frontend = float(datos[i+6 + plus])
-                    backend_bound = float(datos[i+7 + plus])
-                    memory_bound = float(datos[i+9])
+                    retiring = float(datos[i+4])
+                    bad_speculation = float(datos[i+5])
+                    frontend = float(datos[i+6])
+                    backend_bound = float(datos[i+7])
+                    memory_bound = float(datos[i+8])
 
                     ipc = instr / cycles
 
