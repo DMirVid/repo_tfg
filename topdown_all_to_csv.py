@@ -73,11 +73,11 @@ def main():
                             data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles))
                         else:
                             data[app_name] = [(retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles)]
-
-                    if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles)]
+                        if app_name in data:
+                            data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
+                        else:
+                            data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles)]
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
