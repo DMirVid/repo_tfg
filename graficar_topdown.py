@@ -98,8 +98,8 @@ def main():
 
             # eje principal: area apilada
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
-            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, memory_bound, core_bound, colors=color_map,
-                            labels=["Retiring", "Bad speculation", "Frontend", "Memory Bound", "Core Bound"], alpha=0.8)
+            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_bound, memory_bound, colors=color_map,
+                            labels=["Retiring", "Bad speculation", "Frontend", "Core Bound", "Memory Bound"], alpha=0.8)
             str_t = f'Time (s) Total: {seconds//60:.0f}m {seconds%60:.0f}s'
             ax1.set_xlabel(str_t, fontsize=18)
             ax1.set_ylabel('Percertage of Time Execution', fontsize=18)

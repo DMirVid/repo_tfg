@@ -93,7 +93,7 @@ def main():
                 # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
                 last_idx = len(topdown) - 1
                 for i in range(len(topdown) - 1, -1, -1):
-                    if i == 0 or topdown[i][5] > topdown[i-1][5]:  # ciclos en posición 5
+                    if i == 0 or topdown[i][5 + plus] > topdown[i-1][5 + plus]:  # ciclos en posición 5
                         last_idx = i
                         break
                 
