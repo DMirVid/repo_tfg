@@ -58,7 +58,7 @@ def main():
         backend_bound.append(float(datos_E[5]))
         memory_bound_values.append(speedup_tiempo * float(datos_P[5]))
         core_bound_values.append(speedup_tiempo * float(datos_P[6]))
-        ipc_values.append((float(datos_P[6]), norm * float(datos_E[7])))
+        ipc_values.append((float(datos_P[7]), norm * float(datos_E[6])))
         speedup_values.append(ipc_values[-1][0] / ipc_values[-1][1])
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
@@ -100,7 +100,7 @@ def main():
         p7 = ax1.bar(x_pos[i] + width/4, frontend_values[i][1], width/2, bottom=cumulative_E,
                      color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=3)
         cumulative_E += frontend_values[i][1]
-        p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i][1], width/2, bottom=cumulative_E, label='Backend_bound',
+        p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i], width/2, bottom=cumulative_E, label='Backend_bound',
                      color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=3)
         
         x_labels = [name for name in app_names]
