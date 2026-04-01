@@ -49,7 +49,7 @@ def main():
             print(f"Error: Las aplicaciones no coinciden: {datos_P[0]} vs {datos_E[0]}")
             continue
 
-        speedup_tiempo = float(datos_P[1]) / float(datos_E[1])
+        speedup_tiempo = float(datos_E[1]) / float(datos_P[1])
         app_names.append(datos_P[0])
 
         retiring_values.append((speedup_tiempo * float(datos_P[2]), float(datos_E[2])))
@@ -125,7 +125,7 @@ def main():
         # Leyenda fuera de la gráfica arriba en el centro
         lines1, labels1 = ax1.get_legend_handles_labels()
         lines2, labels2 = ax2.get_legend_handles_labels()
-        ax1.legend(lines1 + lines2, labels1 + labels2, loc='center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=6, frameon=True)
+        ax1.legend(lines1 + lines2, labels1 + labels2, loc='center', bbox_to_anchor=(0.5, 1.15), fontsize=20, ncol=7, frameon=True)
         
         plt.tight_layout()
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
