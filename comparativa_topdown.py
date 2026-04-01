@@ -80,12 +80,12 @@ def main():
                      label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P += frontend_values[i][0]
-        p4 = ax1.bar(x_pos[i] - width/4, memory_bound_values[i], width/2, bottom=cumulative_P,
-                     label='Memory_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
-        
-        cumulative_P += memory_bound_values[i]
         p42 = ax1.bar(x_pos[i] - width/4, core_bound_values[i], width/2, bottom=cumulative_P,
-                     label='Core_bound' if i == 0 else "", color=color_map[4], alpha=0.8, edgecolor='gray', linewidth=3)
+                     label='Core_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
+        
+        cumulative_P += core_bound_values[i]
+        p4 = ax1.bar(x_pos[i] - width/4, memory_bound_values[i], width/2, bottom=cumulative_P,
+                     label='Memory_bound' if i == 0 else "", color=color_map[4], alpha=0.8, edgecolor='gray', linewidth=3)
 
         cumulative_P += core_bound_values[i]
         if cumulative_P > max_comulative:
@@ -100,7 +100,7 @@ def main():
         p7 = ax1.bar(x_pos[i] + width/4, frontend_values[i][1], width/2, bottom=cumulative_E,
                      color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=3)
         cumulative_E += frontend_values[i][1]
-        p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i], width/2, bottom=cumulative_E, label='Backend_bound',
+        p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i], width/2, bottom=cumulative_E, label='Backend_bound' if i == 0 else "",
                      color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=3)
         
         x_labels = [name for name in app_names]
