@@ -20,6 +20,8 @@ def main():
     bad_speculation_values = []
     frontend_values = []
     backend_bound = []
+    memory_bound_values = []
+    core_bound_values = []
     ipc_values = []
     speedup_values = []
 
@@ -53,8 +55,10 @@ def main():
         retiring_values.append((speedup_tiempo * float(datos_P[2]), float(datos_E[2])))
         bad_speculation_values.append((speedup_tiempo * float(datos_P[3]), float(datos_E[3])))
         frontend_values.append((speedup_tiempo * float(datos_P[4]), float(datos_E[4])))
-        backend_bound.append((speedup_tiempo * float(datos_P[5]), float(datos_E[5])))
-        ipc_values.append((float(datos_P[6]), norm * float(datos_E[6])))
+        backend_bound.append(float(datos_E[5]))
+        memory_bound_values.append(speedup_tiempo * float(datos_P[5]))
+        core_bound_values.append(speedup_tiempo * float(datos_P[6]))
+        ipc_values.append((float(datos_P[6]), norm * float(datos_E[7])))
         speedup_values.append(ipc_values[-1][0] / ipc_values[-1][1])
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
@@ -76,10 +80,14 @@ def main():
                      label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P += frontend_values[i][0]
-        p4 = ax1.bar(x_pos[i] - width/4, backend_bound[i][0], width/2, bottom=cumulative_P,
-                     label='Backend_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
+        p4 = ax1.bar(x_pos[i] - width/4, memory_bound_values[i], width/2, bottom=cumulative_P,
+                     label='Memory_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
         
-        cumulative_P += backend_bound[i][0]
+        cumulative_P += memory_bound_values[i]
+        p42 = ax1.bar(x_pos[i] - width/4, core_bound_values[i], width/2, bottom=cumulative_P,
+                     label='Core_bound' if i == 0 else "", color=color_map[4], alpha=0.8, edgecolor='gray', linewidth=3)
+
+        cumulative_P += core_bound_values[i]
         if cumulative_P > max_comulative:
             max_comulative = cumulative_P
 
@@ -92,7 +100,7 @@ def main():
         p7 = ax1.bar(x_pos[i] + width/4, frontend_values[i][1], width/2, bottom=cumulative_E,
                      color=color_map[2], alpha=0.5, edgecolor='gray', linewidth=3)
         cumulative_E += frontend_values[i][1]
-        p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i][1], width/2, bottom=cumulative_E,
+        p8 = ax1.bar(x_pos[i] + width/4, backend_bound[i][1], width/2, bottom=cumulative_E, label='Backend_bound',
                      color=color_map[3], alpha=0.5, edgecolor='gray', linewidth=3)
         
         x_labels = [name for name in app_names]

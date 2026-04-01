@@ -40,8 +40,8 @@ def main():
             # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
             datos = linea.split(";")
             
-            for i in range(0, len(datos), 8 + plus):
-                if i + 7 + plus < len(datos):
+            for i in range(0, len(datos), 9 + plus):
+                if i + 8 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
@@ -52,7 +52,7 @@ def main():
                     bad_speculation = float(datos[i+5 + plus])
                     frontend = float(datos[i+6 + plus])
                     backend_bound = float(datos[i+7 + plus])
-                    #memory_bound = float(datos[i+9])
+                    
 
                     ipc = instr / cycles
 
@@ -63,8 +63,16 @@ def main():
                     frontend = frontend / total
                     backend_bound = backend_bound / total
 
-                    # memory_bound = memory_bound / total
-                    # core_bound = backend_bound - memory_bound
+                    if plus == 1:
+                        memory_bound = float(datos[i+8 + plus])
+
+                        memory_bound = memory_bound / total
+                        core_bound = backend_bound - memory_bound
+
+                        if app_name in data:
+                            data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles))
+                        else:
+                            data[app_name] = [(retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles)]
 
                     if app_name in data:
                         data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
@@ -75,7 +83,9 @@ def main():
     if data:
         apps_list = list(sorted(data.items(), key=lambda x: cmp(x[0])))
 
-        cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC\n"
+        cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC,Cycles\n"
+        if plus == 1:
+            cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Memory Bound,Core Bound,IPC\n"
         
         with open("../topdown_all_"+core+".csv", "w") as f:
             f.write(cabecera)
@@ -92,8 +102,10 @@ def main():
                 
                 # Obtener la última muestra de la app
                 final_sample = topdown[last_idx]
-
-                f.write(f"{app_name},{time_seconds},{final_sample[0]},{final_sample[1]},{final_sample[2]},{final_sample[3]},{final_sample[4]}\n")
+                if plus == 1:
+                    f.write(f"{app_name},{time_seconds},{final_sample[0]},{final_sample[1]},{final_sample[2]},{final_sample[3]},{final_sample[4]},{final_sample[5]}\n")
+                else:
+                    f.write(f"{app_name},{time_seconds},{final_sample[0]},{final_sample[1]},{final_sample[2]},{final_sample[3]},{final_sample[4]}\n")
        
     else:
         print("No se encontraron datos")

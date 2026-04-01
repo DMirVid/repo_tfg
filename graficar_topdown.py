@@ -41,8 +41,8 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 8 + plus):
-                if i + 7 + plus < len(datos):
+            for i in range(0, len(datos), 9 + plus):
+                if i + 8 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
@@ -53,7 +53,7 @@ def main():
                     bad_speculation = float(datos[i+5 + plus])
                     frontend = float(datos[i+6 + plus])
                     backend_bound = float(datos[i+7 + plus])
-                    #memory_bound = float(datos[i+9])
+                    memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
 
@@ -64,13 +64,13 @@ def main():
                     frontend = frontend / total
                     backend_bound = backend_bound / total
 
-                    #memory_bound = memory_bound / total
-                    #core_bound = backend_bound - memory_bound
+                    memory_bound = memory_bound / total
+                    core_bound = backend_bound - memory_bound
 
                     if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
+                        data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles)]
 
     # Graficar todas las aplicaciones en gráficas individuales
     if data:
@@ -92,14 +92,14 @@ def main():
             retiring_plot = [x[0] for x in topdown[:last_idx + 1]]
             bad_plot = [x[1] for x in topdown[:last_idx + 1]]
             frontend_plot = [x[2] for x in topdown[:last_idx + 1]]
-            backend_bound = [x[3] for x in topdown[:last_idx + 1]]
-            # memory_bound = [x[4] for x in topdown[:last_idx + 1]]
-            ipc_list = [x[4] for x in topdown[:last_idx + 1]]
+            memory_bound = [x[3] for x in topdown[:last_idx + 1]]
+            core_bound = [x[4] for x in topdown[:last_idx + 1]]
+            ipc_list = [x[5] for x in topdown[:last_idx + 1]]
 
             # eje principal: area apilada
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
-            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound, colors=color_map,
-                            labels=["Retiring", "Bad speculation", "Frontend", "Backend_bound"], alpha=0.8)
+            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, memory_bound, core_bound, colors=color_map,
+                            labels=["Retiring", "Bad speculation", "Frontend", "Memory Bound", "Core Bound"], alpha=0.8)
             str_t = f'Time (s) Total: {seconds//60:.0f}m {seconds%60:.0f}s'
             ax1.set_xlabel(str_t, fontsize=18)
             ax1.set_ylabel('Percertage of Time Execution', fontsize=18)

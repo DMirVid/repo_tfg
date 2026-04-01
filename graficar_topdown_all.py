@@ -44,8 +44,8 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 8 + plus):
-                if i + 7 + plus < len(datos):
+            for i in range(0, len(datos), 9 + plus):
+                if i + 8 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
@@ -56,7 +56,7 @@ def main():
                     bad_speculation = float(datos[i+5 + plus])
                     frontend = float(datos[i+6 + plus])
                     backend_bound = float(datos[i+7 + plus])
-                    #memory_bound = float(datos[i+9])
+                    memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
 
@@ -67,13 +67,13 @@ def main():
                     frontend = frontend / total
                     backend_bound = backend_bound / total
 
-                    # memory_bound = memory_bound / total
-                    # core_bound = backend_bound - memory_bound
+                    memory_bound = memory_bound / total
+                    core_bound = backend_bound - memory_bound
 
                     if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, backend_bound, ipc, cycles))
+                        data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles))
                     else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, backend_bound, ipc, cycles)]
+                        data[app_name] = [(retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles)]
 
     # Graficar todas las aplicaciones en una sola gráfica de barras
     if data:
@@ -86,8 +86,8 @@ def main():
         bad_speculation_values = []
         frontend_values = []
         backend_bound = []
-        #core_bound_values = []
-        #memory_bound_values = []
+        core_bound_values = []
+        memory_bound_values = []
         ipc_values = []
         
         for app_name, topdown in apps_list:
@@ -109,10 +109,10 @@ def main():
             retiring_values.append(final_sample[0])
             bad_speculation_values.append(final_sample[1])
             frontend_values.append(final_sample[2])
-            backend_bound.append(final_sample[3])
-            #core_bound_values.append(final_sample[3])
-            #memory_bound_values.append(final_sample[4])
-            ipc_values.append(final_sample[4])
+            #backend_bound.append(final_sample[3])
+            core_bound_values.append(final_sample[3])
+            memory_bound_values.append(final_sample[4])
+            ipc_values.append(final_sample[5])
         
         # Crear gráfica de barras apiladas
         fig, ax1 = plt.subplots(figsize=(21, 9))
@@ -133,8 +133,11 @@ def main():
                      label='Frontend', color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=1.5)
         
         cumulative = [c + f for c, f in zip(cumulative, frontend_values)]
-        p4 = ax1.bar(x_pos, backend_bound, width, bottom=cumulative,
-                     label='Backend_bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
+        p4 = ax1.bar(x_pos, core_bound_values, width, bottom=cumulative,
+                     label='Core Bound', color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=1.5)
+        cumulative = [c + cb for c, cb in zip(cumulative, core_bound_values)]
+        p5 = ax1.bar(x_pos, memory_bound_values, width, bottom=cumulative,
+                     label='Memory Bound', color=color_map[4], alpha=0.8, edgecolor='gray', linewidth=1.5)
 
         # Configurar etiquetas del eje X con nombre y tiempo
         x_labels = [ rf"$\bf{{{name}}}$" + f" ({(time//60):.0f}m {time%60:.0f}s)" for name, time in zip(app_names, app_times)]
