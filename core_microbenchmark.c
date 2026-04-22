@@ -3,7 +3,7 @@
 #include <time.h>
 #include <math.h>
 
-#define ITERATIONS 1000000000L
+#define ITERATIONS 10000000000L
 
 /* Microbenchmark para medir rendimiento de un core
  * Realiza operaciones CPU-intensivas simples
@@ -86,7 +86,6 @@ int main() {
     
     benchmark_arithmetic();
     benchmark_computation();
-    benchmark_memory_access();
     
     printf("========================================\n");
     printf("  Benchmark completed\n");
