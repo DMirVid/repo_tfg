@@ -73,31 +73,35 @@ def main():
                     last_idx = i
                     break
             
-            fig, ax = plt.subplots(figsize=(16, 8))
+            fig, ax = plt.subplots(figsize=(10, 8))
             
-            seconds = last_idx * QUANTUM / 1000.0
-            tiempo = [x * QUANTUM / 1000.0 for x in np.arange(last_idx + 1)]
+            # Usar los últimos valores de MPKI
+            final_mpki_l1 = mpki_data[last_idx][0]
+            final_mpki_l2 = mpki_data[last_idx][1]
+            final_mpki_l3 = mpki_data[last_idx][2]
             
-            mpki_l1 = [x[0] for x in mpki_data[:last_idx + 1]]
-            mpki_l2 = [x[1] for x in mpki_data[:last_idx + 1]]
-            mpki_l3 = [x[2] for x in mpki_data[:last_idx + 1]]
+            # Datos para el gráfico de barras
+            mpki_values = [final_mpki_l1, final_mpki_l2, final_mpki_l3]
+            cache_names = ['L1 MPKI', 'L2 MPKI', 'L3 MPKI']
+            colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
             
-            # Graficar las tres líneas de MPKI
-            ax.plot(tiempo, mpki_l1, 'o-', color='#FF6B6B', linewidth=2, markersize=3, label='MPKI L1', alpha=0.8)
-            ax.plot(tiempo, mpki_l2, 's-', color='#4ECDC4', linewidth=2, markersize=3, label='MPKI L2', alpha=0.8)
-            ax.plot(tiempo, mpki_l3, '^-', color='#45B7D1', linewidth=2, markersize=3, label='MPKI L3', alpha=0.8)
+            # Crear gráfico de barras
+            bars = ax.bar(cache_names, mpki_values, color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
             
-            str_t = f'Time (s)\t Total: {seconds//60:.0f}m {seconds%60:.0f}s'
-            ax.set_xlabel(str_t, fontsize=18)
-            ax.set_ylabel('MPKI (Misses Per Kilo Instruction)', fontsize=18)
-            ax.tick_params(axis='x', labelsize=16)
-            ax.tick_params(axis='y', labelsize=16)
-            ax.set_xlim(0, seconds)
-            ax.grid(True, alpha=0.3)
+            # Agregar valores en las barras
+            for i, (bar, val) in enumerate(zip(bars, mpki_values)):
+                height = bar.get_height()
+                ax.text(bar.get_x() + bar.get_width()/2., height,
+                        f'{val:.2f}',
+                        ha='center', va='bottom', fontsize=14, fontweight='bold')
             
-            # Agregar título y leyenda
-            ax.set_title(f'Cache MPKI - {app_name}', fontsize=20, fontweight='bold')
-            ax.legend(fontsize=16, loc='upper right')
+            ax.set_ylabel('MPKI (Misses Per Kilo Instruction)', fontsize=16, fontweight='bold')
+            ax.tick_params(axis='x', labelsize=14)
+            ax.tick_params(axis='y', labelsize=14)
+            ax.grid(True, alpha=0.3, axis='y')
+            
+            # Agregar título
+            ax.set_title(f'Cache MPKI - {app_name}', fontsize=18, fontweight='bold')
             
             plt.tight_layout()
             
