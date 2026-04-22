@@ -3,30 +3,39 @@
 #include <time.h>
 #include <math.h>
 
-#define ITERATIONS 1000000000L
+#define DURATION 10.0  /* Duración del benchmark en segundos */
 
 /* Microbenchmark para medir rendimiento de un core
- * Realiza operaciones CPU-intensivas simples
+ * Se ejecuta durante 10 segundos
  */
 
 double benchmark_arithmetic() {
     clock_t start = clock();
     double result = 0.0;
+    long iterations = 0;
+    double elapsed = 0.0;
     
-    for (long i = 0; i < ITERATIONS; i++) {
-        result += (double)i * 1.5;
-        result -= (double)i * 0.5;
+    while (elapsed < DURATION) {
+        result += (double)iterations * 1.5;
+        result -= (double)iterations * 0.5;
         result *= 1.00001;
+        iterations++;
+        
+        /* Verificar tiempo cada 100000 iteraciones para evitar overhead */
+        if (iterations % 100000 == 0) {
+            clock_t current = clock();
+            elapsed = (double)(current - start) / CLOCKS_PER_SEC;
+        }
     }
     
     clock_t end = clock();
-    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+    elapsed = (double)(end - start) / CLOCKS_PER_SEC;
     
     printf("Arithmetic Operations:\n");
-    printf("  Iterations: %ld\n", ITERATIONS);
-    printf("  Time: %.4f seconds\n", elapsed);
+    printf("  Duration: %.2f seconds\n", elapsed);
+    printf("  Iterations: %ld\n", iterations);
     printf("  Result: %.2f\n", result);
-    printf("  GFLOPS: %.2f\n\n", ((double)ITERATIONS * 3.0) / (elapsed * 1e9));
+    printf("  GFLOPS: %.2f\n\n", ((double)iterations * 3.0) / (elapsed * 1e9));
     
     return elapsed;
 }
@@ -34,51 +43,38 @@ double benchmark_arithmetic() {
 double benchmark_computation() {
     clock_t start = clock();
     double result = 1.0;
+    long iterations = 0;
+    double elapsed = 0.0;
     
-    for (long i = 1; i < ITERATIONS / 10; i++) {
-        result = sqrt(result * i);
+    while (elapsed < DURATION) {
+        result = sqrt(result * (double)(iterations + 1));
         result = result * result;
+        iterations++;
+        
+        /* Verificar tiempo cada 10000 iteraciones */
+        if (iterations % 10000 == 0) {
+            clock_t current = clock();
+            elapsed = (double)(current - start) / CLOCKS_PER_SEC;
+        }
     }
     
     clock_t end = clock();
-    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+    elapsed = (double)(end - start) / CLOCKS_PER_SEC;
     
     printf("Computation (sqrt, power):\n");
-    printf("  Iterations: %ld\n", ITERATIONS / 10);
-    printf("  Time: %.4f seconds\n", elapsed);
+    printf("  Duration: %.2f seconds\n", elapsed);
+    printf("  Iterations: %ld\n", iterations);
     printf("  Result: %.2f\n", result);
-    printf("  Operations/sec: %.2e\n\n", (ITERATIONS / 10) / elapsed);
+    printf("  Operations/sec: %.2e\n\n", (double)iterations / elapsed);
     
     return elapsed;
 }
 
-double benchmark_memory_access() {
-    int size = 1000000;
-    int *array = (int *)malloc(size * sizeof(int));
-    
-    clock_t start = clock();
-    int sum = 0;
-    
-    for (long i = 0; i < ITERATIONS / 100; i++) {
-        sum += array[i % size];
-    }
-    
-    clock_t end = clock();
-    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
-    
-    printf("Memory Access Pattern:\n");
-    printf("  Array size: %d elements\n", size);
-    printf("  Iterations: %ld\n", ITERATIONS / 100L);
-    printf("  Time: %.4f seconds\n", elapsed);
-    printf("  Accesses/sec: %.2e\n\n", (ITERATIONS / 100) / elapsed);
-    
-    free(array);
-    return elapsed;
-}
 
 int main() {
     printf("========================================\n");
     printf("  Single Core Microbenchmark Suite\n");
+    printf("  Duration: %.0f seconds per test\n", DURATION);
     printf("========================================\n\n");
     
     printf("System Information:\n");
@@ -86,7 +82,6 @@ int main() {
     
     benchmark_arithmetic();
     benchmark_computation();
-    benchmark_memory_access();
     
     printf("========================================\n");
     printf("  Benchmark completed\n");
