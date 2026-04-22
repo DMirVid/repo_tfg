@@ -15,7 +15,7 @@ double benchmark_arithmetic() {
     long iterations = 0;
     double elapsed = 0.0;
     
-    while (elapsed < DURATION) {
+    while (elapsed < DURATION / 2) {
         result += (double)iterations * 1.5;
         result -= (double)iterations * 0.5;
         result *= 1.00001;
@@ -46,7 +46,7 @@ double benchmark_computation() {
     long iterations = 0;
     double elapsed = 0.0;
     
-    while (elapsed < DURATION) {
+    while (elapsed < DURATION / 2) {
         result = sqrt(result * (double)(iterations + 1));
         result = result * result;
         iterations++;
