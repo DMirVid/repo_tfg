@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 
-QUANTUM = 100 # 100ms
+QUANTUM = 200 # 200ms
 
 def main():
     data = {}
@@ -41,19 +41,19 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 9 + plus):
-                if i + 8 + plus < len(datos):
+            for i in range(0, len(datos), 22 + plus):
+                if i + 21 + plus < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
                     cycles = float(datos[i+3])
                     if cycles == 0:
                         cycles = 1
-                    retiring = float(datos[i+4])
-                    bad_speculation = float(datos[i+5])
-                    frontend = float(datos[i+6])
-                    backend_bound = float(datos[i+7])
-                    memory_bound = float(datos[i+8])
+                    retiring = float(datos[i+5])
+                    bad_speculation = float(datos[i+6])
+                    frontend = float(datos[i+7])
+                    backend_bound = float(datos[i+8])
+                    memory_bound = float(datos[i+9])
 
                     ipc = instr / cycles
 
@@ -100,9 +100,9 @@ def main():
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
             ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_bound, memory_bound, colors=color_map,
                             labels=["Retiring", "Bad speculation", "Frontend", "Core Bound", "Memory Bound"], alpha=0.8)
-            str_t = f'Time (s) Total: {seconds//60:.0f}m {seconds%60:.0f}s'
+            str_t = f'Time (s)\t Total: {seconds//60:.0f}m {seconds%60:.0f}s'
             ax1.set_xlabel(str_t, fontsize=18)
-            ax1.set_ylabel('Percertage of Time Execution', fontsize=18)
+            ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
             ax1.tick_params(axis='x', labelsize=18)
             ax1.tick_params(axis='y', labelsize=18)
             ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
