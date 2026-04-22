@@ -3,7 +3,7 @@
 # Script para compilar y ejecutar el microbenchmark de core
 
 echo "Compilando microbenchmark..."
-gcc -O3 -lm core_microbenchmark.c -o core_microbenchmark
+gcc -O3 core_microbenchmark.c -o core_microbenchmark -lm
 
 if [ $? -eq 0 ]; then
     echo "Compilación exitosa!"
