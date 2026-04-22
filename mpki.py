@@ -42,7 +42,7 @@ def main():
                 app_name = datos[i]
 
                 try:
-                    instr = float(datos[i+1])
+                    instr = float(datos[i+2])
                     l1_miss = float(datos[i+20])
                     l2_miss = float(datos[i+21])
                     l3_miss = float(datos[i+22])
