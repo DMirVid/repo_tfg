@@ -3,7 +3,7 @@
 #include <time.h>
 #include <math.h>
 
-#define ITERATIONS 1000000000
+#define ITERATIONS 1000000000L
 
 /* Microbenchmark para medir rendimiento de un core
  * Realiza operaciones CPU-intensivas simples
@@ -26,7 +26,7 @@ double benchmark_arithmetic() {
     printf("  Iterations: %ld\n", ITERATIONS);
     printf("  Time: %.4f seconds\n", elapsed);
     printf("  Result: %.2f\n", result);
-    printf("  GFLOPS: %.2f\n\n", (ITERATIONS * 3) / (elapsed * 1e9));
+    printf("  GFLOPS: %.2f\n\n", ((double)ITERATIONS * 3.0) / (elapsed * 1e9));
     
     return elapsed;
 }
@@ -68,7 +68,7 @@ double benchmark_memory_access() {
     
     printf("Memory Access Pattern:\n");
     printf("  Array size: %d elements\n", size);
-    printf("  Iterations: %ld\n", ITERATIONS / 100);
+    printf("  Iterations: %ld\n", ITERATIONS / 100L);
     printf("  Time: %.4f seconds\n", elapsed);
     printf("  Accesses/sec: %.2e\n\n", (ITERATIONS / 100) / elapsed);
     
