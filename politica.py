@@ -1,13 +1,18 @@
-from config import CPUS
+from config import CPUS, QUANTUM_SIZE
 
 # Events used by the policy
-EVENTS = ["mem_inst_retired.all_loads"]
+EVENTS = ["instructions, cycles, retiring, bad_speculation, frontend_bound, backend_bound"]
 
 def schedule(processes):
     # WARNING: ONLY WORKS WITH 4 PROCESSES
+    
+    # inatrucciones por quantum
+    ips = []
+    for proc in processes:
+        ips.append(proc.event_counts['instructions'] / QUANTUM_SIZE)
 
     # Sort processes by memory load count (lowest to highest)
-    sorted_procs = sorted(processes, key=lambda proc: proc.event_counts['mem_inst_retired.all_loads'])
+    sorted_procs = sorted(processes, key=lambda proc: proc.event_counts[''])
 
     # Set affinity balancing load number
     sorted_procs[0].set_affinity({CPUS[0][0]})  # Lowest #loads in core 0, context 0
