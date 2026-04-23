@@ -118,7 +118,7 @@ def main():
             
             # Datos para el gráfico de barras
             mpki_values = [final_mpki_l1, final_mpki_l2, final_mpki_l3]
-            cache_names = ['L1 MPKI', 'L2 MPKI', 'L3 MPKI']
+            cache_names = ['L1', 'L2', 'L3']
             colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
             
             # Crear gráfico de barras
@@ -131,19 +131,19 @@ def main():
                         f'{val:.2f}',
                         ha='center', va='bottom', fontsize=14, fontweight='bold')
             
-            ax.set_ylabel('MPKI (Misses Per Kilo Instruction)', fontsize=16, fontweight='bold')
+            ax.set_ylabel('MPKI', fontsize=16, fontweight='bold')
             ax.tick_params(axis='x', labelsize=14)
             ax.tick_params(axis='y', labelsize=14)
             ax.grid(True, alpha=0.3, axis='y')
             
             # Agregar título
-            ax.set_title(f'Cache MPKI - {app_name}', fontsize=18, fontweight='bold')
+            ax.set_title(f'{app_name}', fontsize=18, fontweight='bold')
             
             # Crear texto con información adicional fuera de la gráfica
             info_text = f"""Performance Metrics:
             
-IPC: {final_ipc:.3f} Instructions/Cycle
-GIPS: {final_gips:.3f} Giga Instructions/Second
+IPC: {final_ipc:.3f}
+GIPS: {final_gips:.3f} 
 
 Top-Down Analysis:
   • Retiring: {final_retiring*100:.1f}%
@@ -154,7 +154,7 @@ Top-Down Analysis:
     - Core Bound: {final_core*100:.1f}%"""
             
             # Añadir texto a la figura fuera del área de la gráfica
-            fig.text(0.98, 0.50, info_text, fontsize=11, verticalalignment='center',
+            fig.text(0.98, 0.50, info_text, fontsize=11, verticalalignment='upper',
                     horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8),
                     family='monospace')
             
