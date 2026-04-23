@@ -36,16 +36,16 @@ def main():
             # Parse: name;core;cpu_core/instructions/;...;cpu_core/mem_load_retired.l1_miss/;cpu_core/mem_load_retired.l2_miss/;cpu_core/mem_load_retired.l3_miss/
             datos = linea.split(";")
             
-            if len(datos) < 23:  # Necesitamos al menos 23 campos
+            if len(datos) < 24:  # Necesitamos al menos 23 campos
                 continue
-            for i in range(0, len(datos), 23):
+            for i in range(0, len(datos), 24):
                 app_name = datos[i]
 
                 try:
                     instr = float(datos[i+2])
-                    l1_miss = float(datos[i+20])
-                    l2_miss = float(datos[i+21])
-                    l3_miss = float(datos[i+22])
+                    l1_miss = float(datos[i+21])
+                    l2_miss = float(datos[i+22])
+                    l3_miss = float(datos[i+23])
                 except (ValueError, IndexError):
                     continue
             
