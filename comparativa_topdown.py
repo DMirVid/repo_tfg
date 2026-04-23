@@ -93,11 +93,11 @@ def main():
                      label='Frontend' if i == 0 else "", color=color_map[2], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P += frontend_values[i][0]
-        p42 = ax1.bar(x_pos[i] + width/4, core_bound_values[i], width/2, bottom=cumulative_P,
+        p42 = ax1.bar(x_pos[i] - width/4, core_bound_values[i], width/2, bottom=cumulative_P,
                      label='Core_bound' if i == 0 else "", color=color_map[3], alpha=0.8, edgecolor='gray', linewidth=3)
         
         cumulative_P += core_bound_values[i]
-        p4 = ax1.bar(x_pos[i] + width/4, memory_bound_values[i], width/2, bottom=cumulative_P,
+        p4 = ax1.bar(x_pos[i] - width/4, memory_bound_values[i], width/2, bottom=cumulative_P,
                      label='Memory_bound' if i == 0 else "", color=color_map[4], alpha=0.8, edgecolor='gray', linewidth=3)
 
         cumulative_P += core_bound_values[i]
