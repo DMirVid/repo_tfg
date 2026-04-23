@@ -154,7 +154,7 @@ Top-Down Analysis:
     - Core Bound: {final_core*100:.1f}%"""
             
             # Añadir texto a la figura fuera del área de la gráfica
-            fig.text(0.98, 0.50, info_text, fontsize=11, verticalalignment='top',
+            fig.text(0.98, 0.95, info_text, fontsize=11, verticalalignment='top',
                     horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8),
                     family='monospace')
             
