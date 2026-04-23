@@ -43,6 +43,27 @@ def main():
 
                 try:
                     instr = float(datos[i+2])
+                    cycles = float(datos[i+3])
+                    if cycles == 0:
+                        cycles = 1
+                    retiring = float(datos[i+5])
+                    bad_speculation = float(datos[i+6])
+                    frontend = float(datos[i+7])
+                    backend_bound = float(datos[i+8])
+                    memory_bound = float(datos[i+9])
+
+                    ipc = instr / cycles
+
+                    total = frontend + retiring + bad_speculation + backend_bound
+                    total = total if total != 0 else 1  # Evitar división por cero
+                    retiring_pct = retiring / total
+                    bad_speculation_pct = bad_speculation / total
+                    frontend_pct = frontend / total
+                    backend_bound_pct = backend_bound / total
+
+                    memory_bound = memory_bound / total
+                    core_bound = backend_bound_pct - memory_bound
+
                     l1_miss = float(datos[i+21])
                     l2_miss = float(datos[i+22])
                     l3_miss = float(datos[i+23])
@@ -57,10 +78,17 @@ def main():
                 mpki_l2 = (l2_miss / instr) * 1000
                 mpki_l3 = (l3_miss / instr) * 1000
                 
+                # Calcular GIPS (Giga Instrucciones Por Segundo)
+                # Asumimos frecuencia típica de 3.0 GHz
+                frequency_ghz = 3.0
+                gips = (instr / cycles) * frequency_ghz
+                
                 if app_name in data:
-                    data[app_name].append((mpki_l1, mpki_l2, mpki_l3, instr))
+                    data[app_name].append((mpki_l1, mpki_l2, mpki_l3, instr, ipc, retiring_pct, bad_speculation_pct, 
+                                          frontend_pct, backend_bound_pct, memory_bound, core_bound, gips))
                 else:
-                    data[app_name] = [(mpki_l1, mpki_l2, mpki_l3, instr)]
+                    data[app_name] = [(mpki_l1, mpki_l2, mpki_l3, instr, ipc, retiring_pct, bad_speculation_pct, 
+                                      frontend_pct, backend_bound_pct, memory_bound, core_bound, gips)]
 
     # Graficar MPKI para todas las aplicaciones
     if data:
@@ -73,12 +101,20 @@ def main():
                     last_idx = i
                     break
             
-            fig, ax = plt.subplots(figsize=(10, 8))
+            fig, ax = plt.subplots(figsize=(14, 10))
             
             # Usar los últimos valores de MPKI
             final_mpki_l1 = mpki_data[last_idx][0]
             final_mpki_l2 = mpki_data[last_idx][1]
             final_mpki_l3 = mpki_data[last_idx][2]
+            final_ipc = mpki_data[last_idx][4]
+            final_retiring = mpki_data[last_idx][5]
+            final_bad_spec = mpki_data[last_idx][6]
+            final_frontend = mpki_data[last_idx][7]
+            final_backend = mpki_data[last_idx][8]
+            final_memory = mpki_data[last_idx][9]
+            final_core = mpki_data[last_idx][10]
+            final_gips = mpki_data[last_idx][11]
             
             # Datos para el gráfico de barras
             mpki_values = [final_mpki_l1, final_mpki_l2, final_mpki_l3]
@@ -103,11 +139,30 @@ def main():
             # Agregar título
             ax.set_title(f'Cache MPKI - {app_name}', fontsize=18, fontweight='bold')
             
+            # Crear texto con información adicional fuera de la gráfica
+            info_text = f"""Performance Metrics:
+            
+IPC: {final_ipc:.3f} Instructions/Cycle
+GIPS: {final_gips:.3f} Giga Instructions/Second
+
+Top-Down Analysis:
+  • Retiring: {final_retiring*100:.1f}%
+  • Bad Speculation: {final_bad_spec*100:.1f}%
+  • Frontend Bound: {final_frontend*100:.1f}%
+  • Backend Bound: {final_backend*100:.1f}%
+    - Memory Bound: {final_memory*100:.1f}%
+    - Core Bound: {final_core*100:.1f}%"""
+            
+            # Añadir texto a la figura fuera del área de la gráfica
+            fig.text(0.98, 0.50, info_text, fontsize=11, verticalalignment='center',
+                    horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8),
+                    family='monospace')
+            
             plt.tight_layout()
             
             output_filename = '../' + app_name + '_mpki.png'
             
-            plt.savefig(output_filename, dpi=100)
+            plt.savefig(output_filename, dpi=100, bbox_inches='tight')
             print(f"Gráfica MPKI guardada: {output_filename}")
             plt.close()
     else:
