@@ -128,10 +128,10 @@ def main():
         ax1.grid(True, alpha=0.3, axis='y')
 
         ax2 = ax1.twinx()
-        ax2.scatter(x_pos, speedup_values, s=100, color='white', edgecolor='black', linewidth=2, zorder=5, label='SpeedUp')
+        ax2.scatter(x_pos, speedup_values, s=100, color='white', edgecolor='black', linewidth=2, zorder=5, label='Speedup')
         ax2.yaxis.set_major_locator(mtick.MultipleLocator(0.25))
         ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
-        ax2.set_ylabel('SpeedUp IPC', fontsize=20)
+        ax2.set_ylabel('Speedup IPC', fontsize=20)
         ax2.tick_params(axis='y', labelsize=18)
         ax2.set_ylim(1, 3)
 
