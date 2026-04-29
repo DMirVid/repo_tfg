@@ -3,6 +3,10 @@ from config import CPUS, QUANTUM_SIZE
 # Events used by the policy
 EVENTS = ["instructions, cycles, retiring, bad_speculation, frontend_bound, backend_bound"]
 
+
+def asignacion_core(nucleo):
+    
+
 def schedule(processes):
     # WARNING: ONLY WORKS WITH 4 PROCESSES
     
