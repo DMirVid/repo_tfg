@@ -28,8 +28,14 @@ def signal_handler(sig, frame):
 def build_args(tasks):
     args = []
     for name, cores in tasks:
-        if isinstance(cores, int):
+        # Handle different input types for cores
+        if isinstance(cores, str):
+            # Parse comma-separated string: "2,4" -> [2, 4]
+            cores = [int(c.strip()) for c in cores.split(",") if c.strip()]
+        elif isinstance(cores, int):
             cores = [cores]
+        elif isinstance(cores, (list, tuple)):
+            cores = list(cores)
 
         if name not in SPEC:
             print(f"Error: Application {name} is not in the SPEC list.")
