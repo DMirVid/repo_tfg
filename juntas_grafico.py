@@ -73,9 +73,9 @@ def main():
                     mpki_total = (l1_miss / instr) * 1000
 
                     if app_name in data:
-                        data[app_name].append((ipc, mpki_total, memory_bound_norm, core_bound))
+                        data[app_name].append((ipc, mpki_total, memory_bound_norm, core_bound, backend_bound_norm))
                     else:
-                        data[app_name] = [(ipc, mpki_total, memory_bound_norm, core_bound)]
+                        data[app_name] = [(ipc, mpki_total, memory_bound_norm, core_bound, backend_bound_norm)]
 
         # Generar las tres gráficas combinadas si hay datos
         if data:
@@ -90,18 +90,19 @@ def main():
             fig1, ax1 = plt.subplots(figsize=(14, 7))
             for (app_name, values), color in zip(data.items(), colors):
                 ipc_list = [v[0] for v in values]
-                ax1.plot(tiempo[:len(ipc_list)], ipc_list, 'o-', label=app_name, color=color, markersize=3, linewidth=2)
+                ax1.plot(tiempo[:len(ipc_list)], ipc_list, 'o-', label=app_name, color=color, markersize=1, linewidth=1)
             
             str_t = f'Time (s)'
             ax1.set_xlabel(str_t, fontsize=14)
             ax1.set_ylabel('IPC', fontsize=14)
             ax1.tick_params(axis='both', labelsize=12)
             ax1.grid(True, alpha=0.3)
-            ax1.legend(fontsize=10, loc='best')
-            ax1.set_title('IPC de Aplicaciones Ejecutadas Juntas', fontsize=16, fontweight='bold')
+            ax1.legend(fontsize=10, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, frameon=True)
+            ax1.set_title('')
+            plt.subplots_adjust(top=0.88)
             plt.tight_layout()
             output_filename1 = archivo.replace('.csv', '_ipc.png')
-            plt.savefig("../" + output_filename1, dpi=100)
+            plt.savefig(output_filename1, dpi=100)
             print(f"Gráfica IPC guardada: {output_filename1}")
             plt.close()
             
@@ -109,41 +110,82 @@ def main():
             fig2, ax2 = plt.subplots(figsize=(14, 7))
             for (app_name, values), color in zip(data.items(), colors):
                 mpki_list = [v[1] for v in values]
-                ax2.plot(tiempo[:len(mpki_list)], mpki_list, 'o-', label=app_name, color=color, markersize=3, linewidth=2)
+                ax2.plot(tiempo[:len(mpki_list)], mpki_list, 'o-', label=app_name, color=color, markersize=1, linewidth=1)
             
             ax2.set_xlabel(str_t, fontsize=14)
             ax2.set_ylabel('MPKI (Misses Per Kilo Instructions)', fontsize=14)
             ax2.tick_params(axis='both', labelsize=12)
             ax2.grid(True, alpha=0.3)
-            ax2.legend(fontsize=10, loc='best')
-            ax2.set_title('MPKI de Aplicaciones Ejecutadas Juntas', fontsize=16, fontweight='bold')
+            ax2.legend(fontsize=10, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, frameon=True)
+            ax2.set_title('')
+            plt.subplots_adjust(top=0.88)
             plt.tight_layout()
             output_filename2 = archivo.replace('.csv', '_mpki.png')
-            plt.savefig("../" + output_filename2, dpi=100)
+            plt.savefig(output_filename2, dpi=100)
             print(f"Gráfica MPKI guardada: {output_filename2}")
             plt.close()
             
-            # Gráfica 3: Memory Bound y Core Bound
+            # Gráfica 3: Memory Bound
             fig3, ax3 = plt.subplots(figsize=(14, 7))
             for (app_name, values), color in zip(data.items(), colors):
                 memory_bound_list = [v[2] for v in values]
-                core_bound_list = [v[3] for v in values]
-                ax3.plot(tiempo[:len(memory_bound_list)], memory_bound_list, 'o-', label=f'{app_name} (Memory Bound)', 
-                        color=color, markersize=3, linewidth=2, linestyle='-', alpha=0.7)
-                ax3.plot(tiempo[:len(core_bound_list)], core_bound_list, 's-', label=f'{app_name} (Core Bound)', 
-                        color=color, markersize=3, linewidth=2, linestyle='--', alpha=0.7)
+                ax3.plot(tiempo[:len(memory_bound_list)], memory_bound_list, 'o-', label=app_name, 
+                        color=color, markersize=1, linewidth=1)
             
             ax3.set_xlabel(str_t, fontsize=14)
             ax3.set_ylabel('Percentage of Time Execution', fontsize=14)
             ax3.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
             ax3.tick_params(axis='both', labelsize=12)
             ax3.grid(True, alpha=0.3)
-            ax3.legend(fontsize=9, loc='best', ncol=2)
-            ax3.set_title('Memory Bound y Core Bound de Aplicaciones', fontsize=16, fontweight='bold')
+            ax3.legend(fontsize=10, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, frameon=True)
+            ax3.set_title('')
+            plt.subplots_adjust(top=0.88)
             plt.tight_layout()
-            output_filename3 = archivo.replace('.csv', '_bounds.png')
-            plt.savefig("../" + output_filename3, dpi=100)
-            print(f"Gráfica Bounds guardada: {output_filename3}")
+            output_filename3 = archivo.replace('.csv', '_memory_bound.png')
+            plt.savefig(output_filename3, dpi=100)
+            print(f"Gráfica Memory Bound guardada: {output_filename3}")
+            plt.close()
+            
+            # Gráfica 4: Core Bound
+            fig4, ax4 = plt.subplots(figsize=(14, 7))
+            for (app_name, values), color in zip(data.items(), colors):
+                core_bound_list = [v[3] for v in values]
+                ax4.plot(tiempo[:len(core_bound_list)], core_bound_list, 's-', label=app_name, 
+                        color=color, markersize=1, linewidth=1)
+            
+            ax4.set_xlabel(str_t, fontsize=14)
+            ax4.set_ylabel('Percentage of Time Execution', fontsize=14)
+            ax4.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+            ax4.tick_params(axis='both', labelsize=12)
+            ax4.grid(True, alpha=0.3)
+            ax4.legend(fontsize=10, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, frameon=True)
+            ax4.set_title('')
+            plt.subplots_adjust(top=0.88)
+            plt.tight_layout()
+            output_filename4 = archivo.replace('.csv', '_core_bound.png')
+            plt.savefig(output_filename4, dpi=100)
+            print(f"Gráfica Core Bound guardada: {output_filename4}")
+            plt.close()
+            
+            # Gráfica 5: Backend Bound
+            fig5, ax5 = plt.subplots(figsize=(14, 7))
+            for (app_name, values), color in zip(data.items(), colors):
+                backend_bound_list = [v[4] for v in values]
+                ax5.plot(tiempo[:len(backend_bound_list)], backend_bound_list, '^-', label=app_name, 
+                        color=color, markersize=1, linewidth=1)
+            
+            ax5.set_xlabel(str_t, fontsize=14)
+            ax5.set_ylabel('Percentage of Time Execution', fontsize=14)
+            ax5.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+            ax5.tick_params(axis='both', labelsize=12)
+            ax5.grid(True, alpha=0.3)
+            ax5.legend(fontsize=10, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, frameon=True)
+            ax5.set_title('')
+            plt.subplots_adjust(top=0.88)
+            plt.tight_layout()
+            output_filename5 = archivo.replace('.csv', '_backend_bound.png')
+            plt.savefig(output_filename5, dpi=100)
+            print(f"Gráfica Backend Bound guardada: {output_filename5}")
             plt.close()
         else:
             print(f"No se encontraron datos para graficar en {archivo}")
