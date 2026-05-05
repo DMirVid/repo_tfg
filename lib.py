@@ -2,8 +2,8 @@
 ### Lee un archivo de datos en formato csv y el core en el que se ejecuta
 ### Devuelve un diccionario con la siguiente estructura:
 ### {
-###     P core -> app_name: [(ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm,  mpki_l1_total, mpki_l2_total, mpki_l3_total), ...],
-###     E core -> app_name: [(ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm), ...]
+###     P core -> app_name: [(instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm,  mpki_l1_total, mpki_l2_total, mpki_l3_total), ...],
+###     E core -> app_name: [(instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm), ...]
 ### }
 def leer_datos(core, archivo):
 
@@ -70,13 +70,13 @@ def leer_datos(core, archivo):
                     mpki_l3_total = (l3_miss / instr) * 1000
                 if core == 'P':
                     if app_name in data:
-                        data[app_name].append((ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm, mpki_l1_total, mpki_l2_total, mpki_l3_total))
+                        data[app_name].append((instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm, mpki_l1_total, mpki_l2_total, mpki_l3_total))
                     else:
-                        data[app_name] = [(ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm, mpki_l1_total, mpki_l2_total, mpki_l3_total)]
+                        data[app_name] = [(instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm, mpki_l1_total, mpki_l2_total, mpki_l3_total)]
                 else:
                     if app_name in data:
-                        data[app_name].append((ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm))
+                        data[app_name].append((instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm))
                     else:
-                        data[app_name] = [(ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm)]
+                        data[app_name] = [(instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm)]
     
     return data

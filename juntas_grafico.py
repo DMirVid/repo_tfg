@@ -35,7 +35,7 @@ def main():
             # Gráfica 1: IPC
             fig1, ax1 = plt.subplots(figsize=(14, 7))
             for (app_name, values), color in zip(data.items(), colors):
-                ipc_list = [v[0] for v in values]
+                ipc_list = [v[2] for v in values]
                 ax1.plot(tiempo[:len(ipc_list)], ipc_list, 'o-', label=app_name, color=color, markersize=1, linewidth=1)
             
             str_t = f'Time (s)'
@@ -55,7 +55,7 @@ def main():
             # Gráfica 2: Backend Bound
             fig5, ax5 = plt.subplots(figsize=(14, 7))
             for (app_name, values), color in zip(data.items(), colors):
-                backend_bound_list = [v[4] for v in values]
+                backend_bound_list = [v[6] for v in values]
                 ax5.plot(tiempo[:len(backend_bound_list)], backend_bound_list, '^-', label=app_name, 
                         color=color, markersize=1, linewidth=1)
             
@@ -77,7 +77,7 @@ def main():
                 # Gráfica 2: MPKI
                 fig2, ax2 = plt.subplots(figsize=(14, 7))
                 for (app_name, values), color in zip(data.items(), colors):
-                    mpki_list = [v[7] for v in values]
+                    mpki_list = [v[9] for v in values]
                     ax2.plot(tiempo[:len(mpki_list)], mpki_list, 'o-', label=app_name, color=color, markersize=1, linewidth=1)
                 
                 ax2.set_xlabel(str_t, fontsize=14)
@@ -97,7 +97,7 @@ def main():
                 # Gráfica 3: Memory Bound
                 fig3, ax3 = plt.subplots(figsize=(14, 7))
                 for (app_name, values), color in zip(data.items(), colors):
-                    memory_bound_list = [v[6] for v in values]
+                    memory_bound_list = [v[8] for v in values]
                     ax3.plot(tiempo[:len(memory_bound_list)], memory_bound_list, 'o-', label=app_name, 
                             color=color, markersize=1, linewidth=1)
                 
@@ -118,7 +118,7 @@ def main():
                 # Gráfica 4: Core Bound
                 fig4, ax4 = plt.subplots(figsize=(14, 7))
                 for (app_name, values), color in zip(data.items(), colors):
-                    core_bound_list = [v[5] for v in values]
+                    core_bound_list = [v[7] for v in values]
                     ax4.plot(tiempo[:len(core_bound_list)], core_bound_list, 's-', label=app_name, 
                             color=color, markersize=1, linewidth=1)
                 

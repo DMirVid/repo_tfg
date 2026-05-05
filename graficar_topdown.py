@@ -37,7 +37,7 @@ def main():
             # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
             last_idx = len(topdown) - 1
             for i in range(len(topdown) - 1, -1, -1):
-                if i == 0 or topdown[i][5] > topdown[i-1][5]:  # ciclos en posición 5
+                if i == 0 or topdown[i][2] > topdown[i-1][2]:  # IPC en posición 2  
                     last_idx = i
                     break
 
@@ -45,17 +45,17 @@ def main():
             
             seconds = last_idx * QUANTUM / 1000.0
             tiempo = [x * QUANTUM / 1000.0 for x in  np.arange(last_idx + 1)]  # Convertir a segundos
-            ipc_list = [x[0] for x in topdown[:last_idx + 1]]
-            retiring_plot = [x[1] for x in topdown[:last_idx + 1]]
-            bad_plot = [x[2] for x in topdown[:last_idx + 1]]
-            frontend_plot = [x[3] for x in topdown[:last_idx + 1]]
-            backend_bound_plot = [x[4] for x in topdown[:last_idx + 1]]
+            ipc_list = [x[2] for x in topdown[:last_idx + 1]]
+            retiring_plot = [x[3] for x in topdown[:last_idx + 1]]
+            bad_plot = [x[4] for x in topdown[:last_idx + 1]]
+            frontend_plot = [x[5] for x in topdown[:last_idx + 1]]
+            backend_bound_plot = [x[6] for x in topdown[:last_idx + 1]]
 
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
             if core == 'P':
-                core_bound = [x[5] for x in topdown[:last_idx + 1]]
-                memory_bound = [x[6] for x in topdown[:last_idx + 1]]
-                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound_plot, core_bound, memory_bound, colors=color_map,
+                core_bound_plot = [x[7] for x in topdown[:last_idx + 1]]
+                memory_bound_plot = [x[8] for x in topdown[:last_idx + 1]]
+                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_bound_plot, memory_bound_plot, colors=color_map,
                                 labels=["Retiring", "Bad speculation", "Frontend", "Core Bound", "Memory Bound"], alpha=0.8)
             else:
                 ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound_plot, colors=color_map,
