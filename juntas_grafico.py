@@ -8,6 +8,7 @@
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+from lib import leer_datos
 import numpy as np
 
 QUANTUM = 200 # 200ms
@@ -16,74 +17,11 @@ def main():
     if len(sys.argv) < 3:
         print("Uso: python juntas_grafico.py core archivo1 [archivo2 ...]")
         return
-    
-    ancho_issue = 5
-    len_datos = 8
-    resta = 1
     core = sys.argv[1]
-    if core == 'P':
-        ancho_issue = 6
-        len_datos = 24
-        resta = 0
     archivos = sys.argv[2:]
     
-    # Procesar cada archivo
     for archivo in archivos:
-        data = {}  # app_name -> list of tuples
-        
-        try:
-            with open(archivo, 'r') as f:
-                lineas = f.readlines()
-        except Exception as e:
-            print(f"Error abriendo {archivo}: {e}")
-            continue
-        
-        # Procesar cada línea del archivo
-        for linea in lineas:
-            linea = linea.strip()
-            if not linea or linea.startswith("name"):
-                continue
-            
-            # Parse: name;cores;instructions;cycles;...
-            datos = linea.split(";")
-            
-            # Agrupar en conjuntos de 23 + plus
-            for i in range(0, len(datos), len_datos):
-                if i + len_datos - 1 < len(datos):
-                    app_name = datos[i]
-                    cores = datos[i+1]
-                    instr = float(datos[i+2])
-                    cycles = float(datos[i+3])
-                    if cycles == 0:
-                        cycles = 1
-                    
-                    retiring = float(datos[i+5-resta])
-                    bad_speculation = float(datos[i+6-resta])
-                    frontend = float(datos[i+7-resta])
-                    backend_bound = float(datos[i+8-resta])
-
-                    ipc = instr / cycles
-                    total = cycles * ancho_issue
-                    total = total if total != 0 else 1
-                    backend_bound_norm = backend_bound / total
-
-                    if core == 'P':
-                        memory_bound = float(datos[i+9])
-                        memory_bound_norm = memory_bound / total
-                        core_bound = backend_bound_norm - memory_bound_norm
-
-                        l1_miss = float(datos[i+21])
-                        mpki_total = (l1_miss / instr) * 1000
-                    if core == 'P':
-                        if app_name in data:
-                            data[app_name].append((ipc, backend_bound_norm, mpki_total, core_bound, memory_bound_norm))
-                        else:
-                            data[app_name] = [(ipc, backend_bound_norm, mpki_total, core_bound, memory_bound_norm)]
-                    else:
-                        if app_name in data:
-                            data[app_name].append((ipc, backend_bound_norm))
-                        else:
-                            data[app_name] = [(ipc, backend_bound_norm)]
+        data = leer_datos(core, archivo)
 
         # Generar las tres gráficas combinadas si hay datos
         if data:
@@ -117,7 +55,7 @@ def main():
             # Gráfica 2: Backend Bound
             fig5, ax5 = plt.subplots(figsize=(14, 7))
             for (app_name, values), color in zip(data.items(), colors):
-                backend_bound_list = [v[1] for v in values]
+                backend_bound_list = [v[4] for v in values]
                 ax5.plot(tiempo[:len(backend_bound_list)], backend_bound_list, '^-', label=app_name, 
                         color=color, markersize=1, linewidth=1)
             
@@ -139,11 +77,11 @@ def main():
                 # Gráfica 2: MPKI
                 fig2, ax2 = plt.subplots(figsize=(14, 7))
                 for (app_name, values), color in zip(data.items(), colors):
-                    mpki_list = [v[2] for v in values]
+                    mpki_list = [v[7] for v in values]
                     ax2.plot(tiempo[:len(mpki_list)], mpki_list, 'o-', label=app_name, color=color, markersize=1, linewidth=1)
                 
                 ax2.set_xlabel(str_t, fontsize=14)
-                ax2.set_ylabel('MPKI', fontsize=14)
+                ax2.set_ylabel('MPKI L1', fontsize=14)
                 ax2.tick_params(axis='both', labelsize=12)
                 ax2.grid(True, alpha=0.3)
                 ax2.legend(fontsize=10, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, frameon=True)
@@ -159,7 +97,7 @@ def main():
                 # Gráfica 3: Memory Bound
                 fig3, ax3 = plt.subplots(figsize=(14, 7))
                 for (app_name, values), color in zip(data.items(), colors):
-                    memory_bound_list = [v[3] for v in values]
+                    memory_bound_list = [v[6] for v in values]
                     ax3.plot(tiempo[:len(memory_bound_list)], memory_bound_list, 'o-', label=app_name, 
                             color=color, markersize=1, linewidth=1)
                 
@@ -180,7 +118,7 @@ def main():
                 # Gráfica 4: Core Bound
                 fig4, ax4 = plt.subplots(figsize=(14, 7))
                 for (app_name, values), color in zip(data.items(), colors):
-                    core_bound_list = [v[4] for v in values]
+                    core_bound_list = [v[5] for v in values]
                     ax4.plot(tiempo[:len(core_bound_list)], core_bound_list, 's-', label=app_name, 
                             color=color, markersize=1, linewidth=1)
                 

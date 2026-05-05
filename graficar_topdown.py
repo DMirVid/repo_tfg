@@ -5,6 +5,7 @@
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+from lib import leer_datos
 import numpy as np
 
 QUANTUM = 200 # 200ms
@@ -22,55 +23,10 @@ def main():
         plus = 1
     archivos = sys.argv[2:]
     
+    data = {} 
     # Procesar cada archivo
     for archivo in archivos:
-        try:
-            with open(archivo, 'r') as f:
-                lineas = f.readlines()
-        except Exception as e:
-            print(f"Error abriendo {archivo}: {e}")
-            continue
-        
-        # Procesar cada línea del archivo
-        for linea in lineas:
-            linea = linea.strip()
-            if not linea or linea.startswith("name"):
-                continue
-            
-            # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
-            datos = linea.split(";")
-            
-            # Agrupar en conjuntos de 21
-            for i in range(0, len(datos), 23 + plus):
-                if i + 22 + plus < len(datos):
-                    app_name = datos[i]
-                    cores = datos[i+1]
-                    instr = float(datos[i+2])
-                    cycles = float(datos[i+3])
-                    if cycles == 0:
-                        cycles = 1
-                    retiring = float(datos[i+5])
-                    bad_speculation = float(datos[i+6])
-                    frontend = float(datos[i+7])
-                    backend_bound = float(datos[i+8])
-                    memory_bound = float(datos[i+9])
-
-                    ipc = instr / cycles
-
-                    total = frontend + retiring + bad_speculation + backend_bound
-                    total = total if total != 0 else 1  # Evitar división por cero
-                    retiring = retiring / total
-                    bad_speculation = bad_speculation / total
-                    frontend = frontend / total
-                    backend_bound = backend_bound / total
-
-                    memory_bound = memory_bound / total
-                    core_bound = backend_bound - memory_bound
-
-                    if app_name in data:
-                        data[app_name].append((retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles))
-                    else:
-                        data[app_name] = [(retiring, bad_speculation, frontend, memory_bound, core_bound, ipc, cycles)]
+       data.update(leer_datos(core, archivo))
 
     # Graficar todas las aplicaciones en gráficas individuales
     if data:
@@ -89,17 +45,23 @@ def main():
             
             seconds = last_idx * QUANTUM / 1000.0
             tiempo = [x * QUANTUM / 1000.0 for x in  np.arange(last_idx + 1)]  # Convertir a segundos
-            retiring_plot = [x[0] for x in topdown[:last_idx + 1]]
-            bad_plot = [x[1] for x in topdown[:last_idx + 1]]
-            frontend_plot = [x[2] for x in topdown[:last_idx + 1]]
-            memory_bound = [x[3] for x in topdown[:last_idx + 1]]
-            core_bound = [x[4] for x in topdown[:last_idx + 1]]
-            ipc_list = [x[5] for x in topdown[:last_idx + 1]]
+            ipc_list = [x[0] for x in topdown[:last_idx + 1]]
+            retiring_plot = [x[1] for x in topdown[:last_idx + 1]]
+            bad_plot = [x[2] for x in topdown[:last_idx + 1]]
+            frontend_plot = [x[3] for x in topdown[:last_idx + 1]]
+            backend_bound_plot = [x[4] for x in topdown[:last_idx + 1]]
 
-            # eje principal: area apilada
             color_map = ["cornflowerblue", "gold", "lightgreen", "lightcoral", "crimson"]
-            ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_bound, memory_bound, colors=color_map,
-                            labels=["Retiring", "Bad speculation", "Frontend", "Core Bound", "Memory Bound"], alpha=0.8)
+            if core == 'P':
+                core_bound = [x[5] for x in topdown[:last_idx + 1]]
+                memory_bound = [x[6] for x in topdown[:last_idx + 1]]
+                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound_plot, core_bound, memory_bound, colors=color_map,
+                                labels=["Retiring", "Bad speculation", "Frontend", "Core Bound", "Memory Bound"], alpha=0.8)
+            else:
+                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound_plot, colors=color_map,
+                                labels=["Retiring", "Bad speculation", "Frontend", "Backend Bound"], alpha=0.8)
+            
+            # eje principal: area apilada
             str_t = f'Time (s) Total: {seconds//60:.0f}m {seconds%60:.0f}s'
             ax1.set_xlabel(str_t, fontsize=18)
             ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
