@@ -101,7 +101,7 @@ def main():
             ax1.set_title('IPC de Aplicaciones Ejecutadas Juntas', fontsize=16, fontweight='bold')
             plt.tight_layout()
             output_filename1 = archivo.replace('.csv', '_ipc.png')
-            plt.savefig(output_filename1, dpi=100)
+            plt.savefig("../" + output_filename1, dpi=100)
             print(f"Gráfica IPC guardada: {output_filename1}")
             plt.close()
             
@@ -119,7 +119,7 @@ def main():
             ax2.set_title('MPKI de Aplicaciones Ejecutadas Juntas', fontsize=16, fontweight='bold')
             plt.tight_layout()
             output_filename2 = archivo.replace('.csv', '_mpki.png')
-            plt.savefig(output_filename2, dpi=100)
+            plt.savefig("../" + output_filename2, dpi=100)
             print(f"Gráfica MPKI guardada: {output_filename2}")
             plt.close()
             
@@ -142,7 +142,7 @@ def main():
             ax3.set_title('Memory Bound y Core Bound de Aplicaciones', fontsize=16, fontweight='bold')
             plt.tight_layout()
             output_filename3 = archivo.replace('.csv', '_bounds.png')
-            plt.savefig(output_filename3, dpi=100)
+            plt.savefig("../" + output_filename3, dpi=100)
             print(f"Gráfica Bounds guardada: {output_filename3}")
             plt.close()
         else:
