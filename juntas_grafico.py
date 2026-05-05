@@ -19,11 +19,12 @@ def main():
     
     ancho_issue = 5
     len_datos = 8
+    resta = 1
     core = sys.argv[1]
     if core == 'P':
         ancho_issue = 6
         len_datos = 24
-
+        resta = 0
     archivos = sys.argv[2:]
     
     # Procesar cada archivo
@@ -56,33 +57,33 @@ def main():
                     if cycles == 0:
                         cycles = 1
                     
-                    retiring = float(datos[i+5])
-                    bad_speculation = float(datos[i+6])
-                    frontend = float(datos[i+7])
-                    backend_bound = float(datos[i+8])
+                    retiring = float(datos[i+5-resta])
+                    bad_speculation = float(datos[i+6-resta])
+                    frontend = float(datos[i+7-resta])
+                    backend_bound = float(datos[i+8-resta])
 
                     ipc = instr / cycles
                     total = cycles * ancho_issue
                     total = total if total != 0 else 1
-                    memory_bound_norm = memory_bound / total
+                    backend_bound_norm = backend_bound / total
 
                     if core == 'P':
                         memory_bound = float(datos[i+9])
-                        backend_bound_norm = backend_bound / total
+                        memory_bound_norm = memory_bound / total
                         core_bound = backend_bound_norm - memory_bound_norm
 
                         l1_miss = float(datos[i+21])
                         mpki_total = (l1_miss / instr) * 1000
                     if core == 'P':
                         if app_name in data:
-                            data[app_name].append((ipc, memory_bound_norm, mpki_total, core_bound, backend_bound_norm))
+                            data[app_name].append((ipc, backend_bound_norm, mpki_total, core_bound, memory_bound_norm))
                         else:
-                            data[app_name] = [(ipc, memory_bound_norm, mpki_total, core_bound, backend_bound_norm)]
+                            data[app_name] = [(ipc, backend_bound_norm, mpki_total, core_bound, memory_bound_norm)]
                     else:
                         if app_name in data:
-                            data[app_name].append((ipc, memory_bound_norm))
+                            data[app_name].append((ipc, backend_bound_norm))
                         else:
-                            data[app_name] = [(ipc, memory_bound_norm)]
+                            data[app_name] = [(ipc, backend_bound_norm)]
 
         # Generar las tres gráficas combinadas si hay datos
         if data:
