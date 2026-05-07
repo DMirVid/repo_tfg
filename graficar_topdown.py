@@ -55,8 +55,8 @@ def main():
             if core == 'P':
                 core_bound_plot = [x[7] for x in topdown[:last_idx + 1]]
                 memory_bound_plot = [x[8] for x in topdown[:last_idx + 1]]
-                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, core_bound_plot, memory_bound_plot, colors=color_map,
-                                labels=["Retiring", "Bad speculation", "Frontend", "Core Bound", "Memory Bound"], alpha=0.8)
+                ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound_plot, colors=color_map,
+                                labels=["Retiring", "Bad speculation", "Frontend","Backend Bound"], alpha=0.8)
             else:
                 ax1.stackplot(tiempo, retiring_plot, bad_plot, frontend_plot, backend_bound_plot, colors=color_map,
                                 labels=["Retiring", "Bad speculation", "Frontend", "Backend Bound"], alpha=0.8)
