@@ -2,7 +2,7 @@
 import sys
 
 
-QUANTUM = 100  # 100ms
+QUANTUM = 200  # 100ms
 
 def cmp(name):
     return name.lower()
