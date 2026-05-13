@@ -2,7 +2,7 @@
 import sys
 
 
-QUANTUM = 100 # 100ms
+QUANTUM = 100  # 100ms
 
 def cmp(name):
     return name.lower()
@@ -11,14 +11,16 @@ def cmp(name):
 def main():
 
     if len(sys.argv) < 4:
-        print("Uso: python graficar.py num_eventos core archivo1 [archivo2 ...]")
+        print("Uso: python all_to_csv.py num_eventos core archivo1 [archivo2 ...]")
         return
 
     eventos = int(sys.argv[1])
     core = sys.argv[2]
     archivos = sys.argv[3:]
     data = {}
+    cabecera = None
 
+    # Procesar todos los archivos
     for archivo in archivos:
         try:
             with open(archivo, 'r') as f:
@@ -26,13 +28,6 @@ def main():
         except Exception as e:
             print(f"Error abriendo {archivo}: {e}")
             continue
-
-        try:
-            with open(archivo, 'r') as f:
-                lineas = f.readlines()
-        except Exception as e:
-            print(f"Error abriendo {archivo}: {e}")
-            return {}
         
         # Procesar cada línea del archivo
         for linea in lineas:
@@ -42,33 +37,37 @@ def main():
             
             # Parse: name;cores;instructions;cycles;...
             datos = linea.split(";")
-            if linea.startswith("name"):
-                data["aaacabecera"] = datos[0:eventos+2]
-
-            # Agrupar en conjuntos de 23 + plus
+            
+            # Guardar cabecera si es la primera línea
+            if datos[0].lower() == "name":
+                cabecera = datos[0:eventos+2]
+                continue
+            
+            # Agrupar en conjuntos de (eventos + 2) campos
             for i in range(0, len(datos), eventos + 2):
-                if i + eventos < len(datos):
-                    
+                if i + eventos + 1 < len(datos):
                     app_name = datos[i]
-                    values = datos[i+1:i+eventos +2]
-                    if app_name in data:
-                        data[app_name].append(values)
-                    else:
-                        data[app_name] = [values]
+                    values = datos[i+1:i+eventos+2]
+                    
+                    if app_name not in data:
+                        data[app_name] = []
+                    data[app_name].append(values)
 
-
-     # Graficar todas las aplicaciones en una sola gráfica de barras
-    if data:
+    # Escribir CSV con cabecera y tiempo
+    if data and cabecera:
         apps_list = list(sorted(data.items(), key=lambda x: cmp(x[0])))
-
         
-        with open("../topdown_all_"+core+".csv", "w") as f:
-            f.write("app_name,time_seconds," + ",".join(data["aaacabecera"][1:]) + "\n")
-            for app_name, topdown in apps_list:
+        output_file = f"../topdown_all_{core}.csv"
+        with open(output_file, "w") as f:
+            # Escribir cabecera
+            f.write("app_name,time_seconds," + ",".join(cabecera[1:]) + "\n")
+            
+            # Escribir datos de cada aplicación
+            for app_name, samples in apps_list:
                 # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
-                last_idx = len(topdown) - 1
-                for i in range(len(topdown) - 1, -1, -1):
-                    if i == 0 or topdown[i][2] > topdown[i-1][2]:  # ciclos en posición 2
+                last_idx = len(samples) - 1
+                for i in range(len(samples) - 1, -1, -1):
+                    if i == 0 or int(samples[i][2]) > int(samples[i-1][2]):
                         last_idx = i
                         break
                 
@@ -76,15 +75,16 @@ def main():
                 time_seconds = last_idx * QUANTUM / 1000.0
                 
                 # Obtener la última muestra de la app
-                final_sample = topdown[last_idx]
-                f.write(f"{app_name},{time_seconds},{','.join(final_sample[0:])}\n")
-       
+                final_sample = samples[last_idx]
+                f.write(f"{app_name},{time_seconds}," + ",".join(final_sample) + "\n")
+        
+        print(f"Archivo guardado en: {output_file}")
+        print(f"Aplicaciones procesadas: {len(apps_list)}")
     else:
-        print("No se encontraron datos")
-
-    data.clear()  # Limpiar datos para el siguiente archivo
-
-    print("Finalizado")
+        if not cabecera:
+            print("Error: No se encontró cabecera en los archivos")
+        else:
+            print("Error: No se encontraron datos")
                     
 
 
