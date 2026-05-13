@@ -5,7 +5,7 @@
 ###     P core -> app_name: [(instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm,  mpki_l1_total, mpki_l2_total, mpki_l3_total), ...],
 ###     E core -> app_name: [(instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm), ...]
 ### }
-def leer_datos(core, archivo):
+def leer_datos(core, archivo, eventosP=0, eventosE=0):
 
     ancho_issue = 5
     len_datos = 8
