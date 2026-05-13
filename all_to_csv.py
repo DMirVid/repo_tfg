@@ -42,15 +42,15 @@ def main():
             
             # Parse: name;cores;instructions;cycles;...
             datos = linea.split(";")
-            
+            if linea.startswith("name"):
+                data["aaacabecera"] = datos[0:eventos+2]
+
             # Agrupar en conjuntos de 23 + plus
             for i in range(0, len(datos), eventos + 2):
                 if i + eventos < len(datos):
-                    if linea.startswith("name"):
-                        data["aaacabecera"] = datos[i:i+eventos]
-                        continue
+                    
                     app_name = datos[i]
-                    values = datos[i+1:i+eventos]
+                    values = datos[i+1:i+eventos +2]
                     if app_name in data:
                         data[app_name].append(values)
                     else:
