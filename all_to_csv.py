@@ -44,7 +44,7 @@ def main():
             datos = linea.split(";")
             
             # Agrupar en conjuntos de 23 + plus
-            for i in range(0, len(datos), eventos):
+            for i in range(0, len(datos), eventos + 2):
                 if i + eventos < len(datos):
                     if linea.startswith("name"):
                         data["aaacabecera"] = datos[i:i+eventos]
@@ -63,11 +63,8 @@ def main():
 
         
         with open("../topdown_all_"+core+".csv", "w") as f:
-            
+            f.write("app_name,time_seconds," + ",".join(data["aaacabecera"][1:]) + "\n")
             for app_name, topdown in apps_list:
-                if app_name == "aaacabecera":
-                    f.write("app_name,time_seconds," + ",".join(topdown[1:]) + "\n")
-                    continue
                 # Encontrar el índice donde la app termina (ciclos dejan de aumentar)
                 last_idx = len(topdown) - 1
                 for i in range(len(topdown) - 1, -1, -1):
