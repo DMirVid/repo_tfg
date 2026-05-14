@@ -25,7 +25,7 @@ def main():
     ipc_values = []
     speedup_values = []
 
-    norm = float(2.2/3.0)
+    norm = float(3/2.2)
 
     P_cores = sys.argv[1]
     E_cores = sys.argv[2]
@@ -38,7 +38,7 @@ def main():
         line_P = line_P.strip()
         line_E = line_E.strip()
 
-        if not line_P or not line_E or line_P.startswith("App") or line_E.startswith("App"):
+        if not line_P or not line_E or line_P.startswith("app") or line_E.startswith("app"):
             continue
         
         # Parse: App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC
@@ -49,30 +49,46 @@ def main():
             print(f"Error: Las aplicaciones no coinciden: {datos_P[0]} vs {datos_E[0]}")
             continue
 
-        speedup_tiempo = float(datos_P[1]) / float(datos_E[1])
+        speedup_tiempo = float(datos_E[1]) / float(datos_P[1])
         app_names.append(datos_P[0])
+        
+        # P_cores: índices correctos para cpu_core
+        slots_P = float(datos_P[5])  # cpu_core/TOPDOWN.SLOTS/
+        retiring_P = float(datos_P[6])  # cpu_core/topdown-retiring/
+        bad_spec_P = float(datos_P[7])  # cpu_core/topdown-bad-spec/
+        fe_bound_P = float(datos_P[8])  # cpu_core/topdown-fe-bound/
+        be_bound_P = float(datos_P[9])  # cpu_core/topdown-be-bound/
+        mem_bound_P = float(datos_P[10])  # cpu_core/topdown-mem-bound/
+        
+        # E_cores: índices correctos para cpu_atom (no tiene TOPDOWN.SLOTS, usar cycles*4)
+        cycles_E = float(datos_E[4])  # cpu_atom/cycles/
+        slots_E = cycles_E * 5  # Atom tiene 5 slots por ciclo
+        retiring_E = float(datos_E[5])  # cpu_atom/topdown-retiring/
+        bad_spec_E = float(datos_E[6])  # cpu_atom/topdown-bad-spec/
+        fe_bound_E = float(datos_E[7])  # cpu_atom/topdown-fe-bound/
+        be_bound_E = float(datos_E[8])  # cpu_atom/topdown-be-bound/
+        
+        retiring_values.append((retiring_P / slots_P, norm * retiring_E / slots_E))
+        bad_speculation_values.append((bad_spec_P / slots_P, norm * bad_spec_E / slots_E))
+        frontend_values.append((fe_bound_P / slots_P, norm * fe_bound_E / slots_E))
+        backend_bound.append(norm * be_bound_E / slots_E)
+        memory_bound_values.append(mem_bound_P / slots_P)
+        core_bound_values.append(be_bound_P / slots_P - mem_bound_P / slots_P)
+        ipc_values.append((float(datos_P[3]) / float(datos_P[4]), float(datos_E[3]) / float(datos_E[4])))
+        speedup_values.append(ipc_values[-1][0] / ipc_values[-1][1] * norm)
 
-        retiring_values.append((speedup_tiempo * float(datos_P[2]), float(datos_E[2])))
-        bad_speculation_values.append((speedup_tiempo * float(datos_P[3]), float(datos_E[3])))
-        frontend_values.append((speedup_tiempo * float(datos_P[4]), float(datos_E[4])))
-        backend_bound.append(float(datos_E[5]))
-        memory_bound_values.append(speedup_tiempo * float(datos_P[5]))
-        core_bound_values.append(speedup_tiempo * float(datos_P[6]))
-        ipc_values.append((float(datos_P[7]), norm * float(datos_E[6])))
-        speedup_values.append(ipc_values[-1][0] / ipc_values[-1][1])
-
-    # Ordenar todos los datos por speedup de menor a mayor
-    sorted_indices = sorted(range(len(speedup_values)), key=lambda i: speedup_values[i])
+    # # Ordenar todos los datos por speedup de menor a mayor
+    # sorted_indices = sorted(range(len(speedup_values)), key=lambda i: speedup_values[i])
     
-    app_names = [app_names[i] for i in sorted_indices]
-    retiring_values = [retiring_values[i] for i in sorted_indices]
-    bad_speculation_values = [bad_speculation_values[i] for i in sorted_indices]
-    frontend_values = [frontend_values[i] for i in sorted_indices]
-    backend_bound = [backend_bound[i] for i in sorted_indices]
-    memory_bound_values = [memory_bound_values[i] for i in sorted_indices]
-    core_bound_values = [core_bound_values[i] for i in sorted_indices]
-    ipc_values = [ipc_values[i] for i in sorted_indices]
-    speedup_values = [speedup_values[i] for i in sorted_indices]
+    # app_names = [app_names[i] for i in sorted_indices]
+    # retiring_values = [retiring_values[i] for i in sorted_indices]
+    # bad_speculation_values = [bad_speculation_values[i] for i in sorted_indices]
+    # frontend_values = [frontend_values[i] for i in sorted_indices]
+    # backend_bound = [backend_bound[i] for i in sorted_indices]
+    # memory_bound_values = [memory_bound_values[i] for i in sorted_indices]
+    # core_bound_values = [core_bound_values[i] for i in sorted_indices]
+    # ipc_values = [ipc_values[i] for i in sorted_indices]
+    # speedup_values = [speedup_values[i] for i in sorted_indices]
 
     fig, ax1 = plt.subplots(figsize=(21, 9))
     x_pos = np.arange(len(app_names))
@@ -123,7 +139,7 @@ def main():
         ax1.tick_params(axis='y', labelsize=18)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
-        ax1.set_ylim(0, max_comulative)
+        ax1.set_ylim(0, 1.5)
         ax1.set_xlim(-0.5, len(app_names) - 0.5)
         ax1.grid(True, alpha=0.3, axis='y')
 

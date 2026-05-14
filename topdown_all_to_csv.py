@@ -40,8 +40,8 @@ def main():
             # Parse: name;cores;instructions_path;cycles_path (puede repetirse)
             datos = linea.split(";")
             
-            for i in range(0, len(datos), 9 + plus):
-                if i + 8 + plus < len(datos):
+            for i in range(0, len(datos), 12):
+                if i + 11 < len(datos):
                     app_name = datos[i]
                     cores = datos[i+1]
                     instr = float(datos[i+2])
@@ -83,7 +83,7 @@ def main():
     if data:
         apps_list = list(sorted(data.items(), key=lambda x: cmp(x[0])))
 
-        cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC,Cycles\n"
+        cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Backend Bound,IPC\n"
         if plus == 1:
             cabecera = "App,Time,Retiring,Bad Speculation,Frontend Bound,Memory Bound,Core Bound,IPC\n"
         
