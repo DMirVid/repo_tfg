@@ -135,8 +135,6 @@ def leer_datos_juntos(archivo, seguimiento_cores, eventosP=0, eventosE=0):
                 app_name = datos[i]
                 core = int(datos[i+1])
 
-                if lineas_cores[pos_cores]
-
                 ## Leer eventos P
                 if core < 16:
                     instr = float(datos[i+2])
