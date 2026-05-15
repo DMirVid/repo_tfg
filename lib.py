@@ -117,7 +117,7 @@ def leer_datos_juntos(archivo, eventosP=0, eventosE=0):
         for i in range(0, len(datos), 2 + eventosP + eventosE):
             if i + 2 + eventosP + eventosE - 1 < len(datos):
                 app_name = datos[i]
-                core = datos[i+1]
+                core = int(datos[i+1])
 
                 ## Leer eventos P
                 if core < 16:
