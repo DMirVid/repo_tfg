@@ -93,7 +93,7 @@ def leer_datos(core, archivo):
 ### {
 ###    app_name: [(core, instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm), ...],
 ### }
-def leer_datos_juntos(archivo, eventosP=0, eventosE=0):
+def leer_datos_juntos(archivo, seguimiento_cores, eventosP=0, eventosE=0):
 
     data = {}  # app_name -> list of tuples
     
@@ -103,6 +103,22 @@ def leer_datos_juntos(archivo, eventosP=0, eventosE=0):
     except Exception as e:
         print(f"Error abriendo {archivo}: {e}")
         return {}
+    
+    try:
+        with open(seguimiento_cores, 'r') as f:
+            lineas_cores = f.readlines()
+    except Exception as e:
+        print(f"Error abriendo {seguimiento_cores}: {e}")
+        return {}
+    
+    pos_cores = 0
+
+    for i in range(len(lineas_cores)):
+        if lineas_cores[i].startswith("[Policy"):
+            pos_cores = i
+            break
+
+    quantum = 0
     
     # Procesar cada línea del archivo
     for linea in lineas:
@@ -117,7 +133,9 @@ def leer_datos_juntos(archivo, eventosP=0, eventosE=0):
         for i in range(0, len(datos), 2 + eventosP + eventosE):
             if i + 2 + eventosP + eventosE - 1 < len(datos):
                 app_name = datos[i]
-                core = datos[i+1]
+                core = int(datos[i+1])
+
+                if lineas_cores[pos_cores]
 
                 ## Leer eventos P
                 if core < 16:
@@ -169,4 +187,6 @@ def leer_datos_juntos(archivo, eventosP=0, eventosE=0):
                     data[app_name].append((core, instr, cycles, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm))
                 else:
                     data[app_name] = [(core, instr, cycles, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm)]
+        
+        quantum += 1
     return data
