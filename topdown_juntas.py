@@ -48,7 +48,7 @@ def main():
                             labels=["Retiring", "Bad speculation", "Frontend","Memory Bound", "Core Bound"], alpha=0.8)
 
             ax1.stackplot(tiempo, retiring_plot_e, bad_plot_e, frontend_plot_e, backend_bound_plot_e, colors=color_map,
-                            labels=["Retiring", "Bad speculation", "Frontend", "Backend Bound"], alpha=0.8)
+                            labels=["", "", "", "Backend Bound"], alpha=0.8)
                 
 
             str_t = f'Time (s)'
