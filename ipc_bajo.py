@@ -25,7 +25,7 @@ def schedule(processes, quantum=0):
         else:
             ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
 
-    sorted_procs = sorted(processes, key=lambda proc: ipc[processes.index(proc)], reverse=True)
+    sorted_procs = sorted(processes, key=lambda proc: ipc[processes.index(proc)])
 
     cambio = []
 

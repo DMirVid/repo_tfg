@@ -3,29 +3,18 @@
 
 from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E
 import results
+import random
 
 # Events used by the policy
 EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E]
 
+
+
 # Procesos con mayot IPC se mueven a los P cores
 def schedule(processes, quantum=0):
     ### FUNCIIONA PARA EJECUCIoNES QUE NO TERMINAN
-    
-    ipc = [0] * len(processes)
-    for i, proc in enumerate(processes):
 
-        es_P = True
-        for c in proc.cores:
-            if c > 16:
-                es_P = False
-                break
-
-        if es_P:
-            ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
-        else:
-            ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
-
-    sorted_procs = sorted(processes, key=lambda proc: ipc[processes.index(proc)], reverse=True)
+    sorted_procs = sorted(processes, key=lambda proc: random.random())
 
     cambio = []
 
