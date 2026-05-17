@@ -76,7 +76,7 @@ def main():
             plt.subplots_adjust(top=0.85)
             plt.legend(lines + lines2, labels + labels2, 
                         loc='upper center', bbox_to_anchor=(0.5, 1.15), 
-                        fontsize=16, ncol=6)
+                        fontsize=16, ncol=7)
             
             plt.tight_layout()
 
