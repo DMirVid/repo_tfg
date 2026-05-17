@@ -6,6 +6,8 @@ import results
 
 # Events used by the policy
 EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E]
+P_CORES = set(range(0, 7, 2))
+E_CORES = set(range(24, 31, 2))
 
 # Procesos con mayot IPC se mueven a los P cores
 def schedule(processes, quantum=0):
@@ -42,10 +44,10 @@ def schedule(processes, quantum=0):
             sorted_procs[i].set_affinity(core)
         else:
             # Si ya esta en el núcleo correcto o mismo grupo, no hacer nada
-            a_P    = core[0] < 16
-            esta_P = sorted_procs[i].cores[0] < 16
-            a_E    = core[0] >= 16
-            esta_E = sorted_procs[i].cores[0] >= 16
+            a_P    = core.issubset(P_CORES)
+            esta_P = sorted_procs[i].cores.issubset(P_CORES)
+            a_E    = core.issubset(E_CORES)
+            esta_E = sorted_procs[i].cores.issubset(E_CORES)
             if sorted_procs[i].cores == core or (a_P and esta_P) or (a_E and esta_E):
                 pass
             else:
