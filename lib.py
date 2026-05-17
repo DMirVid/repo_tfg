@@ -93,7 +93,7 @@ def leer_datos(core, archivo):
 ### {
 ###    app_name: [(core, instr, cycles, ipc, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm), ...],
 ### }
-def leer_datos_juntos(archivo, seguimiento_cores, eventosP=0, eventosE=0):
+def leer_datos_juntos(archivo, eventosP=0, eventosE=0):
 
     data = {}  # app_name -> list of tuples
     
@@ -104,22 +104,8 @@ def leer_datos_juntos(archivo, seguimiento_cores, eventosP=0, eventosE=0):
         print(f"Error abriendo {archivo}: {e}")
         return {}
     
-    try:
-        with open(seguimiento_cores, 'r') as f:
-            lineas_cores = f.readlines()
-    except Exception as e:
-        print(f"Error abriendo {seguimiento_cores}: {e}")
-        return {}
-    
-    pos_cores = 0
+    set_nombres = set()
 
-    for i in range(len(lineas_cores)):
-        if lineas_cores[i].startswith("[Policy"):
-            pos_cores = i
-            break
-
-    quantum = 0
-    
     # Procesar cada línea del archivo
     for linea in lineas:
         linea = linea.strip()
@@ -128,12 +114,19 @@ def leer_datos_juntos(archivo, seguimiento_cores, eventosP=0, eventosE=0):
         
         # Parse: name;cores;instructions;cycles;...
         datos = linea.split(";")
+    
+        set_nombres.clear()
         
-        # Agrupar en conjuntos de 23 + plus
         for i in range(0, len(datos), 2 + eventosP + eventosE):
             if i + 2 + eventosP + eventosE - 1 < len(datos):
                 app_name = datos[i]
                 core = int(datos[i+1])
+
+                if not set_nombres or app_name not in set_nombres:
+                    set_nombres.add(app_name)
+                else:
+                    set_nombres.add(app_name + "REPEAT")
+                    app_name += "REPEAT"
 
                 ## Leer eventos P
                 if core < 16:
@@ -186,5 +179,4 @@ def leer_datos_juntos(archivo, seguimiento_cores, eventosP=0, eventosE=0):
                 else:
                     data[app_name] = [(core, instr, cycles, retiring_norm, bad_speculation_norm, frontend_norm, backend_bound_norm, core_bound, memory_bound_norm)]
         
-        quantum += 1
     return data
