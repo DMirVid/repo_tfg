@@ -51,7 +51,11 @@ def main():
                             labels=["", "", "", "Backend Bound"], alpha=0.8)
                 
 
-            str_t = f'Time (s)'
+            cambios_core = 0
+            for i in range(1, len(core)):
+                if core[i] != core[i-1]:
+                    cambios_core += 1
+            str_t = f'Time (s)    Cambios de núcleo: {cambios_core}'
             ax1.set_xlabel(str_t, fontsize=18)
             ax1.set_ylabel('Percentage of Time Execution', fontsize=18)
             ax1.tick_params(axis='x', labelsize=18)
