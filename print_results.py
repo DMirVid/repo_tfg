@@ -88,7 +88,7 @@ def main():
                 tiempo = [x * QUANTUM / 1000.0 for x in  np.arange(len(topdown))] 
 
                 core = [x[0] for x in topdown]
-                ipc = data[app_name][-1][1]+data[app_name][-1][3]/(data[app_name][-1][2]+data[app_name][-1][4])
+                ipc = (data[app_name][-1][1]+data[app_name][-1][3])/(data[app_name][-1][2]+data[app_name][-1][4])
 
 
                 cambios_core = 0
@@ -96,7 +96,7 @@ def main():
                     if core[i] != core[i-1] and (core[i] > 16 and core[i-1] < 16 or core[i] < 16 and core[i-1] > 16):
                         cambios_core += 1
 
-                print(f"{app_name},{ipc},{cambios_core}")
+                print(f"{app_name},{ipc},{cambios_core}\n")
                 
         else:
             print("No se han encontrado datos para graficar.")
