@@ -96,7 +96,7 @@ def main():
                     if core[i] != core[i-1] and (core[i] > 16 and core[i-1] < 16 or core[i] < 16 and core[i-1] > 16):
                         cambios_core += 1
 
-                print(f"{app_name},{ipc},{cambios_core}\n")
+                print(f"{app_name},{ipc},{cambios_core},{tiempo[-1]}\n")
                 
         else:
             print("No se han encontrado datos para graficar.")
