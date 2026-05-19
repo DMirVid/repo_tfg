@@ -12,7 +12,8 @@ QUANTUM = 200
 def main():
 
     archivos = sys.argv[1:]
-    eventosP=8, eventosE=6
+    eventosP=8
+    eventosE=6
     data = {}
 
     for archivo in archivos:
@@ -72,7 +73,7 @@ def main():
                     if app_name in data:
                         data[app_name].append((core, instr, cycles, instrE, cyclesE))
                     else:
-                        data[app_name] = [(core, instr if instr != 0 else data[app_name][-1][1], cycles if cycles != 0 else data[app_name][-1][2], instrE if instrE != 0 else data[app_name][-1][3], cyclesE if cyclesE != 0 else data[app_name][-1][4])]
+                        data[app_name] = [(core, instr, cycles, instrE, cyclesE)]
             
 
         if data:
@@ -83,7 +84,11 @@ def main():
                 tiempo = [x * QUANTUM / 1000.0 for x in  np.arange(len(topdown))] 
 
                 core = [x[0] for x in topdown]
-                ipc = data[app_name][-1][1]+data[app_name][-1][3]/(data[app_name][-1][2]+data[app_name][-1][4])
+                inst = [i for i in topdown[1].reverse() if i != 0]
+                cycles = [i for i in topdown[2].reverse() if i != 0]
+                instE = [i for i in topdown[3].reverse() if i != 0]
+                cyclesE = [i for i in topdown[4].reverse() if i != 0]
+                ipc = inst[-1] + instE[-1] / (cycles[-1] + cyclesE[-1])
 
 
                 cambios_core = 0
