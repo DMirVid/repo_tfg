@@ -13,7 +13,7 @@ def main():
 
     archivos = sys.argv[1:]
     eventosP=8
-    eventosE=6
+    eventosE=8
     data = {}
 
     for archivo in archivos:

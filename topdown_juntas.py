@@ -15,7 +15,7 @@ def main():
     data = {}
 
     for archivo in archivos:
-        data.update(leer_datos_juntos(archivo, eventosP=8, eventosE=6))
+        data.update(leer_datos_juntos(archivo, eventosP=8, eventosE=8))
 
     if data:
         apps_list = list(data.items())
