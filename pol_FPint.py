@@ -7,15 +7,11 @@ import results
 # Events used by the policy
 EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, "cpu_core/fp_arith_inst_retired.vector/", "cpu_core/fp_arith_inst_retired.scalar/"]
 
-P_CORES = set(range(0, 7, 2))
+P_CORES = set(range(0, 15, 2))
 E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
 
 ## Listas para guardar valores anteriores
-procesos_fp = []
-procesos_int = []
-last_int_in_P = []
-last_fp_in_E = []
 
 ### Comprueba para cada aplicaión si es INT o FLT
 def obtener_ipc_float(processes, ipc, isFloatArray):
@@ -55,7 +51,7 @@ def medir_en_P(processes, quantum, ipc, isFloatArray):
 
 
 def asignar_cores(sorted_procs, quantum):
-
+    results.log_message(len(sorted_procs))
     cambio = []
     for i in range(len(sorted_procs)):
         core = {}
@@ -90,6 +86,10 @@ def schedule(processes, quantum=0):
 
     ipc = [0] * len(processes)
     isFloatArray = [False] * len(processes)
+    procesos_fp = []
+    procesos_int = []
+    last_int_in_P = []
+    last_fp_in_E = []
 
     ## Primera parte: designar quien es float o no
     if medir_en_P(processes, quantum, ipc, isFloatArray):
