@@ -108,7 +108,7 @@ def schedule(processes, quantum=0):
 
         pasar = False
         ## Mover de E a P las aplicaciones de FP
-        if last_fp_in_E:
+        if last_fp_in_E and (last_fp_in_E[0] not in move_P or indice_a_E not in move_E):
             move_P.append(last_fp_in_E.pop(0))
             move_E.append(indice_a_E) 
             last_fp_in_E.append(indice_a_E)
@@ -125,13 +125,15 @@ def schedule(processes, quantum=0):
     
         pasar = False
 
-        if last_int_in_P:
+        if last_int_in_P and (last_int_in_P[0] not in move_E or indice_a_P not in move_P):
             move_E.append(last_int_in_P.pop(0))
             move_P.append(indice_a_P)
             last_int_in_P.append(indice_a_P)
             pasar = True
 
         for i in procesos_int:
+            if i in move_P or i in move_E:
+                pass
             if i == indice_a_P and pasar:
                 pass
             if len(move_E) < 4:
