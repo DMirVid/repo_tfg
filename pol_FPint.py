@@ -10,13 +10,13 @@ EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E
 P_CORES = set(range(0, 7, 2))
 E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
-EVALUATING = False
 
 ## Listas para guardar valores anteriores
 procesos_fp = []
 procesos_int = []
 last_int_in_P = []
 last_fp_in_E = []
+eval = False
 
 ### Comprueba para cada aplicaión si es INT o FLT
 def obtener_ipc_float(processes, ipc, isFloatArray):
@@ -41,17 +41,17 @@ def obtener_ipc_float(processes, ipc, isFloatArray):
 
 ### Mide durante un quantum las prestaciones en los nucleos P
 ### Devuelve True si es momento de aplicar cambios 
-def medir_en_P(processes, quantum, ipc, isFloatArray, EVALUATING):
+def medir_en_P(processes, quantum, ipc, isFloatArray, eval):
     if quantum % NEXT_EVAL == 0:
         results.log_message(f"[Policy core movement]:{quantum}:Movement to P cores")
         for i, proc in enumerate(processes):
             results.log_message(f"[Policy core movement]:{quantum}:{proc.name}:{proc.cores}:{i*2}")
-            proc.set_affinity(i*2)
-        EVALUATING = True
+            proc.set_affinity({i*2})
+        eval = True
         return False
-    elif EVALUATING: 
+    elif eval: 
         obtener_ipc_float(processes, ipc, isFloatArray)
-        EVALUATING = False
+        eval = False
         return True
     return False
 
@@ -94,7 +94,7 @@ def schedule(processes, quantum=0):
     isFloatArray = [False] * len(processes)
 
     ## Primera parte: designar quien es float o no
-    if medir_en_P(processes, quantum, ipc, isFloatArray, EVALUATING):
+    if medir_en_P(processes, quantum, ipc, isFloatArray, eval):
    
         # obtener_ipc_float(processes, ipc, isFloatArray)
         move_P = []
