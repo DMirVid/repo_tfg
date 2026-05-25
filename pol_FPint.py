@@ -12,6 +12,8 @@ E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
 
 ## Listas para guardar valores anteriores
+last_int_in_P = []
+last_fp_in_E = []
 
 ### Comprueba para cada aplicaión si es INT o FLT
 def obtener_ipc_float(processes, ipc, isFloatArray):
@@ -88,8 +90,6 @@ def schedule(processes, quantum=0):
     isFloatArray = [False] * len(processes)
     procesos_fp = []
     procesos_int = []
-    last_int_in_P = []
-    last_fp_in_E = []
 
     ## Primera parte: designar quien es float o no
     if medir_en_P(processes, quantum, ipc, isFloatArray):
