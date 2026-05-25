@@ -61,25 +61,28 @@ def asignar_cores(sorted_procs, quantum):
             core = {i * 2}
         else:
             core = {16+i*2}
+
+        results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{core}")
+        sorted_procs[i].set_affinity(core)
        
         # Si ya esta en el núcleo correcto o mismo grupo, no hacer nada
-        a_P    = core.issubset(P_CORES)
-        esta_P = sorted_procs[i].cores.issubset(P_CORES)
-        a_E    = core.issubset(E_CORES)
-        esta_E = sorted_procs[i].cores.issubset(E_CORES)
-        if sorted_procs[i].cores == core or (a_P and esta_P) or (a_E and esta_E):
-            pass
-        else:
-            ## Lista vacia o pertence al mismo grupo de nucleos
-            if not cambio or i<4:
-                cambio.append(i)
-            else:
-                pos_cambio = cambio.pop()
-                guarda = sorted_procs[pos_cambio].cores
-                results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[pos_cambio].name}:{sorted_procs[pos_cambio].cores}:{sorted_procs[i].cores}")
-                results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{guarda}")
-                sorted_procs[pos_cambio].set_affinity(sorted_procs[i].cores)
-                sorted_procs[i].set_affinity(guarda)
+        # a_P    = core.issubset(P_CORES)
+        # esta_P = sorted_procs[i].cores.issubset(P_CORES)
+        # a_E    = core.issubset(E_CORES)
+        # esta_E = sorted_procs[i].cores.issubset(E_CORES)
+        # if sorted_procs[i].cores == core or (a_P and esta_P) or (a_E and esta_E):
+        #     pass
+        # else:
+        #     ## Lista vacia o pertence al mismo grupo de nucleos
+        #     if not cambio or i<4:
+        #         cambio.append(i)
+        #     else:
+        #         pos_cambio = cambio.pop()
+        #         guarda = sorted_procs[pos_cambio].cores
+        #         results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[pos_cambio].name}:{sorted_procs[pos_cambio].cores}:{sorted_procs[i].cores}")
+        #         results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{guarda}")
+        #         sorted_procs[pos_cambio].set_affinity(sorted_procs[i].cores)
+        #         sorted_procs[i].set_affinity(guarda)
 
     
 
@@ -106,42 +109,43 @@ def schedule(processes, quantum=0):
         indice_a_E = quantum % len(procesos_fp)
         indice_a_P = quantum % len(procesos_int)
 
-        pasar = False
         ## Mover de E a P las aplicaciones de FP
         if last_fp_in_E and (last_fp_in_E[0] not in move_P or indice_a_E not in move_E):
-            move_P.append(last_fp_in_E.pop(0))
-            move_E.append(indice_a_E) 
-            last_fp_in_E.append(indice_a_E)
-            pasar = True
+            tmp = last_fp_in_E.pop(0)
+            move_P.append(tmp)
+            if tmp != indice_a_E:
+                move_E.append(indice_a_E) 
+                last_fp_in_E.append(indice_a_E)
+
 
         for i in procesos_fp:
-            if i == indice_a_E and pasar:
-                pass
+            if i in move_P or i in move_E:
+                continue  # Skip si ya está asignado
             if len(move_P) < 4:                  
                 move_P.append(i)
             else:
                 move_E.append(i)
                 last_fp_in_E.append(i)
     
-        pasar = False
-
         if last_int_in_P and (last_int_in_P[0] not in move_E or indice_a_P not in move_P):
-            move_E.append(last_int_in_P.pop(0))
-            move_P.append(indice_a_P)
-            last_int_in_P.append(indice_a_P)
+            tmp = last_int_in_P.pop(0)
+            move_E.append(tmp)
+            if tmp != indice_a_P:
+                move_P.append(indice_a_P)
+                last_int_in_P.append(indice_a_P)
             pasar = True
 
         for i in procesos_int:
             if i in move_P or i in move_E:
-                pass
-            if i == indice_a_P and pasar:
-                pass
+                continue  # Skip si ya está asignado
             if len(move_E) < 4:
                 move_E.append(i)
             else:
                 move_P.append(i)
                 last_int_in_P.append(i)
 
+        results.log_message(move_P)
+        results.log_message(move_E)
         ## PArte final: Apartir de aqui ya se debe de saber la asignación final de los procesos
         sorted_procs = []
         for i in move_P:
