@@ -81,18 +81,10 @@ def asignar_cores(sorted_procs, quantum, simple):
                 else:
                     pos_cambio = cambio.pop()
                     guarda = sorted_procs[pos_cambio].cores
-                    results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[pos_cambio].name}:{sorted_procs[pos_cambio].cores}:{sorted_procs[i].cores}")
-                    results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{guarda}")
+                    results.log_message(f"[Policy pol_FPint]:{quantum}:{sorted_procs[pos_cambio].name}:{sorted_procs[pos_cambio].cores}:{sorted_procs[i].cores}")
+                    results.log_message(f"[Policy pol_FPint]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{guarda}")
                     sorted_procs[pos_cambio].set_affinity(sorted_procs[i].cores)
                     sorted_procs[i].set_affinity(guarda)
-
-# Ordena los procesos según la función dada en funcion del IPC o aplica round robin
-def ordena(procesos, function, rr=False):
-    if rr:
-        return procesos.append(procesos.pop(0))
-    else:
-        return sorted(procesos, key=function)
-    
 
 # Procesos con mayot IPC se mueven a los P cores
 def schedule(processes, quantum=0):
@@ -121,8 +113,14 @@ def schedule(processes, quantum=0):
         move_E = []
 
         ## Ordenamos los indices según 
-        procesos_fp = ordena(procesos_fp, key=lambda index: ipc[index], rr=simple)
-        procesos_int = ordena(procesos_int, key=lambda index: ipc[index], rr=simple)
+        if simple:
+             procesos_fp.append(procesos_fp.pop(0))
+             procesos_int.append(procesos_int.pop(0))
+
+        else:
+             procesos_fp = sorted(procesos_fp, key=lambda index: ipc[index])
+             procesos_int = sorted(procesos_int, key=lambda index: ipc[index])
+
 
         if len(procesos_fp) == len(procesos_int):
             move_P = procesos_fp[:3]
