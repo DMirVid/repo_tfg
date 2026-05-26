@@ -27,14 +27,21 @@ def obtener_ipc_float(processes, ipc, isFloatArray):
                 break
 
         if es_P:
-            ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
+            try:
+                ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
 
-            vector = proc.event_counts["cpu_core/fp_arith_inst_retired.vector/"]
-            scalar = proc.event_counts["cpu_core/fp_arith_inst_retired.scalar/"]
-            isFloatArray[i] = (vector + scalar) / proc.event_counts[INSTRUCTION_COUNT_P] > 0.005
+                vector = proc.event_counts["cpu_core/fp_arith_inst_retired.vector/"]
+                scalar = proc.event_counts["cpu_core/fp_arith_inst_retired.scalar/"]
+                isFloatArray[i] = (vector + scalar) / proc.event_counts[INSTRUCTION_COUNT_P] > 0.005
+            except ZeroDivisionError:
+                ipc[i] = 1
+                isFloatArray[i] = False
         else:
-            ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E] * (3.0/2.2)
+            try:
 
+                ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E] * (3.0/2.2)
+            except ZeroDivisionError:
+                ipc[i] = 1
 
 ### Eejcuta durante 1 quantum todas las aplicaciones en los núcleos P
 def medir_en_P(processes, quantum):
