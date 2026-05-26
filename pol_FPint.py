@@ -114,12 +114,12 @@ def schedule(processes, quantum=0):
 
         ## Ordenamos los indices según 
         if simple:
-             procesos_fp.append(procesos_fp.pop(0))
-             procesos_int.append(procesos_int.pop(0))
+            procesos_fp.append(procesos_fp.pop(0))
+            procesos_int.append(procesos_int.pop(0))
 
         else:
-             procesos_fp = sorted(procesos_fp, key=lambda index: ipc[index])
-             procesos_int = sorted(procesos_int, key=lambda index: ipc[index])
+            procesos_fp = sorted(procesos_fp, key=lambda index: ipc[index])
+            procesos_int = sorted(procesos_int, key=lambda index: ipc[index])
 
 
         if len(procesos_fp) == len(procesos_int):
