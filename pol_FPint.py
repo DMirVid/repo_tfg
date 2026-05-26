@@ -12,6 +12,8 @@ E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
 NUM_APPS = 8
 simple = False
+procesos_fp = []
+procesos_int = []
 
 ### Comprueba para cada aplicaión si es INT o FLT
 def obtener_ipc_float(processes, ipc, isFloatArray):
@@ -77,15 +79,19 @@ def asignar_cores(sorted_procs, quantum, simple):
                     sorted_procs[pos_cambio].set_affinity(sorted_procs[i].cores)
                     sorted_procs[i].set_affinity(guarda)
 
+# Ordena los procesos según la función dada en funcion del IPC o aplica round robin
+def ordena(procesos, function, rr=False):
+    if rr:
+        return procesos.append(procesos.pop(0))
+    else:
+        return sorted(procesos, key=function)
     
 
 # Procesos con mayot IPC se mueven a los P cores
 def schedule(processes, quantum=0):
-    global simple
-    ipc = [0] * len(processes)
+    global simple, procesos_fp, procesos_int
     
-    procesos_fp = []
-    procesos_int = []
+    ipc = [0] * len(processes)
 
     isFloatArray = [False] * len(processes)
     ipc = [0] * len(processes)
@@ -94,9 +100,10 @@ def schedule(processes, quantum=0):
     if quantum % NEXT_EVAL == 0:
         medir_en_P(processes, quantum)
     else:
-
         obtener_ipc_float(processes, ipc, isFloatArray)
 
+        procesos_fp = []
+        procesos_int = []
         for i in range(len(processes)):
             if isFloatArray[i]:
                 procesos_fp.append(i)
@@ -107,8 +114,8 @@ def schedule(processes, quantum=0):
         move_E = []
 
         ## Ordenamos los indices según 
-        procesos_fp = sorted(procesos_fp, key=lambda index: ipc[index])
-        procesos_int = sorted(procesos_int, key=lambda index: ipc[index])
+        procesos_fp = ordena(procesos_fp, key=lambda index: ipc[index], rr=simple)
+        procesos_int = ordena(procesos_int, key=lambda index: ipc[index], rr=simple)
 
         if len(procesos_fp) == len(procesos_int):
             move_P = procesos_fp[:3]
