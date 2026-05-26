@@ -11,7 +11,7 @@ P_CORES = set(range(0, 15, 2))
 E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
 NUM_APPS = 8
-
+simple = False
 
 ### Comprueba para cada aplicaión si es INT o FLT
 def obtener_ipc_float(processes, ipc, isFloatArray):
@@ -36,6 +36,8 @@ def obtener_ipc_float(processes, ipc, isFloatArray):
 
 ### Eejcuta durante 1 quantum todas las aplicaciones en los núcleos P
 def medir_en_P(processes, quantum):
+    global simple
+    simple = True
     results.log_message(f"[Policy pol_FPint]:{quantum}:Movement to P cores")
     for i, proc in enumerate(processes):
         results.log_message(f"[Policy pol_FPint]:{quantum}:{proc.name}:{proc.cores}:{i*2}")
@@ -43,7 +45,7 @@ def medir_en_P(processes, quantum):
 
 
 def asignar_cores(sorted_procs, quantum, simple):
-    results.log_message(len(sorted_procs))
+
     cambio = []
     for i in range(len(sorted_procs)):
         core = {}
@@ -79,7 +81,7 @@ def asignar_cores(sorted_procs, quantum, simple):
 
 # Procesos con mayot IPC se mueven a los P cores
 def schedule(processes, quantum=0):
-
+    global simple
     ipc = [0] * len(processes)
     
     procesos_fp = []
@@ -122,9 +124,6 @@ def schedule(processes, quantum=0):
             move_P = procesos_fp
             move_P.extend(procesos_int[4:8])
 
-        results.log_message(move_P)
-        results.log_message(move_E)
-
         sorted_procs = []
         for i in move_P:
             sorted_procs.append(processes[i])
@@ -132,8 +131,8 @@ def schedule(processes, quantum=0):
         for i in move_E:
             sorted_procs.append(processes[i])
         
-        asignar_cores(sorted_procs, quantum, simple=True)
-
+        asignar_cores(sorted_procs, quantum, simple)
+        simple = False
 
 
 
