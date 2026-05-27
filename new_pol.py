@@ -1,11 +1,15 @@
 ## Política de asignación de cores basado en IPC
 ## Daniel Mirón
 
-from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E
+from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING,  BACKEND_BOUND, RETIRING_E, BACKEND_BOUND_E
 import results
 
 # Events used by the policy
-EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, "cpu_core/fp_arith_inst_retired.vector/", "cpu_core/fp_arith_inst_retired.scalar/"]
+EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING,  BACKEND_BOUND, RETIRING_E, BAD_SPECULATION_E, FRONTEND_BOUND_E, BACKEND_BOUND_E]
+P_CORES = set(range(0, 15, 2))
+E_CORES = set(range(24, 31, 2))
+NEXT_EVAL = 10  # 10 quantums = 2 seconds
+
 
 def obtener_calcular_eventos(processes, ipc):
 
@@ -20,16 +24,24 @@ def obtener_calcular_eventos(processes, ipc):
         if es_P:
             try:
                 ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
+                slots = proc.event_counts[TOPDOWNL1] 
+                retiring = proc.event_counts[RETIRING] / slots
+                backend = proc.event_counts[BACKEND_BOUND] / slots
+                ipc[i] *= backend * retiring
 
-                
             except ZeroDivisionError:
-                ipc[i] = 1
+                ipc[i] = 0.25
+
         else:
             try:
-
                 ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E] * (3.0/2.2)
+                slots = proc.event_counts[CYCLE_COUNT_E] * 5
+                retiring = proc.event_counts[RETIRING_E] / slots
+                backend = proc.event_counts[BACKEND_BOUND_E] / slots
+                ipc[i] *= backend * retiring
+
             except ZeroDivisionError:
-                ipc[i] = 1
+                ipc[i] = 0.25
 
 ### Eejcuta durante 1 quantum todas las aplicaciones en los núcleos P
 def medir_en_P(processes, quantum):
@@ -75,4 +87,12 @@ def asignar_cores(sorted_procs, quantum, simple):
                     sorted_procs[i].set_affinity(guarda)
 
 def schedule(processes, quantum=0):
-    pass
+
+    if quantum % NEXT_EVAL == 0:
+        ipc = [0] * len(processes)
+        obtener_calcular_eventos(processes, ipc)
+
+        # Ordenar procesos por IPC
+        sorted_procs = sorted(processes, key=lambda x: ipc[processes.index(x)], reverse=True)
+
+        asignar_cores(sorted_procs, quantum, simple=False)
