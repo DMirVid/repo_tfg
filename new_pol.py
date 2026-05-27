@@ -5,7 +5,7 @@ from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E,
 import results
 
 # Events used by the policy
-EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING,  BACKEND_BOUND, RETIRING_E, BAD_SPECULATION_E, FRONTEND_BOUND_E, BACKEND_BOUND_E]
+EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING, BACKEND_BOUND, RETIRING_E, BACKEND_BOUND_E]
 P_CORES = set(range(0, 15, 2))
 E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
@@ -86,6 +86,8 @@ def asignar_cores(sorted_procs, quantum, simple):
                     sorted_procs[pos_cambio].set_affinity(sorted_procs[i].cores)
                     sorted_procs[i].set_affinity(guarda)
 
+
+## Solo funciona si al inico las aplicaciones estan dividas entre los cores P y E
 def schedule(processes, quantum=0):
 
     if quantum % NEXT_EVAL == 0:
