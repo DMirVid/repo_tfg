@@ -3,6 +3,8 @@
 
 from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING,  BACKEND_BOUND, RETIRING_E, BACKEND_BOUND_E
 import results
+import random
+import math
 
 # Events used by the policy
 EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING, BACKEND_BOUND, RETIRING_E, BACKEND_BOUND_E]
@@ -64,7 +66,7 @@ def asignar_cores(sorted_procs, quantum, simple):
             core = {16+i*2}
 
         if simple:
-            results.log_message(f"[Policy pol_FPint]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{core}")
+            results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{core}")
             sorted_procs[i].set_affinity(core)
         else:
             # Si ya esta en el núcleo correcto o mismo grupo, no hacer nada
@@ -96,5 +98,6 @@ def schedule(processes, quantum=0):
 
         # Ordenar procesos por IPC
         sorted_procs = sorted(processes, key=lambda x: ipc[processes.index(x)], reverse=True)
-
+        random_index = math.floor(random.random() * len(processes))
+        sorted_procs.append(sorted_procs.pop(random_index))
         asignar_cores(sorted_procs, quantum, simple=False)
