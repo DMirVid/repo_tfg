@@ -1,0 +1,22 @@
+
+MACHINE CONFIG: Intel-Core-i9-13900K
+EXPERIMENT ARGUMENTS: astar:0 mcf_r:1 hmmer:2 leela_r:3 sjeng:4 mcf_r:5 omnetpp_r:6 nab_r:7
+
+TOTALS (ON TARGET COMPLETION):
+name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;IPC
+astar;213441715826;278476753572;223329440098;88146823656;1669121522944;146003633629;66319210888;1.19
+mcf_r;500367633255;550192547114;0;0;3299266113312;895788053340;0;0.91
+hmmer;49893236639;31841740962;434470271677;277657782676;187611357632;22610035992;49437198321;1.56
+leela_r;138619052343;90135045076;361588199588;241501195341;538844217044;47283516814;87620341541;1.51
+sjeng;3799194525;2409309596;578449799201;328346331378;10690323244;1221631795;132041282738;1.76
+mcf_r;500760749125;550819635335;0;0;3303145526226;897083304431;0;0.91
+omnetpp_r;497141363168;480227689703;3389750202;2649008209;2877511137872;1509192723427;4917211448;1.04
+nab_r;69194280024;34843539105;431772032647;275451706866;205642372378;83427060323;712161577462;1.61
+====
+name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/;name;cpu_core/instructions/;cpu_core/cycles/;cpu_atom/instructions/;cpu_atom/cycles/;cpu_core/TOPDOWN.SLOTS/;cpu_core/topdown-be-bound/;cpu_atom/topdown-be-bound/
+astar;213441715826;278476753572;223329440098;88146823656;1669121522944;146003633629;66319210888;mcf_r;500367633255;550192547114;0;0;3299266113312;895788053340;0;hmmer;49893236639;31841740962;434470271677;277657782676;187611357632;22610035992;49437198321;leela_r;138619052343;90135045076;361588199588;241501195341;538844217044;47283516814;87620341541;sjeng;3799194525;2409309596;578449799201;328346331378;10690323244;1221631795;132041282738;mcf_r;500760749125;550819635335;0;0;3303145526226;897083304431;0;omnetpp_r;497141363168;480227689703;3389750202;2649008209;2877511137872;1509192723427;4917211448;nab_r;69194280024;34843539105;431772032647;275451706866;205642372378;83427060323;712161577462
+
+Average IPC: 1.31
+Harmonic Mean IPC: 1.23
+Geometric Mean IPC: 1.27
+Turnaround Time (TT): 5.51e+11 cycles (perf), 183400 ms (quantums)
