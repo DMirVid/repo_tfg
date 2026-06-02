@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in {2..15}; do
+for i in {0..7}; do
     sudo taskset -c "${i}" /home/dmirvid/repo_tfg/core_microbenchmark > /dev/null &
 done
 
