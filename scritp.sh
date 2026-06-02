@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APPS=("astar" "bwaves" "bzip2" "cactusADM" "calculix" "dealII" "gamess" "gcc" "GemsFDTD" "gobmk" "gromacs" "h264ref" "hmmer" "lbm" "leslie3d" "libquantum" "mcf" "milc" "namd" "omnetpp" "perlbench" "povray" "sjeng" "soplex" "sphinx3" "tonto" "wrf" "xalancbmk" "zeusmp" "mcf_r" "cactuBSSN_r" "namd_r" "parest_r" "povray_r" "lbm_r" "omnetpp_r" "xalancbmk_r" "x264_r" "blender_r" "deepsjeng_r" "imagick_r" "leela_r" "nab_r")
+APPS=("gcc" "astar" "bwaves" "bzip2" "cactusADM" "calculix" "dealII" "gamess"  "GemsFDTD" "gobmk" "gromacs" "h264ref" "hmmer" "lbm" "leslie3d" "libquantum" "mcf" "milc" "namd" "omnetpp" "perlbench" "povray" "sjeng" "soplex" "sphinx3" "tonto" "wrf" "xalancbmk" "zeusmp" "mcf_r" "cactuBSSN_r" "namd_r" "parest_r" "povray_r" "lbm_r" "omnetpp_r" "xalancbmk_r" "x264_r" "blender_r" "deepsjeng_r" "imagick_r" "leela_r" "nab_r")
 
 echo "APP;ENERGIA_J;TIEMPO_S" > resultados_energia.csv
 
