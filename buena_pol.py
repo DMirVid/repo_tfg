@@ -2,12 +2,12 @@
 # y luego cada cierto intervalo ir rotando entre los núcleos.
 # se clasificaran según el speedup en 
 
-from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND, MEMORY_BOUND, CORE_BOUND, RETIRING_E, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND_E
+from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND, MEMORY_BOUND, RETIRING_E, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND_E
 import results
 
 
 
-EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND, MEMORY_BOUND, CORE_BOUND, RETIRING_E, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND_E]
+EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, RETIRING, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND, MEMORY_BOUND, RETIRING_E, BAD_SPECULATION, FRONTEND_BOUND, BACKEND_BOUND_E]
 P_CORES = set(range(0, 15, 2))
 E_CORES = set(range(24, 31, 2))
 NEXT_EVAL = 10  # 10 quantums = 2 seconds
@@ -199,14 +199,25 @@ def schedule_by_classification(processes, quantum):
             e_assignments.append((proc_idx, proc, {core_id}))
             results.log_message(f"[Schedule E-core]:{quantum}:{proc_idx}:{proc.name}:core={core_id}")
     
+
+    sorted_procs = []
     # Aplicar asignaciones
     for proc_idx, proc, core in p_assignments:
-        results.log_message(f"[Policy core movement]:{quantum}:{proc_idx}:{proc.name}:{proc.cores}:{core}")
-        proc.set_affinity(core)
-    
+        sorted_procs.append(proc)
+
     for proc_idx, proc, core in e_assignments:
-        results.log_message(f"[Policy core movement]:{quantum}:{proc_idx}:{proc.name}:{proc.cores}:{core}")
-        proc.set_affinity(core)
+        sorted_procs.append(proc)
+
+    asignar_cores(sorted_procs, quantum, simple=False)
+    
+    # Log de procesos no asignados (no caben en slots disponibles)
+    assigned_indices = set()
+    for proc_idx, proc, _ in p_assignments + e_assignments:
+        assigned_indices.add(proc_idx)
+    
+    for proc_idx, proc in enumerate(processes):
+        if proc_idx not in assigned_indices:
+            results.log_message(f"[Warning no assignment]:{quantum}:{proc_idx}:{proc.name}:no available slots")
 
 
 def medir_P(processes, quantum):
@@ -253,6 +264,7 @@ def schedule(processes, quantum=0):
         # FASE 2: Scheduling basado en clasificación
         # Reasignar cada NEXT_EVAL quantums
         if quantum % NEXT_EVAL == 0:
+            clasificacion(processes, quantum)  # Asegurar clasificación actualizada antes de asignar
             schedule_by_classification(processes, quantum)
         else:
             # Calcular datos en otros quantums para actualizar métricas
