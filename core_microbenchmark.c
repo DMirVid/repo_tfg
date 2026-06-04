@@ -3,7 +3,7 @@
 #include <time.h>
 #include <math.h>
 
-#define DURATION 10.0  /* Duración del benchmark en segundos */
+#define DURATION 1000.0  /* Duración del benchmark en segundos */
 
 /* Microbenchmark para medir rendimiento de un core
  * Se ejecuta durante 10 segundos

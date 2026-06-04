@@ -12,8 +12,8 @@ QUANTUM = 200
 def main():
 
     archivos = sys.argv[1:]
-    eventosP=2
-    eventosE=5
+    eventosP=8
+    eventosE=6
     data = {}
 
     for archivo in archivos:
@@ -56,7 +56,7 @@ def main():
 
                     ## Leer eventos P
                     if core < 16:
-                         instr = float(datos[i+2])
+                        instr = float(datos[i+2])
                         cycles = float(datos[i+3])
                         if cycles == 0:
                             cycles = 1
