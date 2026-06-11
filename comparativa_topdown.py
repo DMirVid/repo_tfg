@@ -48,7 +48,7 @@ def main():
     f_e = open(E_cores, 'r')
 
     # Crear un diccionario para rastrear qué aplicaciones de la mezcla hemos procesado
-    mezcla_list = list(mezcla)  # Convertir tupla a lista para mantener orden y repeticiones
+    #mezcla_list = list(mezcla)  # Convertir tupla a lista para mantener orden y repeticiones
     
     # Leer ambos archivos simultáneamente
     for line_P, line_E in zip(f_p, f_e):
@@ -129,7 +129,7 @@ def main():
     # ipc_values = [ipc_values[i] for i in sorted_indices]
     # speedup_values = [speedup_values[i] for i in sorted_indices]
 
-    fig, ax1 = plt.subplots(figsize=(11,9))
+    fig, ax1 = plt.subplots(figsize=(21,9))
     x_pos = np.arange(len(app_names))
     width = 0.8
 
@@ -178,7 +178,7 @@ def main():
         ax1.tick_params(axis='y', labelsize=20)
         ax1.yaxis.set_major_locator(mtick.MultipleLocator(0.2))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0, decimals=None))
-        ax1.set_ylim(0, 2)
+        ax1.set_ylim(0, 3)
         ax1.set_xlim(-0.5, len(app_names) - 0.5)
         ax1.grid(True, alpha=0.3, axis='y')
 
