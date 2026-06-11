@@ -38,7 +38,7 @@ def schedule(processes, quantum=0):
             ipc_change_significant = percent_change > 10
         
             # Actualizar IPC
-            if ipc_change_significant:
+            if ipc_change_significant and ipc > ipc_history[i]:
                 ipc_history[i] = ipc
         # Iniciar el IPC
         else:
