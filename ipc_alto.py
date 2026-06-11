@@ -21,12 +21,13 @@ def schedule(processes, quantum=0):
             if c > 16:
                 es_P = False
                 break
-
-        if es_P:
-            ipc = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
-        else:
-            ipc = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
-
+        try:
+            if es_P:
+                ipc = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
+            else:
+                ipc = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
+        except ZeroDivisionError:
+            ipc[i] = 1
         
 
         ipc_change_significant = False
