@@ -31,7 +31,7 @@ def schedule(processes, quantum=0):
         
 
         ipc_change_significant = False
-        if quantum > 0 and i in ipc_history and ipc_history[i] > 0:
+        if quantum > 0:
             percent_change = abs((ipc - ipc_history[i]) / ipc_history[i]) * 100
             ipc_change_significant = percent_change > 10
         
