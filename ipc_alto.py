@@ -27,7 +27,7 @@ def schedule(processes, quantum=0):
             else:
                 ipc = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
         except ZeroDivisionError:
-            ipc[i] = 1
+            ipc_history[i] = 1
         
 
         ipc_change_significant = False
