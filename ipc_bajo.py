@@ -22,10 +22,14 @@ def schedule(processes, quantum=0):
                 es_P = False
                 break
 
-        if es_P:
-            ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
-        else:
-            ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
+        try:
+            if es_P:
+                ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
+            else:
+                ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
+
+        except ZeroDivisionError:
+            ipc[i] = 1
 
     sorted_procs = sorted(processes, key=lambda proc: ipc[processes.index(proc)])
 
