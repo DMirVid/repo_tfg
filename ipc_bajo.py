@@ -14,7 +14,7 @@ ipc_history=[0] * 8
 def schedule(processes, quantum=0):
     ### FUNCIIONA PARA EJECUCIoNES QUE NO TERMINAN
     
-    ipc = [0] * len(processes)
+
     for i, proc in enumerate(processes):
 
         es_P = True
@@ -25,12 +25,12 @@ def schedule(processes, quantum=0):
 
         try:
             if es_P:
-                ipc[i] = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
+                ipc = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
             else:
-                ipc[i] = proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
+                ipc= proc.event_counts[INSTRUCTION_COUNT_E] / proc.event_counts[CYCLE_COUNT_E]
 
         except ZeroDivisionError:
-            ipc[i] = 1
+            ipc_history[i] = 1
 
         ipc_change_significant = False
         if quantum > 0 and i in ipc_history and ipc_history[i] > 0:
@@ -44,7 +44,7 @@ def schedule(processes, quantum=0):
         else:
             ipc_history[i] = ipc
 
-    sorted_procs = sorted(processes, key=lambda proc: ipc[processes.index(proc)])
+    sorted_procs = sorted(processes, key=lambda proc: ipc_history[processes.index(proc)])
 
     cambio = []
 
