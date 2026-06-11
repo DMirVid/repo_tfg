@@ -8,6 +8,7 @@ import results
 EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E]
 P_CORES = set(range(0, 7, 2))
 E_CORES = set(range(24, 31, 2))
+ipc_history=[0] * 8
 
 # Procesos con mayot IPC se mueven a los P cores
 def schedule(processes, quantum=0):
@@ -30,6 +31,18 @@ def schedule(processes, quantum=0):
 
         except ZeroDivisionError:
             ipc[i] = 1
+
+        ipc_change_significant = False
+        if quantum > 0 and i in ipc_history and ipc_history[i] > 0:
+            percent_change = abs((ipc - ipc_history[i]) / ipc_history[i]) * 100
+            ipc_change_significant = percent_change > 10
+        
+            # Actualizar IPC
+            if ipc_change_significant:
+                ipc_history[i] = ipc
+        # Iniciar el IPC
+        else:
+            ipc_history[i] = ipc
 
     sorted_procs = sorted(processes, key=lambda proc: ipc[processes.index(proc)])
 
