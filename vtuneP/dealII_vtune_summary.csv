@@ -1,0 +1,186 @@
+Hierarchy Level	Metric Name	Metric Value
+0	Elapsed Time	60.773072
+1	Clockticks	3384000000
+2	Performance-core (P-core)	2583000000
+1	Instructions Retired	536028000000
+2	Performance-core (P-core)	534579000000
+1	CPI Rate	0.006313
+2	Performance-core (P-core)	0.004832
+1	Performance-core (P-core)	
+2	Retiring	48.2
+3	Light Operations	44.8
+4	FP Arithmetic	2.7
+5	FP x87	2.7
+5	FP Scalar	0.0
+5	FP Vector	0.0
+6	128-bit FP Vector	0.0
+6	256-bit FP Vector	0.0
+4	Integer Operations	0.0
+5	128-bit Integer Vector Operations	0.0
+5	256-bit Vector Operations	0.0
+4	Memory Operations	23.4
+4	Fused Instructions	2.2
+4	Non Fused Branches	3.3
+4	Other	13.2
+5	Nop Instructions	0.0
+5	Shuffles_256b	0.0
+3	Heavy Operations	3.4
+4	Few Uops Instructions	3.2
+4	Microcode Sequencer	0.2
+5	Assists	0.0
+6	Page Faults	0.0
+6	FP Assists	0.0
+6	AVX Assists	0.0
+5	CISC	0.2
+2	Front-End Bound	15.6
+3	Front-End Latency	7.9
+4	ICache Misses	0.6
+5	Code L2 Hit	0.5
+5	Code L2 Miss	0.0
+4	ITLB Misses	0.0
+5	Code STLB Hit	0.0
+5	Code STLB Miss	0.0
+6	Code STLB Miss 4K	0.0
+6	Code STLB Miss 2M	0.0
+4	Branch Resteers	2.6
+5	Mispredicts Resteers	1.2
+5	Clears Resteers	1.3
+5	Unknown Branches	0.0
+4	MS Switches	0.9
+4	Length Changing Prefixes	0.0
+4	DSB Switches	2.9
+3	Front-End Bandwidth	7.8
+4	Front-End Bandwidth MITE	0.8
+5	Decoder-0 Alone	0.1
+4	Front-End Bandwidth DSB	5.6
+4	Front-End Bandwidth LSD	0.6
+4	MS	0.3
+4	(Info) DSB Coverage	48.8
+4	(Info) LSD Coverage	8.1
+4	(Info) DSB Misses	4.1
+2	Bad Speculation	23.4
+3	Branch Mispredict	11.2
+4	Other Mispredicts	1.0
+3	Machine Clears	12.2
+4	Other Nukes	1.5
+2	Back-End Bound	12.7
+3	Memory Bound	2.1
+4	L1 Bound	8.5
+5	DTLB Overhead	3.8
+6	Load STLB Hit	3.2
+6	Load STLB Miss	0.6
+7	Load STLB Miss 4K	0.6
+7	Load STLB Miss 2M	0.0
+7	Load STLB Miss 1G	0.0
+5	Loads Blocked by Store Forwarding	8.0
+5	L1 Latency Dependency	43.6
+5	Lock Latency	0.0
+5	Split Loads	0.0
+5	FB Full	0.2
+4	L2 Bound	1.0
+5	L2 Hit Latency	9.4
+4	L3 Bound	0.3
+5	Contested Accesses	0.0
+5	Data Sharing	0.0
+5	L3 Latency	0.7
+5	SQ Full	0.1
+4	DRAM Bound	0.4
+5	Memory Bandwidth	3.3
+5	Memory Latency	1.7
+4	Store Bound	0.5
+5	Store Latency	0.4
+5	False Sharing	0.0
+5	Split Stores	0.0
+5	Streaming Stores	0.0
+5	DTLB Store Overhead	3.0
+6	Store STLB Hit	2.9
+6	Store STLB Miss	0.1
+7	Store STLB Miss 4K	0.0
+7	Store STLB Miss 2M	0.0
+7	Store STLB Miss 1G	0.0
+3	Core Bound	10.6
+4	Divider	0.7
+5	FP Divider	0.3
+5	INT Divider	0.5
+4	Serializing Operations	1.0
+5	Slow Pause	0.0
+5	C01 Wait	0.0
+5	C02 Wait	0.0
+5	Memory Fence	0.0
+4	Port Utilization	20.4
+5	Cycles of 0 Ports Utilized	0.1
+6	Mixing Vectors	0.0
+5	Cycles of 1 Port Utilized	9.4
+5	Cycles of 2 Ports Utilized	10.7
+5	Cycles of 3+ Ports Utilized	63.9
+6	ALU Operation Utilization	24.5
+7	Port 0	26.4
+7	Port 1	17.5
+7	Port 6	38.6
+6	Load Operation Utilization	40.5
+6	Store Operation Utilization	24.5
+5	Vector Capacity Usage (FPU)	6.2
+1	Efficient-core (E-core)	
+2	Retiring	57.5
+3	Arith Ops	39.5
+4	Non Divider	39.5
+4	FP Divide	0.0
+4	Int Divider	0.0
+3	Mem Ops	17.9
+4	Loads	11.2
+4	Stores	6.8
+2	Front-End Bound	47.7
+3	IFetch Latency	25.1
+4	ICache Misses	10.1
+4	ITLB Misses	1.8
+4	BACLEARS	7.4
+4	Branch Resteers	1.8
+3	IFetch Bandwidth	22.6
+4	Cisc	12.4
+4	Decode	16.8
+4	Pre-Decode Wrong	0.0
+4	Front-End Other	4.4
+2	Bad Speculation	0.0
+3	Branch Mispredict	27.5
+3	Machine Clears	0.0
+4	Ucode_Assist	0.0
+4	Machine_Restart	0.0
+2	Back-End Bound	44.0
+3	Memory Subsystem Bound	18.1
+4	L2 Bound	9.8
+4	L2 Miss	4.8
+5	L3 Bound	3.5
+5	Memory Bound	1.4
+3	Core Bound	25.9
+4	Serializing Operations	13.7
+5	Pause	3.4
+5	TPause	0.0
+4	L1 Bound	6.1
+4	RB Bound	0.0
+4	Store Bound	0.8
+4	Execution Bound	0.0
+4	Allocation Bound	5.4
+5	Allocation Restriction	5.4
+2	Info Metrics	
+3	Stores Bound	0.007688
+3	Load Bound	0.243172
+1	Average CPU Frequency	3254899148.115607
+1	Total Thread Count	77
+1	Paused Time	0.0
+0	Effective Physical Core Utilization	0.1% (0.015 out of 24)
+1	Effective Logical Core Utilization	0.1% (0.017 out of 32)
+0	Collection and Platform Info	
+1	Application Command Line	sudo "bash" "/home/dmirvid/python-manager/scripts/launch.bash" "app.yaml" "--ini-rep" "0" "--max-rep" "1" 
+1	Operating System	6.8.0-117-generic DISTRIB_ID=Ubuntu DISTRIB_RELEASE=22.04 DISTRIB_CODENAME=jammy DISTRIB_DESCRIPTION="Ubuntu 22.04.5 LTS"
+1	Computer Name	ipman1
+1	Result Size	85385881
+1	Collection start time	07:27:43 12/06/2026 UTC
+1	Collection stop time	07:28:44 12/06/2026 UTC
+1	Collector Type	Driverless Perf system-wide sampling
+1	CPU	
+2	Name	Intel(R) microarchitecture code named Raptorlake-DT
+2	Frequency	2995199748
+2	Logical CPU Count	32
+2	Cache Allocation Technology	
+3	Level 2 capability	not detected
+3	Level 3 capability	not detected
