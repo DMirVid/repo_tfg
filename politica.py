@@ -134,7 +134,6 @@ def clasificar(processes, quantum):
     else:
         lista_cores = sorted(p_core + e_core, key=lambda p: speedups[processes.index(p)], reverse=True)
 
-    lista_cores = [processes.index(proc) for proc in lista_cores]
     return lista_cores
 
 
@@ -158,11 +157,12 @@ def schedule(processes, quantum=0):
             fase = 'medir'
     
     elif fase == 'medir':
-        if inicio_q - old_q > NEXT_EVAL * 2:
+        if inicio_q - old_q >= NEXT_EVAL * 2:
             results.log_message(f'[Politica] Medición 2 de apps en {quantum}')
             fase = 'schedule'
             calcular_datos(processes)
-            sorted_index = clasificar(processes, quantum)
+            sorted_procs = clasificar(processes, quantum)
+            asignar_cores(sorted_procs, quantum, simple=False)
 
         else:
             results.log_message(f'[Politica] Medición 1 de apps en {quantum}')
@@ -173,8 +173,8 @@ def schedule(processes, quantum=0):
 
     elif fase == 'schedule':
         results.log_message(f'[Politica] Schedule de apps en {quantum}')
-        asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
-        sorted_index = remover(sorted_index)
+        #asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
+        #sorted_index = remover(sorted_index)
         if quantum % (NEXT_EVAL * 9) == 0:
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
