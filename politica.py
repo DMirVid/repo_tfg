@@ -3,16 +3,11 @@
 from config import CPUS, QUANTUM_SIZE, INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, BACKEND_BOUND, MEMORY_BOUND, DIVIDER, STORE_BOUND, CLOCK, EXE_3, L1_STALLS, L2_STALLS, L3_STALLS
 import results
 
-## Eventos necesarios para la politica
-# - Intrucciones y ciclos de ambos núcleos
-# - Backend Bound y Memory bound para obtener el core
-# - Divider 
-
 
 EVENTS = [INSTRUCTION_COUNT_P, INSTRUCTION_COUNT_E, CYCLE_COUNT_P, CYCLE_COUNT_E, TOPDOWNL1, BACKEND_BOUND, MEMORY_BOUND, DIVIDER, STORE_BOUND, CLOCK, EXE_3, L1_STALLS, L2_STALLS, L3_STALLS]
 P_CORES = set(range(0, 7, 2))
 E_CORES = set(range(24, 31, 2))
-NEXT_EVAL = 5 # 1 segundo 
+NEXT_EVAL = 5 # 1 segundo
 MEDIO = 1.21
 ALTO = 1.31
 MUY_ALTO = 1.36
@@ -22,13 +17,14 @@ app_data_e = {}
 speedups = {}
 fase = 'warmup'
 inicio_q = NEXT_EVAL * 2
-sorted_procs = []
+sorted_index = []
 rrPE = 0
+old_q = 0
 
 def calcular_datos(processes):
     global app_data_p, app_data_e, speedups
     for proc_idx, proc in enumerate(processes):
-        es_P = any(c <= 16 for c in proc.cores)
+        es_P = any(c < 16 for c in proc.cores)
         try:
             if es_P:
                 ipc_p = proc.event_counts[INSTRUCTION_COUNT_P] / proc.event_counts[CYCLE_COUNT_P]
@@ -61,8 +57,9 @@ def asignar_cores(sorted_procs, quantum, simple):
         if i < 4:
             core = {i * 2}
         else:
-            core = {8 + i*2}
+            core = {16 + i*2}
         if simple:
+            results.log_message(f"[Policy core movement]:{quantum}:{sorted_procs[i].name}:{sorted_procs[i].cores}:{core}")
             sorted_procs[i].set_affinity(core)
         else:
             a_P = core.issubset(P_CORES)
@@ -93,7 +90,7 @@ def clasificar(processes, quantum):
 
     for proc_id, proc in enumerate(processes):
         if app_data_p[proc_id]['core'] > app_data_p[proc_id]['memory']:
-            if app_data_p[proc_id]['ports3'] > 0.55 and app_data_p[proc_id]['divider'] < 0.2: # Podría cambiarse
+            if app_data_p[proc_id]['exe_3'] > 0.55 and app_data_p[proc_id]['divider'] < 0.2: # Podría cambiarse
                 p_core.append(proc)
                 results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:PUERTOS")
             elif app_data_p[proc_id]['divider'] > 0.2:
@@ -137,42 +134,48 @@ def clasificar(processes, quantum):
     else:
         lista_cores = sorted(p_core + e_core, key=lambda p: speedups[processes.index(p)], reverse=True)
 
+    lista_cores = [processes.index(proc) for proc in lista_cores]
     return lista_cores
 
 
 def remover(sorted_procs):
     if rrPE > 0:
         tmp = sorted_procs.pop(0)
-        sorted_procs.insert(rrPE/2+3, tmp)
+        sorted_procs.insert(rrPE//2+3, tmp)
     elif rrPE < 0:
-        tmp = sorted_procs.pop(rrPE/2+4)
+        tmp = sorted_procs.pop(rrPE//2+4)
         sorted_procs.append(tmp)
 
     return sorted_procs
 
 
 def schedule(processes, quantum=0):
-    global fase, inicio_q, sorted_procs
+    global fase, inicio_q, sorted_index, old_q
 
-    if fase == 'wamrup':
+    if fase == 'warmup':
+        results.log_message(f'[Politica] Warmup de apps en {quantum}')
         if quantum >= inicio_q:
             fase = 'medir'
     
     elif fase == 'medir':
-        if inicio_q - quantum >= NEXT_EVAL * 2:
+        if inicio_q - old_q > NEXT_EVAL * 2:
+            results.log_message(f'[Politica] Medición 2 de apps en {quantum}')
             fase = 'schedule'
             calcular_datos(processes)
-            sorted_procs = clasificar(processes, quantum)
+            sorted_index = clasificar(processes, quantum)
 
         else:
-            fase = 'wamrup'
+            results.log_message(f'[Politica] Medición 1 de apps en {quantum}')
+            fase = 'warmup'
             calcular_datos(processes)
             asignar_cores(processes[::-1], quantum, simple=True)
             inicio_q += NEXT_EVAL
 
     elif fase == 'schedule':
-        asignar_cores(sorted_procs, quantum, simple=False)
-        sorted_procs = remover(sorted_procs)
-        if quantum % NEXT_EVAL * 5 == 0:
+        results.log_message(f'[Politica] Schedule de apps en {quantum}')
+        asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
+        sorted_index = remover(sorted_index)
+        if quantum % (NEXT_EVAL * 9) == 0:
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
+            old_q = quantum
