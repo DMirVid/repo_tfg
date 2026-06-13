@@ -2,7 +2,7 @@ import os
 import csv
 
 # Carpeta con los archivos vtune
-vtune_folder = "vtune"
+vtune_folder = "vtuneP"
 
 # Obtener lista de archivos CSV
 csv_files = [f for f in os.listdir(vtune_folder) if f.endswith("_vtune_summary.csv")]
@@ -23,7 +23,7 @@ for csv_file in csv_files:
         lines = list(reader)
     
     # Extraer líneas 123-166 (índices 122-165 en 0-indexed)
-    ecore_section = lines[122:166]
+    ecore_section = lines[9:123]
     
     metrics = {}
     current_metric = None
@@ -42,15 +42,17 @@ for csv_file in csv_files:
     
     all_data[app_name] = metrics
 
-# Obtener todas las métricas únicas
-all_metrics = set()
+# Obtener todas las métricas únicas manteniendo el orden de aparición
+all_metrics = []
+all_metrics_set = set()
 for metrics in all_data.values():
-    all_metrics.update(metrics.keys())
-
-all_metrics = list(all_metrics)
+    for metric_name in metrics.keys():
+        if metric_name not in all_metrics_set:
+            all_metrics.append(metric_name)
+            all_metrics_set.add(metric_name)
 
 # Guardar como CSV
-output_file = "vtune_ecores_combined.csv"
+output_file = "vtune_pcores_combined.csv"
 with open(output_file, 'w', newline='') as f:
     writer = csv.writer(f)
     
