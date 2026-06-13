@@ -12,7 +12,7 @@ QUANTUM = 200
 def main():
 
     archivos = sys.argv[1:]
-    eventosP=8
+    eventosP=15
     eventosE=6
     data = {}
 
