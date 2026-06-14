@@ -16,7 +16,7 @@ app_data_p = {}
 app_data_e = {}
 speedups = {}
 fase = 'warmup'
-inicio_q = NEXT_EVAL * 2
+inicio_q = NEXT_EVAL
 sorted_index = []
 rrPE = 0
 old_q = 0
@@ -172,7 +172,7 @@ def schedule(processes, quantum=0):
             inicio_q += NEXT_EVAL
 
     elif fase == 'schedule':
-        results.log_message(f'[Politica] Schedule de apps en {quantum}')
+        #results.log_message(f'[Politica] Schedule de apps en {quantum}')
         #asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
         #sorted_index = remover(sorted_index)
         if quantum % (NEXT_EVAL * 9) == 0:
