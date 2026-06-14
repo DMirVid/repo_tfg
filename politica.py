@@ -175,9 +175,9 @@ def schedule(processes, quantum=0):
             inicio_q += NEXT_EVAL
 
     elif fase == 'schedule':
-        #results.log_message(f'[Politica] Schedule de apps en {quantum}')
-        #asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
-        #sorted_index = remover(sorted_index)
+        results.log_message(f'[Politica] Schedule de apps en {quantum}')
+        asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
+        sorted_index = remover(sorted_index)
         if quantum % (NEXT_EVAL * 9) == 0:
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
