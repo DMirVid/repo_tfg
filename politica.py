@@ -169,7 +169,9 @@ def schedule(processes, quantum=0):
             results.log_message(f'[Politica] Medición 1 de apps en {quantum}')
             fase = 'warmup'
             calcular_datos(processes)
-            asignar_cores(sorted_index[::-1], quantum, simple=True)
+            if not sorted_index:
+                sorted_index = [processes.index(proc) for proc in processes]
+            asignar_cores([processes[i] for i in sorted_index[::-1]], quantum, simple=True)
             inicio_q += NEXT_EVAL
 
     elif fase == 'schedule':
