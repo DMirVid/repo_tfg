@@ -92,31 +92,31 @@ def clasificar(processes, quantum):
         if app_data_p[proc_id]['core'] > app_data_p[proc_id]['memory']:
             if app_data_p[proc_id]['exe_3'] > 0.55 and app_data_p[proc_id]['divider'] < 0.2: # Podría cambiarse
                 p_core.append(proc)
-                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:PUERTOS")
+                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:PUERTOS:{app_data_p[proc_id]['exe_3']}")
             elif app_data_p[proc_id]['divider'] > 0.2:
                 e_core.append(proc)
-                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:DIVIDER")
+                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:DIVIDER:{app_data_p[proc_id]['divider']}")
             else:
                 if speedups[proc_id] > MUY_ALTO:
                     p_core.append(proc)
-                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:SPEEDUP:{speedups[proc_id]}")
+                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:SPEEDUP:CORE:{speedups[proc_id]}:{app_data_p[proc_id]['exe_3']}:{app_data_p[proc_id]['divider']}")
                 else:
                     e_core.append(proc)
-                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:SPEEDUP:{speedups[proc_id]}")
+                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:SPEEDUP:CORE:{speedups[proc_id]}:{app_data_p[proc_id]['exe_3']}:{app_data_p[proc_id]['divider']}")
         else:
             if app_data_p[proc_id]['dram'] > 0.2 or app_data_p[proc_id]['store'] > 0.2:
                 e_core.append(proc)
-                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:DRAM/STORE")
+                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:DRAM/STORE:{app_data_p[proc_id]['dram']}/{app_data_p[proc_id]['store']}")
             elif app_data_p[proc_id]['l2_bound'] > 0.05:
                 p_core.append(proc)
-                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:L2_BOUND")
+                results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:L2_BOUND:{app_data_p[proc_id]['l2_bound']}")
             else:
                 if speedups[proc_id] > MUY_ALTO:
                     p_core.append(proc)
-                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:SPEEDUP:{speedups[proc_id]}")
+                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:SPEEDUP:MEM:{speedups[proc_id]}:{app_data_p[proc_id]['dram']}/{app_data_p[proc_id]['store']}:{app_data_p[proc_id]['l2_bound']}")
                 else:
                     e_core.append(proc)
-                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:SPEEDUP:{speedups[proc_id]}")
+                    results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:SPEEDUP:MEM:{speedups[proc_id]}:{app_data_p[proc_id]['dram']}/{app_data_p[proc_id]['store']}:{app_data_p[proc_id]['l2_bound']}")
 
     lista_cores = []
     # Resolución de conflictos
@@ -177,7 +177,6 @@ def schedule(processes, quantum=0):
     elif fase == 'schedule':
         results.log_message(f'[Politica] Schedule de apps en {quantum}')
         asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
-        sorted_index = remover(sorted_index)
         if quantum % (NEXT_EVAL * 9) == 0:
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
