@@ -90,9 +90,10 @@ def clasificar(processes, quantum):
 
     for proc_id, proc in enumerate(processes):
         if app_data_p[proc_id]['core'] > app_data_p[proc_id]['memory']:
-            if app_data_p[proc_id]['exe_3'] > 0.50 and (app_data_p[proc_id]['divider'] < 0.15 or app_data_p[proc_id]['divider'] > 0.35): 
+            if app_data_p[proc_id]['exe_3'] > 0.55 and app_data_p[proc_id]['divider'] < 0.2:
+                p_core.append(proc)
                 results.log_message(f"[Policy classification]:{quantum}:{proc.name}:P:PUERTOS:{app_data_p[proc_id]['exe_3']}")
-            elif app_data_p[proc_id]['divider'] >= 0.15:
+            elif app_data_p[proc_id]['divider'] > 0.2:
                 e_core.append(proc)
                 results.log_message(f"[Policy classification]:{quantum}:{proc.name}:E:DIVIDER:{app_data_p[proc_id]['divider']}")
             else:
