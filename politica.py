@@ -153,7 +153,6 @@ def schedule(processes, quantum=0):
 
     if fase == 'warmup':
         results.log_message(f'[Politica] Warmup de apps en {quantum}')
-        asignar_cores(processes, quantum, simple=True)
         if quantum >= inicio_q:
             fase = 'medir'
     
@@ -179,3 +178,4 @@ def schedule(processes, quantum=0):
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
             old_q = quantum
+            asignar_cores(processes, quantum, simple=True)
