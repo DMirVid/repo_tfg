@@ -178,4 +178,4 @@ def schedule(processes, quantum=0):
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
             old_q = quantum
-            asignar_cores(processes, quantum, simple=True)
+            asignar_cores(processes, quantum, simple=False)
