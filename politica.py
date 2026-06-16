@@ -17,7 +17,7 @@ app_data_e = {}
 speedups = {}
 fase = 'warmup'
 inicio_q = NEXT_EVAL
-sorted_index = []
+sorted_procs = []
 rrPE = 0
 old_q = 0
 
@@ -134,7 +134,6 @@ def clasificar(processes, quantum):
     else:
         lista_cores = sorted(p_core + e_core, key=lambda p: speedups[processes.index(p)], reverse=True)
 
-    lista_cores = [processes.index(proc) for proc in lista_cores]
     return lista_cores
 
 
@@ -150,10 +149,11 @@ def remover(sorted_procs):
 
 
 def schedule(processes, quantum=0):
-    global fase, inicio_q, sorted_index, old_q
+    global fase, inicio_q, sorted_procs, old_q
 
     if fase == 'warmup':
         results.log_message(f'[Politica] Warmup de apps en {quantum}')
+        asignar_cores(processes, quantum, simple=True)
         if quantum >= inicio_q:
             fase = 'medir'
     
@@ -162,21 +162,19 @@ def schedule(processes, quantum=0):
             results.log_message(f'[Politica] Medición 2 de apps en {quantum}')
             fase = 'schedule'
             calcular_datos(processes)
-            sorted_index = clasificar(processes, quantum)
-            asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
+            sorted_procs = clasificar(processes, quantum)
+            asignar_cores(sorted_procs, quantum, simple=False)
 
         else:
             results.log_message(f'[Politica] Medición 1 de apps en {quantum}')
             fase = 'warmup'
             calcular_datos(processes)
-            if not sorted_index:
-                sorted_index = [processes.index(proc) for proc in processes]
-            asignar_cores([processes[i] for i in sorted_index[::-1]], quantum, simple=True)
+            asignar_cores(processes[::-1], quantum, simple=True)
             inicio_q += NEXT_EVAL
 
     elif fase == 'schedule':
-        results.log_message(f'[Politica] Schedule de apps en {quantum}')
-        asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
+        #results.log_message(f'[Politica] Schedule de apps en {quantum}')
+        #asignar_cores([processes[i] for i in sorted_index], quantum, simple=False)
         if quantum % (NEXT_EVAL * 9) == 0:
             fase = 'warmup'
             inicio_q = quantum + NEXT_EVAL
