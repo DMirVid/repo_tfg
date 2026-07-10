@@ -6,8 +6,8 @@ echo "politica,mezcla,run,app,ipc,nucleos,tiempo" > ~/repo_tfg/resultados/tiempo
 
 echo "politica;mezcla;run;energia;timepo" > ~/repo_tfg/resultados_energia_pol0.csv
 #echo "politica;mezcla;run;energia;timepo"
-for p in 4; do
-    for m in 4; do
+for p in 0 4; do
+    for m in 15 16 17; do
         cd ~/ejecuciones/instr_max/politica"${p}"/mezcla"$((m+1))"/
         for r in 0 1; do
             output=$(sudo perf stat -e power/energy-cores/ bash /home/dmirvid/python-manager/scripts/launch.bash apps.yaml --ini-rep 0 --max-rep 1 2>&1)
