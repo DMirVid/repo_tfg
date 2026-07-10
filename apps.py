@@ -8,19 +8,19 @@ salida = []
 junto = medio + alto + muy_alto
 
 for i in range(8):
-    salida.append(medio[randint(0, len(medio)-1)])
+    salida.append(junto[randint(0, len(junto)-1)])
 
 print(salida)
-salida.clear()
+# salida.clear()
 
-for i in range(8):
-    salida.append(alto[randint(0, len(alto)-1)])
+# for i in range(8):
+#     salida.append(alto[randint(0, len(alto)-1)])
 
-print(salida)
-salida.clear()
+# print(salida)
+# salida.clear()
 
-for i in range(8):
-    salida.append(muy_alto[randint(0, len(muy_alto)-1)])
+# for i in range(8):
+#     salida.append(muy_alto[randint(0, len(muy_alto)-1)])
 
-print(salida)
+# print(salida)
 
