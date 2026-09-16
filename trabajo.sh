@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## Script con el que lanzar a ejecución varias mezclas de aplicaciones con distintas políticas, obteniendo los resultados la energía 
+## y guardando en la carpeta adecuada.
+## Daniel Mirón
+
 APPS=("gamess_go" "xala" "gamess_l" "astar")
 
 echo "politica,mezcla,run,app,ipc,nucleos,tiempo" > ~/repo_tfg/resultados/tiempos_pol0.csv

@@ -1,3 +1,6 @@
+## Libreria con un par de funciones para leer de los resultados del Manager.
+## Daniel Mirón 
+
 ### DEFINICIONES
 ANCHO_ISSUE_P = 6
 ANCHO_ISSUE_E = 5
